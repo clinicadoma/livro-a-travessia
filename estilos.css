@@ -1,0 +1,22 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #FAF6EE !important; overflow-x: hidden !important; font-family: 'Nunito', sans-serif; }
+
+.doma-nav { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+.doma-seta { position: absolute; top: 0; width: 45px; height: 100%; pointer-events: auto; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #ea580c; opacity: 0.15; transition: 0.3s; }
+.seta-esq { left: 0; } .seta-dir { right: 0; }
+
+.carteira-doma { position: fixed; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); border: 2px solid #f59e0b; border-radius: 30px; padding: 8px 15px; font-family: 'Orbitron', sans-serif; font-weight: 900; color: #b45309; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); z-index: 100000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+.carteira-pulse { transform: scale(1.15); color: #ea580c; border-color: #ea580c; box-shadow: 0 5px 25px rgba(234, 88, 12, 0.5); }
+@keyframes voarMoeda { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.5); } }
+.texto-moeda-voadora { position: fixed; color: #f59e0b; font-family: 'Quicksand', sans-serif; font-weight: 900; font-size: 2rem; text-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 100001; pointer-events: none; animation: voarMoeda 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+.doma-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: none; justify-content: center; align-items: center; z-index: 99999; backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s; padding: 20px; box-sizing: border-box; }
+.doma-modal-box { background: linear-gradient(135deg, #ffffff, #f0f9ff); width: 100%; max-width: 400px; padding: 25px 20px 20px 20px; border-radius: 25px; text-align: center; transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 0 4px #ffffff, 0 0 0 8px #e0f2fe, 0 0 0 12px #7dd3fc, 0 25px 50px rgba(2, 132, 199, 0.5); }
+.modal-monstrinho-img { width: 80px; height: 80px; object-fit: contain; margin-top: -60px; margin-bottom: 15px; background: white; border-radius: 50%; padding: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 4px solid #f59e0b; animation: flutuarJogo 3s infinite ease-in-out; flex-shrink: 0; }
+.doma-modal-titulo { font-size: clamp(1.3rem, 4vw, 1.6rem); font-weight: 900; margin-bottom: 10px; color: #1e293b; font-family: 'Quicksand', sans-serif; letter-spacing: -0.5px; }
+.doma-modal-texto { font-size: clamp(0.95rem, 3vw, 1.05rem); color: #475569; line-height: 1.5; margin-bottom: 20px; width: 100%; max-height: 35vh; overflow-y: auto; padding-right: 5px; }
+.doma-modal-btn { background: linear-gradient(45deg, #ea580c, #ff7f41); color: white; border: none; padding: 15px 40px; font-size: 1.1rem; font-weight: 900; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3); text-transform: uppercase; width: 100%; flex-shrink: 0;}
+
+@keyframes flutuarJogo { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(0, -10px); } }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.loading-doma { text-align: center; font-family: 'Quicksand', sans-serif; font-weight: bold; color: #ea580c; padding-top: 40vh; font-size: 1.2rem; }
