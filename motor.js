@@ -1,26 +1,23 @@
 const urlBase = "https://clinicadoma.github.io/livro-a-travessia";
-let modulos = [];
+window.modulos = [];
 let moduloAtual = 0;
 let moedasTotais = parseInt(localStorage.getItem('doma_coins')) || 0;
 
-// Atualiza a carteira na tela logo ao carregar
 const elCoins = document.getElementById('doma-coins-valor');
 if (elCoins) elCoins.innerText = moedasTotais;
 
 async function iniciarSistema() {
     const palco = document.getElementById('palco-doma');
     
-    // 1. Injeta os estilos dinamicamente sem cache
     const cssLink = document.createElement("link");
     cssLink.rel = "stylesheet";
     cssLink.href = `${urlBase}/estilos.css?v=${new Date().getTime()}`;
     document.head.appendChild(cssLink);
 
-    // 2. Lê o mapa de slides
     try {
         const res = await fetch(`${urlBase}/mapa.json?v=${new Date().getTime()}`);
         const config = await res.json();
-        modulos = config.modulos;
+        window.modulos = config.modulos;
         injetarModulo(moduloAtual);
     } catch (error) {
         palco.innerHTML = '<div class="loading-doma" style="text-align:center; margin-top: 40vh;">Erro ao carregar o mapa. Atualize a página.</div>';
@@ -32,13 +29,17 @@ async function injetarModulo(index) {
     palco.innerHTML = '<div class="loading-doma" style="text-align:center; margin-top: 40vh; color:#ea580c; font-weight:bold; font-family:sans-serif;">Avançando...</div>';
     
     try {
-        const response = await fetch(`${urlBase}/${modulos[index]}?v=${new Date().getTime()}`);
+        const response = await fetch(`${urlBase}/${window.modulos[index]}?v=${new Date().getTime()}`);
         const html = await response.text();
         palco.innerHTML = html;
         window.scrollTo(0, 0);
 
-        // 3. RECRIADOR DE SCRIPTS (Vital para a Roleta e Jogos funcionarem)
-        // Navegadores bloqueiam <script> injetados via innerHTML. Isso recria e executa as funções ativamente.
+        // RASTREADOR DE PROGRESSO (Desbloqueia o Sumário)
+        let maxPag = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+        if (index > maxPag) {
+            localStorage.setItem('doma_max_pagina', index);
+        }
+
         const scripts = palco.querySelectorAll('script');
         scripts.forEach(oldScript => {
             const newScript = document.createElement('script');
@@ -46,35 +47,39 @@ async function injetarModulo(index) {
             newScript.appendChild(document.createTextNode(oldScript.innerHTML));
             oldScript.parentNode.replaceChild(newScript, oldScript);
         });
-
     } catch (error) {
         palco.innerHTML = '<div class="loading-doma" style="text-align:center; margin-top: 40vh;">Houve uma oscilação na conexão.</div>';
     }
 }
 
-// Funções Globais expostas para a interface
 window.mudarPagina = function(direcao) {
     let proximoIndex = moduloAtual + direcao;
-    if (proximoIndex >= 0 && proximoIndex < modulos.length) {
+    if (proximoIndex >= 0 && proximoIndex < window.modulos.length) {
         moduloAtual = proximoIndex;
+        injetarModulo(moduloAtual);
+    }
+};
+
+// NOVA FUNÇÃO: Permite saltar direto da página do Sumário para a fase destrancada
+window.irParaModulo = function(index) {
+    let maxPag = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+    if (index >= 0 && index < window.modulos.length && index <= maxPag) {
+        moduloAtual = index;
         injetarModulo(moduloAtual);
     }
 };
 
 window.ganharMoedas = function(quantidade, eventoClick = null) {
     if(quantidade <= 0) return;
-    
     moedasTotais += quantidade;
     localStorage.setItem('doma_coins', moedasTotais);
     
     const elCoins = document.getElementById('doma-coins-valor');
     if (elCoins) elCoins.innerText = moedasTotais;
 
-    // 1. Toca o Som
     const sMoeda = document.getElementById('S_MOEDA');
     if(sMoeda) { sMoeda.currentTime = 0; sMoeda.play().catch(e=>{}); }
 
-    // 2. Posição da animação (Onde o usuário clicou ou no meio da tela)
     let posX = window.innerWidth / 2;
     let posY = window.innerHeight / 2;
 
@@ -83,7 +88,6 @@ window.ganharMoedas = function(quantidade, eventoClick = null) {
         posY = eventoClick.clientY;
     }
 
-    // 3. Cria a Moeda Voadora
     const animText = document.createElement('div');
     animText.className = 'texto-moeda-voadora';
     animText.innerText = '+' + quantidade;
@@ -91,7 +95,6 @@ window.ganharMoedas = function(quantidade, eventoClick = null) {
     animText.style.top = (posY - 20) + 'px';
     document.body.appendChild(animText);
 
-    // 4. Pulso na Carteira
     const carteira = document.getElementById('carteira-ui');
     if(carteira) carteira.classList.add('carteira-pulse');
     
@@ -185,5 +188,4 @@ window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, mod
     });
 };
 
-// Dá a partida no sistema
 iniciarSistema();
