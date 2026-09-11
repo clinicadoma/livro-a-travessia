@@ -2,11 +2,9 @@
     /* CSS EXCLUSIVO DA TRIAGEM E DIAGNÓSTICO */
     .doma-triagem-container { 
         width: 100%; min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f3e8ff); position: relative; padding: 20px 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Nunito', sans-serif; overflow-x: hidden;
-        /* BLINDAGEM CONTRA SELEÇÃO DE TEXTO NO ARRASTO */
         user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
     }
     
-    /* LIBERA SELEÇÃO APENAS ONDE É PERMITIDO DIGITAR */
     .doma-triagem-container input, .doma-triagem-container textarea { 
         user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; 
     }
@@ -17,7 +15,8 @@
     .btn-categoria .icone { font-size: 1.8rem; }
     .btn-categoria .titulo { font-weight: 900; color: #1e1b4b; font-size: 0.75rem; text-transform: uppercase; line-height: 1.1; }
 
-    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 110px; width: 100%; max-width: 500px; margin: 30px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
+    /* AUMENTADO MARGIN-TOP PARA 65PX PARA EVITAR SOBREPOSIÇÃO DO TEXTO */
+    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 110px; width: 100%; max-width: 500px; margin: 65px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
     .cesto { width: 48%; height: 100%; position: relative; background: rgba(255, 255, 255, 0.3); border-left: 2px solid rgba(255, 255, 255, 0.9); border-right: 2px solid rgba(255, 255, 255, 0.9); border-radius: 8px 8px 20px 20px; box-shadow: inset 5px 0 10px rgba(255,255,255,0.6), inset -5px 0 10px rgba(255,255,255,0.6), 0 10px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; transition: all 0.2s ease; }
     .cesto::before { content: ''; position: absolute; top: -8px; left: -2px; right: -2px; height: 16px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.2); z-index: 3; box-shadow: inset 0 5px 10px rgba(0,0,0,0.05); }
     #cesto-existe { border-bottom: 5px solid #ef4444; background-color: rgba(239, 68, 68, 0.08); } #cesto-existe::before { border-color: rgba(239, 68, 68, 0.5); }
@@ -232,7 +231,7 @@
         'relacionamentos': [
             { t: "Sinais de Alerta do Corpo", desc: "Sentir taquicardia ou tensão apenas por saber que o parceiro está chegando.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você sente um nó no estômago só de ouvir a chave na porta.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua saúde física e a paz dentro da própria casa.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Observar meu corpo: se travar, sair de perto."], d_outro: ["Dizer 'Não continuo a conversa com você nesse tom'."] },
             { t: "Aceitar Distorção (Gaslighting)", desc: "Permitir que o outro distorça os fatos, fazendo você duvidar da sua memória.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você escuta 'isso é coisa da sua cabeça' até pedir desculpas.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A confiança na sua própria memória.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Anotar os fatos no celular para não duvidar de mim."], d_outro: ["Firmar: 'Eu sei o que ouvi' e encerrar o assunto."] },
-            { t: "Perdoar Abuso em Troca de Presente", desc: "Cair no ciclo da aggression seguida por lua de mel e presentes.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Ele te humilha na sexta, chora e te dá flores no domingo.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O seu valor inegociável.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Lembrar que abuso não se apaga com presente."], d_outro: ["Recusar o presente e manter a consequência do abuso."] },
+            { t: "Perdoar Abuso em Troca de Presente", desc: "Cair no ciclo da agressão seguida por lua de mel e presentes.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Ele te humilha na sexta, chora e te dá flores no domingo.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O seu valor inegociável.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Lembrar que abuso não se apaga com presente."], d_outro: ["Recusar o presente e manter a consequência do abuso."] },
             { t: "Suportar o Castigo do Silêncio", desc: "Aceitar que o outro te puna com gelo verbal por dias.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Após uma briga, ele te ignora como se você não existisse.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua dignidade adulta.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Focar na minha própria vida e rotina normalmente."], d_outro: ["Deixar o outro no silêncio dele sem tentar resgatá-lo."] },
             { t: "Ceder Sexualmente Sem Desejo", desc: "Ter relações sexuais apenas para evitar brigas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você transa torcendo para acabar logo, só para ele não fechar a cara.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O respeito pelo seu próprio corpo.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Praticar o auto-respeito corporal absoluto."], d_outro: ["Dizer 'não' claramente e sair da cama se houver pressão."] },
             { t: "Microtraições Validadas", desc: "Tolerar flertes e desrespeitos sob a desculpa de 'brincadeira'.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Ele flerta e se você reclama, ele te chama de controladora.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A segurança emocional.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Validar o que sinto: se me machuca, não é bobeira."], d_outro: ["Impor o limite claro sobre respeito nas redes e presencialmente."] },
@@ -370,7 +369,7 @@
         }
     }
 
-    // 5. MOTOR DRAG AND DROP - FÍSICA ORIGINAL RESTAURADA + SELEÇÃO EM TELA DIVIDIDA
+    // 5. MOTOR DRAG AND DROP - INFALÍVEL
     window.configurarFisicaJogo = function() {
         var peca = document.getElementById('peca-arrastavel');
         var areaJogo = document.getElementById('area-jogo-fisica');
@@ -390,11 +389,14 @@
             setTimeout(function() { fantasma.remove(); }, 400);
         }
 
+        function isPointInside(x, y, rect, pad = 20) {
+            return (x >= rect.left - pad && x <= rect.right + pad &&
+                    y >= rect.top - pad && y <= rect.bottom + pad);
+        }
+
         function onDragStart(e) {
             if(indexAtual >= pecasExibicao.length) return;
-            // Previne a seleção de texto e arrasto da imagem no Desktop
-            if(e.type === 'mousedown') { e.preventDefault(); }
-            
+            if(e.type === 'mousedown') e.preventDefault();
             e.stopPropagation(); 
             isDragging = true; 
             peca.style.transition = 'none'; 
@@ -409,7 +411,6 @@
             currentX = 0; 
             currentY = 0; 
             cestoAlvo = null; 
-
             tocarPegarPecaSeguro();
         }
 
@@ -432,30 +433,22 @@
                 rastroTimer = setTimeout(function() { rastroTimer = null; }, 80); 
             }
             
-            // COLISÃO DIVISÃO DE TELA: Geometria robusta que corta o iframe ao meio
-            var cestoEsq = document.getElementById('cesto-existe');
-            var cestoDir = document.getElementById('cesto-nao-existe');
-            var cestoTemp = null;
-            
-            // Pega o centro da peça atual
             var rectPeca = peca.getBoundingClientRect();
             var cxPeca = rectPeca.left + (rectPeca.width / 2);
             var cyPeca = rectPeca.top + (rectPeca.height / 2);
             
+            var cestoEsq = document.getElementById('cesto-existe');
+            var cestoDir = document.getElementById('cesto-nao-existe');
             var rectEsq = cestoEsq.getBoundingClientRect();
             var rectDir = cestoDir.getBoundingClientRect();
             
-            // A peça precisa ser arrastada pra CIMA, entrando na "Zona dos Cestos"
-            // Pega o fundo do cesto e dá uma margem extra para celulares
-            var zonaCestosY = Math.max(rectEsq.bottom, rectDir.bottom) + 30; 
+            var cestoTemp = null;
             
-            if (cyPeca < zonaCestosY) {
-                // Se a peça entrou na zona superior, divide a tela no meio (50%)
-                if (cxPeca < window.innerWidth / 2) {
-                    cestoTemp = cestoEsq; // Caiu na metade do SIM
-                } else {
-                    cestoTemp = cestoDir; // Caiu na metade do NÃO
-                }
+            // Verifica o toque/centro da peça nos limites de cada cesto com um respiro de 30px
+            if (isPointInside(cxPeca, cyPeca, rectEsq, 30)) {
+                cestoTemp = cestoEsq;
+            } else if (isPointInside(cxPeca, cyPeca, rectDir, 30)) {
+                cestoTemp = cestoDir;
             }
 
             var cestos = [cestoEsq, cestoDir];
@@ -478,14 +471,15 @@
             isDragging = false; 
             peca.classList.remove('dragging');
             
-            var cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
+            var cestoEsq = document.getElementById('cesto-existe');
+            var cestoDir = document.getElementById('cesto-nao-existe');
+            var cestos = [cestoEsq, cestoDir];
             cestos.forEach(function(c) { c.classList.remove('cesto-hover'); });
             
             if (cestoAlvo) {
                 var rectCesto = cestoAlvo.getBoundingClientRect();
                 var rectPecaInicial = peca.getBoundingClientRect();
                 
-                // Calcula a volta para o "Zero"
                 var cxOriginal = rectPecaInicial.left - currentX + rectPecaInicial.width / 2;
                 var cyOriginal = rectPecaInicial.top - currentY + rectPecaInicial.height / 2;
                 
@@ -503,7 +497,7 @@
                 else tocarDropAusenteSeguro();
                 
                 var cestoCapturado = cestoAlvo;
-                cestoAlvo = null; // Zera para proteção
+                cestoAlvo = null; 
                 setTimeout(function() { window.jogarNoCesto(cestoCapturado); }, 150);
             } else {
                 peca.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
@@ -777,6 +771,6 @@
         document.getElementById('triagem-tela-contrato').style.display = 'block';
         window.scrollTo(0,0);
     };
-    // FIM
+
 })();
 </script>
