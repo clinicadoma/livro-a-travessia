@@ -61,11 +61,44 @@ window.mudarPagina = function(direcao) {
     }
 };
 
-window.ganharMoedas = function(qtd, event) {
-    moedasTotais += qtd;
+window.ganharMoedas = function(quantidade, eventoClick = null) {
+    if(quantidade <= 0) return;
+    
+    moedasTotais += quantidade;
     localStorage.setItem('doma_coins', moedasTotais);
+    
     const elCoins = document.getElementById('doma-coins-valor');
     if (elCoins) elCoins.innerText = moedasTotais;
+
+    // 1. Toca o Som
+    const sMoeda = document.getElementById('S_MOEDA');
+    if(sMoeda) { sMoeda.currentTime = 0; sMoeda.play().catch(e=>{}); }
+
+    // 2. Posição da animação (Onde o usuário clicou ou no meio da tela)
+    let posX = window.innerWidth / 2;
+    let posY = window.innerHeight / 2;
+
+    if(eventoClick && eventoClick.clientX) {
+        posX = eventoClick.clientX;
+        posY = eventoClick.clientY;
+    }
+
+    // 3. Cria a Moeda Voadora
+    const animText = document.createElement('div');
+    animText.className = 'texto-moeda-voadora';
+    animText.innerText = '+' + quantidade;
+    animText.style.left = (posX - 20) + 'px';
+    animText.style.top = (posY - 20) + 'px';
+    document.body.appendChild(animText);
+
+    // 4. Pulso na Carteira
+    const carteira = document.getElementById('carteira-ui');
+    if(carteira) carteira.classList.add('carteira-pulse');
+    
+    setTimeout(() => { 
+        animText.remove(); 
+        if(carteira) carteira.classList.remove('carteira-pulse');
+    }, 1500);
 };
 
 // Dá a partida no sistema
