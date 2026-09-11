@@ -1,0 +1,37 @@
+<div style="background-color: #fffaf5; width: 100%; min-height: 100vh; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; overflow: hidden; font-family: 'Nunito', sans-serif;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; pointer-events: none; background-image: linear-gradient(#ea580c 1px, transparent 1px), linear-gradient(90deg, #ea580c 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+    <div class="wrapper-isolado" style="padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; z-index: 2;">
+        <h2 class="doma-titulo-gigante" style="margin-bottom: 2vh; color: #1a1a1a; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; text-align: center;">
+            <span style="background: #fef08a; padding: 4px 15px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; border-radius: 8px; display: inline-block; transform: rotate(-1deg);">A Mecânica da Mente</span>
+        </h2>
+
+        <div style="width: 100%; max-width: 200px; margin-bottom: 3vh; position: relative; z-index: 2; filter: drop-shadow(4px 4px 0px rgba(234, 88, 12, 0.2));">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+                <path d="M100,20 C60,20 30,50 30,90 C30,110 40,130 50,140 C50,150 45,170 45,170 L100,170 C110,150 120,120 120,90 C120,50 110,20 100,20 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+                <circle cx="75" cy="75" r="25" fill="#fef08a" stroke="#1a1a1a" stroke-width="3"/>
+                <circle cx="75" cy="75" r="8" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+                <path d="M75,40 L75,50 M75,100 L75,110 M40,75 L50,75 M100,75 L110,75 M50,50 L57,57 M93,93 L100,100 M50,100 L57,93 M93,50 L100,57" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="105" cy="115" r="15" fill="#ea580c" stroke="#1a1a1a" stroke-width="3"/>
+                <circle cx="105" cy="115" r="5" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+                <path d="M105,95 L105,100 M105,130 L105,135 M85,115 L90,115 M120,115 L125,115 M83,93 L88,98 M122,132 L127,137 M83,137 L88,132 M122,93 L127,98" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="caixa-padrao" style="border: 3px solid #1a1a1a; background: #ffffff; padding: 4vh 30px; border-radius: 12px; box-shadow: 8px 8px 0px #ea580c; position: relative; z-index: 2; width: 100%;">
+            <div style="position: absolute; top: -12px; right: 20px; width: 40px; height: 15px; background: rgba(234, 88, 12, 0.5); border: 2px solid #1a1a1a; transform: rotate(5deg);"></div>
+            <p class="doma-texto-corrido" style="font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; color: #1a1a1a; margin-bottom: 20px; text-align: center; font-weight: 600;">
+                Imagine que você recebeu uma máquina incrível, mas o manual veio em branco.
+            </p>
+            <p class="doma-texto-corrido" style="font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; color: #1a1a1a; margin: 0; text-align: center; font-weight: 600;">
+                Nesta fase, você vai entender as <strong style="color: #ea580c; font-weight: 900; text-transform: uppercase;">engrenagens biológicas</strong> que fazem você sentir pânico, dor ou exaustão, e como 
+                <span style="text-transform: uppercase; font-weight: 900; color: #1a1a1a; background: #bae6fd; border: 2px solid #1a1a1a; padding: 2px 6px; border-radius: 4px; box-shadow: 2px 2px 0px #0284c7; display: inline-block; transform: rotate(-2deg); margin: 0 4px;">"HACKEAR"</span> 
+                esse sistema no dia a dia.
+            </p>
+        </div>
+        
+        <button class="btn-doma pulse-btn" style="background-color: #ea580c; color: #ffffff; border: 2px solid #1a1a1a; margin-top: 5vh; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase; width: 100%; max-width: 400px;" onclick="window.mudarPagina(1)" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+            ABRIR O MANUAL ➔
+        </button>
+    </div>
+</div>
