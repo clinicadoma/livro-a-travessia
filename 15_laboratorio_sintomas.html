@@ -1,0 +1,318 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+    .bg-dm { background: #080c14 !important; background-image: radial-gradient(ellipse at 80% 5%,  rgba(244,114,182,.14) 0%, transparent 50%), radial-gradient(ellipse at 5% 95%,  rgba(124,58,237,.10)  0%, transparent 50%) !important; }
+    .dm-card { width: 100%; background: #131e2e; border: 1px solid rgba(255,255,255,.09); border-radius: 16px; padding: 22px 18px; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+    .dm-tag { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #f472b6; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+    .dm-h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.45rem, 6vw, 1.9rem); color: #ffffff !important; margin: 0 0 13px; line-height: 1.2; }
+    .dm-h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.1rem, 5vw, 1.45rem); color: #ffffff !important; margin: 0 0 11px; line-height: 1.3; }
+    .dm-p { font-size: clamp(.87rem, 3.5vw, .96rem); color: #e2e8f0 !important; line-height: 1.75; margin: 0 0 14px; font-family: 'DM Sans', sans-serif; }
+    .dm-p strong { color: #f472b6 !important; }
+    .dm-muted { font-size: .85rem; color: #94a3b8 !important; line-height: 1.6; margin: 0 0 14px; font-family: 'DM Sans', sans-serif; }
+    .dm-hr { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 16px 0; }
+    .dm-alert { background: rgba(248,113,113,.08); border: 1px dashed rgba(248,113,113,.4); border-radius: 10px; padding: 14px; color: #fca5a5 !important; font-size: clamp(.87rem,3.5vw,.96rem); font-weight: 600; text-align: center; line-height: 1.6; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
+    .dm-verdade { background: rgba(248,113,113,.07); border: 1px solid rgba(248,113,113,.28); border-radius: 10px; padding: 14px; color: #fca5a5 !important; font-size: clamp(.87rem,3.5vw,.96rem); font-weight: 600; line-height: 1.65; text-align: center; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
+    .dm-solution { background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.22); border-radius: 10px; padding: 16px; color: #fef3c7 !important; font-size: clamp(.84rem,3.2vw,.92rem); line-height: 1.6; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
+    .dm-btn { display: block; width: 100%; padding: 14px 18px; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-size: .87rem; font-weight: 700; letter-spacing: .04em; cursor: pointer; text-align: center; box-sizing: border-box; margin-top: 4px; transition: 0.2s; }
+    .dm-btn:active { transform: scale(0.98); }
+    .dm-btn-pink { background: linear-gradient(135deg,#be185d,#f472b6); color: #fff !important; }
+    .dm-btn-dark { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); color: #f1f5f9 !important; }
+    .dm-btn-red  { background: linear-gradient(135deg,#dc2626,#f87171); color: #fff !important; }
+    .dm-btn-green{ background: linear-gradient(135deg,#059669,#34d399); color: #fff !important; }
+    .dm-mt10 { margin-top: 10px !important; }
+    .dm-mt8  { margin-top: 8px !important; }
+    .dm-btn-pulse { animation: dm-pulse 2.4s ease-in-out infinite; }
+    @keyframes dm-pulse { 0%,100%{opacity:1} 50%{opacity:.8} }
+    .dm-sym-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .dm-sym-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15); border-radius: 10px; color: #f8fafc !important; font-family: 'DM Sans',sans-serif; font-size: .9rem; font-weight: 500; cursor: pointer; text-align: left; box-sizing: border-box; transition: 0.2s; }
+    .dm-sym-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: rgba(255,255,255,.05); }
+    .dm-sym-btn.dm-sel { border-color: #f472b6; background: rgba(244,114,182,.1); color: #ffffff !important; }
+    .dm-sym-icon { font-size: 1.15rem; width: 24px; text-align: center; flex-shrink: 0; }
+    .dm-sym-check { margin-left: auto; width: 17px; height: 17px; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .62rem; color: #fff; font-weight: 900; }
+    .dm-sym-btn.dm-sel .dm-sym-check { background: #f472b6; border-color: #f472b6; }
+    .dm-counter { display: flex; align-items: center; justify-content: space-between; padding: 7px 11px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; margin-bottom: 12px; }
+    .dm-counter span { font-size: .8rem; color: #94a3b8 !important; font-family: 'DM Sans',sans-serif; font-weight: bold; }
+    .dm-dots { display: flex; gap: 5px; }
+    .dm-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.2); }
+    .dm-dot.on { background: #f472b6; transform: scale(1.3); }
+    .dm-prog-wrap { background: rgba(255,255,255,.1); border-radius: 99px; height: 5px; margin-bottom: 16px; overflow: hidden; }
+    .dm-prog-bar  { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#be185d,#f472b6,#fbbf24); transition: width .5s ease; }
+    .dm-map-item { display: flex; align-items: center; gap: 9px; padding: 12px; border-radius: 9px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15); color: #f8fafc !important; font-size: .9rem; cursor: pointer; margin-bottom: 8px; text-align: left; width: 100%; box-sizing: border-box; font-family: 'DM Sans',sans-serif; }
+    .dm-map-item.dm-done { border-color: rgba(52,211,153,.5); background: rgba(52,211,153,.05); color: #6ee7b7 !important; }
+    .dm-map-icon  { font-size: 1.1rem; width: 22px; text-align: center; flex-shrink: 0; }
+    .dm-map-arrow { margin-left: auto; font-size: .8rem; opacity: .8; flex-shrink: 0; }
+    .dm-trophy { font-size: 2.8rem; display: block; margin-bottom: 8px; animation: dm-bounce .9s ease-in-out infinite alternate; }
+    @keyframes dm-bounce { to { transform: translateY(-7px); } }
+    .dm-step { display: none; }
+    .dm-step.dm-on { display: block; animation: dm-fadein .3s ease; }
+    @keyframes dm-fadein { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .dm-hidden { display: none !important; }
+    .dm-tc { text-align: center; }
+    
+    @keyframes btnChamarAtencao {
+        0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px rgba(244, 114, 182, 0); }
+        15% { transform: scale(1.02) rotate(-1.5deg); box-shadow: 0 0 15px rgba(244, 114, 182, 0.6); }
+        30% { transform: scale(1.02) rotate(1.5deg); box-shadow: 0 0 15px rgba(244, 114, 182, 0.6); }
+        45% { transform: scale(1.02) rotate(-1.5deg); box-shadow: 0 0 15px rgba(244, 114, 182, 0.6); }
+        60% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px rgba(244, 114, 182, 0); }
+        100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0px rgba(244, 114, 182, 0); }
+    }
+    .dm-anim-chamar-atencao {
+        animation: btnChamarAtencao 2.5s infinite ease-in-out;
+        border: 1px solid #f472b6 !important;
+        background: rgba(244, 114, 182, 0.1);
+    }
+</style>
+
+<div class="bg-dm" style="width: 100%; min-height: 100vh; padding: 40px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box;">
+    <div class="wrapper-isolado" style="width: 100%; max-width: 500px; margin: 0 auto;">
+        
+        <!-- ===================================== -->
+        <!-- TELA 1: SELETOR DE SINTOMAS           -->
+        <!-- ===================================== -->
+        <div id="tela-dm-seletor" class="dm-card" style="display: block;">
+            <span class="dm-tag">👇 Passo 1 · Investigação</span>
+            <h2 class="dm-h2">Onde o seu corpo está gritando mais alto nesse momento?</h2>
+            <p class="dm-muted">Nesta primeira etapa, selecione abaixo <strong style="color:#f472b6;"> De 01 até 03 sintomas</strong> que mais aparecem na sua vida agora.</p>
+
+            <div class="dm-counter">
+                <span>Selecionados</span>
+                <div class="dm-dots">
+                    <div class="dm-dot" id="dmd0"></div>
+                    <div class="dm-dot" id="dmd1"></div>
+                    <div class="dm-dot" id="dmd2"></div>
+                </div>
+                <span id="dm-ctxt">0 / 3</span>
+            </div>
+
+            <div class="dm-sym-list">
+                <button class="dm-sym-btn" data-key="coracao" onclick="window.dmToggle(this)"><span class="dm-sym-icon">🫀</span><span>Coração acelerado / Pressão</span><span class="dm-sym-check"></span></button>
+                <button class="dm-sym-btn" data-key="dores" onclick="window.dmToggle(this)"><span class="dm-sym-icon">💥</span><span>Dores no corpo / Tensão</span><span class="dm-sym-check"></span></button>
+                <button class="dm-sym-btn" data-key="libido" onclick="window.dmToggle(this)"><span class="dm-sym-icon">🔥</span><span>Baixa energia / Libido</span><span class="dm-sym-check"></span></button>
+                <button class="dm-sym-btn" data-key="memoria" onclick="window.dmToggle(this)"><span class="dm-sym-icon">🧠</span><span>Névoa mental / Memória</span><span class="dm-sym-check"></span></button>
+                <button class="dm-sym-btn" data-key="panico" onclick="window.dmToggle(this)"><span class="dm-sym-icon">🌪️</span><span>Ansiedade / Pânico</span><span class="dm-sym-check"></span></button>
+                <button class="dm-sym-btn" data-key="insonia" onclick="window.dmToggle(this)"><span class="dm-sym-icon">🥱</span><span>Insônia / Mente ativa</span><span class="dm-sym-check"></span></button>
+            </div>
+
+            <button id="dm-btn-montar" class="dm-btn dm-btn-pink" style="opacity:.35;pointer-events:none;" onclick="window.dmIniciar()">MONTAR MEU MAPA DE TRATAMENTO ➔</button>
+        </div>
+
+        <!-- ===================================== -->
+        <!-- TELA 2: HUB DE TRATAMENTO             -->
+        <!-- ===================================== -->
+        <div id="tela-dm-hub" style="display: none; width: 100%;">
+            
+            <div id="dm-v-mapa" class="dm-card">
+                <span class="dm-tag">🗺️ Passo 2 · Mapa de Tratamento</span>
+                <h2 class="dm-h2" style="margin-bottom:5px;">Seus bloqueios mapeados</h2>
+                <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#94a3b8;font-weight:bold;margin-bottom:4px;">
+                    <span>Progresso</span>
+                    <span id="dm-prog-txt" style="color:#94a3b8 !important;">0 / 0 resolvidos</span>
+                </div>
+                <div class="dm-prog-wrap"><div class="dm-prog-bar" id="dm-prog-bar" style="width:0%"></div></div>
+                <p class="dm-muted"> Toque em um sintoma por vez para descobrir a causa e receber orientações que trazem alívio.</p>
+                <div id="dm-mapa-lista"></div>
+                <button class="dm-btn dm-btn-dark dm-mt8" style="font-size:.79rem;" onclick="window.dmReset()">↩ Selecionar novos sintomas</button>
+            </div>
+
+            <div id="dm-v-diag" class="dm-hidden">
+                <div id="dm-diag-inner"></div>
+                <button class="dm-btn dm-btn-dark dm-mt8" style="font-size:.79rem;" onclick="window.dmVoltaMapa()">← Voltar ao mapa</button>
+            </div>
+
+            <div id="dm-v-final" class="dm-card dm-tc dm-hidden">
+                <span class="dm-trophy">🏆</span>
+                <span class="dm-tag">✅ Diagnóstico concluído</span>
+                <h2 class="dm-h2">Mecânica Dominada!</h2>
+                <p class="dm-p">Você entendeu que o sintoma não é um erro, mas um <strong>alarme</strong>. Agora você tem ferramentas para desligá-lo na vida real.</p>
+                <hr class="dm-hr">
+                <button class="dm-btn dm-btn-dark" onclick="window.dmReset()">🔄 Explorar novos sintomas</button>
+                <button class="dm-btn dm-btn-pink dm-btn-pulse dm-mt10" onclick="window.dmSom('success'); window.mudarPagina(1);">CONTINUAR A TRAVESSIA ➔</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    var DATA = {
+        coracao: {
+            icon: '🫀', 
+            titulo: 'Coração Acelerado',
+            inv: 'O peito aperta porque a Amígdala cerebral detectou um medo e mandou sangue para os músculos. É o corpo se preparando para uma guerra que não existe.',
+            verd: 'A "Mecânica" aqui é a hipervigilância. Você foca tanto no batimento que o cérebro acha que você está infartando, gerando mais adrenalina e piorando o sintoma.',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #f472b6; display: block; margin-bottom: 5px; text-transform: uppercase;">💪 Prática Física:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Coloque a mão no peito e diga: "Meu coração está vivo e me protegendo, mas eu assumo o leme".</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Isso traz a consciência de volta para o próprio corpo.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Inspire contando até 4, segure por 2, solte o ar contando até 6.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">A expiração longa ativa o sistema parassimpático.</i></div>'
+        },
+        dores: {
+            icon: '💥', 
+            titulo: 'Dores no Corpo / Tensão',
+            inv: 'A dor lombar ou na nuca é o "lixo" das emoções engolidas. O cortisol inflama os tecidos e a tensão muscular vira uma armadura contra o mundo.',
+            verd: 'Você está travando o corpo fisicamente para não "sentir" o impacto emocional de uma situação insuportável no seu dia a dia.',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #f472b6; display: block; margin-bottom: 5px; text-transform: uppercase;">💪 Prática Física:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Vá a um lugar privado e sacuda braços e pernas vigorosamente por 20s.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Descarrega o excesso de cortisol e adrenalina.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Feche os olhos, dê uma cor à sua dor. Ao expirar, imagine a cor saindo pela boca.</span></div>'
+        },
+        libido: {
+            icon: '🔥', 
+            titulo: 'Baixa Energia / Libido',
+            inv: 'A libido é a nossa "Bateria de Vida". Quando o inconsciente está em guerra interna, ele corta o fornecimento de energia para focar apenas na defesa.',
+            verd: 'Não é falta de desejo, é economia de bateria biológica. Sua mente está cansada demais de lutar contra monstros invisíveis.',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Vá até um espelho e force um sorriso aberto por 30s.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">"Engana" o cérebro e induz liberação de endorfina.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #f472b6; display: block; margin-bottom: 5px; text-transform: uppercase;">💪 Prática Física:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Estufe o peito, abra os braços e levante o queixo por 30s.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Reduz cortisol e aumenta a confiança.</i></div>'
+        },
+        memoria: {
+            icon: '🧠', 
+            titulo: 'Névoa Mental / Memória',
+            inv: 'A "cabeça de algodão" acontece porque a sua razão está sendo desligada pela sua emoção. Você não foca porque sua mente vigia perigos.',
+            verd: 'O esquecimento é uma tática de defesa. Sua mente está "cheia demais" de dores e estresse reprimido para sobrar espaço para reter coisas novas.',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Pare tudo e nomeie em voz alta: 5 coisas azuis, 4 texturas e 3 sons.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Puxa o fluxo sanguíneo do pânico de volta para a lógica.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #f472b6; display: block; margin-bottom: 5px; text-transform: uppercase;">💪 Prática Física:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Pegue um objeto e passe 30s descrevendo a textura dele em voz alta.</span></div>'
+        },
+        insonia: {
+            icon: '🥱', 
+            titulo: 'Insônia / Mente Ativa',
+            inv: 'Dormir é a entrega total e a perda do controle. A insônia é o medo inconsciente de encontrar seus monstros no silêncio da noite.',
+            verd: 'Sua mente acha que o silêncio é perigoso. Ela busca ou cria problemas imaginários apenas para te manter acordado(a) e "seguro(a)".',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #a78bfa; display: block; margin-bottom: 5px; text-transform: uppercase;">✍️ Prática Escrita:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Escreva as suas preocupações em um caderno e feche-o.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Externaliza a carga cognitiva, avisando que não precisa mais vigiar.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Pense em palavras soltas (ex: Cadeira, Abacaxi, Nuvem).</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Quebra a narrativa lógica da ansiedade.</i></div>'
+        },
+        panico: {
+            icon: '🌪️', 
+            titulo: 'Ansiedade / Pânico',
+            inv: 'A crise de pânico é o "transbordo" do balde. Você engoliu dores e suportou pesos por tempo demais. O seu sistema nervoso entra em curto-circuito.',
+            verd: 'A mecânica do pânico é a de um alarme de incêndio disparando sem que haja fogo. É o seu corpo pedindo socorro e uma pausa.',
+            sol: '<div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #f472b6; display: block; margin-bottom: 5px; text-transform: uppercase;">💪 Prática Física:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Coloque água bem gelada nos pulsos ou beba água gelada.</span> <i style="display:block; margin-top:6px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4;">Reseta o nervo vago e corta a crise instantaneamente.</i></div><div style="margin-bottom:15px;"><strong style="font-size: 1.1rem; color: #38bdf8; display: block; margin-bottom: 5px; text-transform: uppercase;">🧠 Prática Mental:</strong> <span style="color: #e2e8f0; line-height: 1.5;">Tape ouvidos e olhos, e faça o som "Hummm" sentindo o peito vibrar.</span></div>'
+        }
+    };
+
+    var sel = [], resolvidos = [], atual = null;
+    var _ac = null;
+
+    function ac(){ return _ac || (_ac = new (window.AudioContext || window.webkitAudioContext)()); }
+    
+    window.dmSom = function(t){
+        try{
+            var c = ac(), o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination);
+            if(t === 'click'){ o.type='sine'; o.frequency.setValueAtTime(660,c.currentTime); o.frequency.exponentialRampToValueAtTime(880,c.currentTime+.05); g.gain.setValueAtTime(.12,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.12); o.start(c.currentTime); o.stop(c.currentTime+.12); }
+            else if(t === 'sel'){ o.type='triangle'; o.frequency.setValueAtTime(520,c.currentTime); o.frequency.linearRampToValueAtTime(700,c.currentTime+.08); g.gain.setValueAtTime(.1,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.18); o.start(c.currentTime); o.stop(c.currentTime+.18); }
+            else if(t === 'whoosh'){ o.type='sine'; o.frequency.setValueAtTime(200,c.currentTime); o.frequency.exponentialRampToValueAtTime(800,c.currentTime+.25); g.gain.setValueAtTime(.09,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.3); o.start(c.currentTime); o.stop(c.currentTime+.3); }
+            else if(t === 'reveal'){ o.type='sine'; o.frequency.value=440; g.gain.setValueAtTime(.1,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.15); o.start(c.currentTime); o.stop(c.currentTime+.15); var o2=c.createOscillator(),g2=c.createGain();o2.connect(g2);g2.connect(c.destination);o2.type='sine';o2.frequency.value=660;g2.gain.setValueAtTime(0,c.currentTime+.1);g2.gain.linearRampToValueAtTime(.12,c.currentTime+.15);g2.gain.exponentialRampToValueAtTime(.001,c.currentTime+.35);o2.start(c.currentTime+.1);o2.stop(c.currentTime+.35); }
+            else if(t === 'success'){ [[261,0],[329,.08],[392,.16]].forEach(function(p){var oo=c.createOscillator(),gg=c.createGain();oo.connect(gg);gg.connect(c.destination);oo.type='sine';oo.frequency.value=p[0];gg.gain.setValueAtTime(0,c.currentTime+p[1]);gg.gain.linearRampToValueAtTime(.12,c.currentTime+p[1]+.04);gg.gain.exponentialRampToValueAtTime(.001,c.currentTime+p[1]+.5);oo.start(c.currentTime+p[1]);oo.stop(c.currentTime+p[1]+.55);}); return; }
+        }catch(e){}
+    };
+
+    window.dmToggle = function(btn){
+        var k = btn.getAttribute('data-key'), i = sel.indexOf(k);
+        if(i > -1){
+            sel.splice(i,1); btn.classList.remove('dm-sel');
+            var ch = btn.querySelector('.dm-sym-check'); if(ch) ch.textContent='';
+        } else {
+            if(sel.length >= 3) return;
+            sel.push(k); btn.classList.add('dm-sel');
+            var ch = btn.querySelector('.dm-sym-check'); if(ch) ch.textContent='✓';
+            window.dmSom('sel');
+        }
+        for(var d = 0; d < 3; d++){
+            var dot = document.getElementById('dmd'+d);
+            if(dot) dot.classList.toggle('on', d < sel.length);
+        }
+        var ct = document.getElementById('dm-ctxt');
+        if(ct) ct.textContent = sel.length + ' / 3';
+        
+        document.querySelectorAll('.dm-sym-btn').forEach(function(b){
+            b.disabled = (sel.length >= 3 && sel.indexOf(b.getAttribute('data-key')) === -1);
+        });
+        
+        var bm = document.getElementById('dm-btn-montar');
+        if(bm){
+            bm.style.opacity = sel.length > 0 ? '1' : '.35';
+            bm.style.pointerEvents = sel.length > 0 ? 'auto' : 'none';
+        }
+    };
+
+    window.dmIniciar = function(){
+        if(!sel.length) return;
+        resolvidos = []; atual = null; window.dmSom('whoosh'); dmRenderMapa();
+        
+        // MÁGICA DA SPA: Esconde o seletor e mostra o Hub sem recarregar o módulo!
+        document.getElementById('tela-dm-seletor').style.display = 'none';
+        document.getElementById('tela-dm-hub').style.display = 'block';
+        window.scrollTo(0,0);
+    };
+
+    function dmRenderMapa(){
+        dmView('mapa');
+        var lista = document.getElementById('dm-mapa-lista');
+        if(!lista) return; lista.innerHTML='';
+        sel.forEach(function(k){
+            var s = DATA[k], feito = resolvidos.indexOf(k) > -1, btn = document.createElement('button');
+            btn.className = 'dm-map-item' + (feito ? ' dm-done' : ' dm-anim-chamar-atencao');
+            btn.innerHTML = '<span class="dm-map-icon">' + s.icon + '</span><span>' + s.titulo + '</span><span class="dm-map-arrow">' + (feito ? '✅' : '→') + '</span>';
+            btn.onclick = function(){ window.dmAbrirSintoma(k); };
+            lista.appendChild(btn);
+        });
+        var t = sel.length, f = resolvidos.length;
+        var bar = document.getElementById('dm-prog-bar'); if(bar) bar.style.width = (t ? Math.round(f/t*100) : 0) + '%';
+        var txt = document.getElementById('dm-prog-txt'); if(txt) txt.textContent = f + ' / ' + t + ' resolvidos';
+    }
+
+    window.dmAbrirSintoma = function(k){
+        atual = k; var s = DATA[k], feito = resolvidos.indexOf(k) > -1;
+        window.dmSom('click'); dmView('diag');
+        var c = document.getElementById('dm-diag-inner'); if(!c) return;
+        c.innerHTML = 
+          '<div class="dm-card">' +
+          '<div id="dmp1" class="dm-step dm-on"><span class="dm-tag">🔍 Investigação</span>' +
+          '<h3 style="font-family:\'Syne\',sans-serif;font-size:clamp(1rem,4vw,1.25rem);color:#fff;margin:0 0 10px;line-height:1.3;">' + s.icon + ' ' + s.titulo + '</h3>' +
+          '<p class="dm-p">' + s.inv + '</p>' +
+          '<button class="dm-btn dm-btn-dark" onclick="window.dmPasso(2)">POR QUE ISSO ACONTECE? ➔</button></div>' +
+          '<div id="dmp2" class="dm-step"><span class="dm-tag">⚡ A Mecânica Oculta</span>' +
+          '<div class="dm-verdade">' + s.verd + '</div>' +
+          '<button class="dm-btn dm-btn-red" onclick="window.dmPasso(3)">VER OPÇÕES DE INTERVENÇÃO ✨ ➔</button></div>' +
+          '<div id="dmp3" class="dm-step"><span class="dm-tag">✨ 2 práticas que trazem alívio.</span>' +
+          '<div class="dm-solution">' + s.sol + '</div>' +
+          '<button class="dm-btn dm-btn-green" onclick="window.dmConcluir(\'' + k + '\')">CONCLUIR INTERVENÇÃO ✅</button></div>' +
+          '</div>';
+        if(feito) window.dmPasso(3, true);
+    };
+
+    window.dmPasso = function(n, s){
+        if(!s) window.dmSom(n === 3 ? 'reveal' : 'whoosh');
+        [1,2,3].forEach(function(i){
+            var el = document.getElementById('dmp'+i);
+            if(el) el.className = 'dm-step' + (i === n ? ' dm-on' : '');
+        });
+    };
+
+    window.dmConcluir = function(k){
+        if(resolvidos.indexOf(k) === -1) resolvidos.push(k);
+        window.dmSom('success'); dmRenderMapa();
+        if(resolvidos.length >= sel.length) setTimeout(function(){ dmView('final'); }, 500);
+    };
+
+    window.dmVoltaMapa = function(){ window.dmSom('click'); dmRenderMapa(); };
+
+    function dmView(v){
+        var ids = { mapa: 'dm-v-mapa', diag: 'dm-v-diag', final: 'dm-v-final' };
+        Object.keys(ids).forEach(function(k){
+            var el = document.getElementById(ids[k]);
+            if(el) el.classList.toggle('dm-hidden', k !== v);
+        });
+    }
+
+    window.dmReset = function(){
+        sel = []; resolvidos = []; atual = null; window.dmSom('click');
+        document.querySelectorAll('.dm-sym-btn').forEach(function(b){
+            b.classList.remove('dm-sel'); b.disabled = false;
+            var ch = b.querySelector('.dm-sym-check'); if(ch) ch.textContent = '';
+        });
+        for(var d = 0; d < 3; d++){
+            var dot = document.getElementById('dmd'+d);
+            if(dot) dot.classList.remove('on');
+        }
+        var ct = document.getElementById('dm-ctxt'); if(ct) ct.textContent = '0 / 3';
+        var bm = document.getElementById('dm-btn-montar');
+        if(bm){ bm.style.opacity = '.35'; bm.style.pointerEvents = 'none'; }
+        
+        // Mágica SPA: Volta do Hub para o Seletor
+        document.getElementById('tela-dm-hub').style.display = 'none';
+        document.getElementById('tela-dm-seletor').style.display = 'block';
+        window.scrollTo(0,0);
+    };
+})();
+</script>
