@@ -189,46 +189,65 @@ window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, mod
 };
 
 window.irParaTela = function(idAlvo) {
+    // 1. Mapeia as páginas dinamicamente para nunca dar "undefined"
+    var paginasLocais = document.querySelectorAll('.doma-pagina');
+    
+    // 2. Garante que as variáveis globais de progresso existam
+    if (typeof window.pagAtiva === 'undefined') window.pagAtiva = 0;
+    if (typeof window.maxPaginaAlcancada === 'undefined') {
+        window.maxPaginaAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+    }
+    if (typeof window.isUsuarioPremium === 'undefined') {
+        window.isUsuarioPremium = localStorage.getItem('acesso_vip_doma_liberado') === 'true';
+    }
+
     let indexTribunal = 0;
-    paginas.forEach((p, i) => { if(p.id === 'pag-tribunal-intro') indexTribunal = i; });
+    paginasLocais.forEach((p, i) => { if(p.id === 'pag-tribunal-intro') indexTribunal = i; });
     
     let alvoIndex = 0;
-    paginas.forEach((p, i) => { if (p.id === idAlvo) alvoIndex = i; });
+    paginasLocais.forEach((p, i) => { if (p.id === idAlvo) alvoIndex = i; });
     
     // --- TRAVA JAVASCRIPT: IMPEDE A ABERTURA DE ITENS AINDA NÃO ALCANÇADOS ---
-    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > maxPaginaAlcancada) {
-        return; // Corta a ação na raiz. Mesmo que clique, não abre!
+    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > window.maxPaginaAlcancada) {
+        return; 
     }
     
     // Trava de Paywall (VIP)
-    if (alvoIndex >= indexTribunal && !isUsuarioPremium) {
-        document.getElementById('slide-paywall-vip').style.display = 'flex';
+    if (alvoIndex >= indexTribunal && !window.isUsuarioPremium) {
+        let modalVip = document.getElementById('slide-paywall-vip');
+        if(modalVip) modalVip.style.display = 'flex';
         return;
     }
 
     // Executa a troca de tela
-    paginas.forEach((p, i) => {
+    paginasLocais.forEach((p, i) => {
         if (p.id === idAlvo) {
-            paginas[pagAtiva].classList.remove('ativa');
-            paginas[pagAtiva].style.display = '';
-            pagAtiva = i;
+            // Remove a classe 'ativa' da página anterior de forma segura
+            if(paginasLocais[window.pagAtiva]) {
+                paginasLocais[window.pagAtiva].classList.remove('ativa');
+                paginasLocais[window.pagAtiva].style.display = '';
+            }
+            // Define a nova página
+            window.pagAtiva = i;
             p.classList.add('ativa');
             p.scrollTop = 0;
         }
     });
     
-    if (typeof atualizarVisibilidadeSeta === 'function') atualizarVisibilidadeSeta();
+    if (typeof window.atualizarVisibilidadeSeta === 'function') window.atualizarVisibilidadeSeta();
     
     // Atualiza a pontuação de avanço no menu
-    let idAtual = paginas[pagAtiva].id;
-    if (idAtual !== 'pag-mapa-final' && idAtual !== 'pag-sumario' && idAtual !== 'pag-mapa-travessia') {
-        if (pagAtiva > maxPaginaAlcancada) {
-            maxPaginaAlcancada = pagAtiva;
-            localStorage.setItem('doma_max_pagina', maxPaginaAlcancada);
+    if (paginasLocais[window.pagAtiva]) {
+        let idAtual = paginasLocais[window.pagAtiva].id;
+        if (idAtual !== 'pag-mapa-final' && idAtual !== 'pag-sumario' && idAtual !== 'pag-mapa-travessia') {
+            if (window.pagAtiva > window.maxPaginaAlcancada) {
+                window.maxPaginaAlcancada = window.pagAtiva;
+                localStorage.setItem('doma_max_pagina', window.maxPaginaAlcancada);
+            }
         }
     }
     
-    if (typeof atualizarVisualSumario === 'function') atualizarVisualSumario();
+    if (typeof window.atualizarVisualSumario === 'function') window.atualizarVisualSumario();
 };
 
 iniciarSistema();
