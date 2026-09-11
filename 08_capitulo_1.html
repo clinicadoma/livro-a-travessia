@@ -1,19 +1,19 @@
-<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
-    
-    <h2 class="doma-titulo-gigante" style="text-align: center; margin-bottom: 2vh;">
-        CAPÍTULO 1<br>
-        <span style="color: #0ea5e9; font-size: 1.4rem;">O Acolhimento</span>
-    </h2>
-    
-    <div style="background: #f0f9ff; border: 3px solid #bae6fd; border-radius: 20px; padding: 4vh 20px; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+<div class="btn-voltar-sumario" onclick="if(window.irParaTela) window.irParaTela('pag-mapa-final')">☰</div>
+<div class="wrapper-isolado">
+    <h2 class="doma-titulo-gigante">CAPÍTULO 1<br><span style="color: #0ea5e9; font-size: 1.4rem;">O Acolhimento</span></h2>
+    <div style="background: #f0f9ff; border: 3px solid #bae6fd; border-radius: 20px; padding: 4vh 20px; text-align: center; margin-top: 3vh; width: 100%;">
         <p style="color: #0369a1; font-weight: 900; font-size: 1.1rem; margin-top:0;">📢 MISSÃO PRÁTICA! 🎮</p>
-        <p class="doma-texto-corrido" style="text-align: center; margin: 2vh 0; color: #0c4a6e;">
-            O jogo a seguir não é só brincadeira, é um <strong>TREINAMENTO</strong>. Encontre os pares de cada "monstrinho".
-        </p>
-        
-        <button class="btn-doma btn-doma-azul efeito-tremor" style="margin-top: 2vh; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; text-transform: uppercase;" onclick="this.disabled=true; mudarPagina(1);">
-            🎮 REVELAR JOGO ➔
-        </button>
+        <p class="doma-texto-corrido" style="text-align: center; margin: 2vh 0; color: #0c4a6e;">O jogo abaixo não é só brincadeira, é um <strong>TREINAMENTO</strong>. Encontre os pares de cada "monstrinho".</p>
+        <button class="btn-doma btn-doma-azul efeito-tremor" onclick="window.revelarMonstrinhos(this, event)">🎮 REVELAR JOGO ➔</button>
     </div>
-
 </div>
+
+<script>
+window.revelarMonstrinhos = function(btn, event) {
+    if(event) { event.preventDefault(); event.stopPropagation(); }
+    // Desativa o botão para evitar duplo clique
+    btn.disabled = true;
+    // Avança para o slide do jogo
+    window.mudarPagina(1);
+};
+</script>
