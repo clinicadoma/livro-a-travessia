@@ -1,35 +1,55 @@
-<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
-    <div style="text-align:center; margin-bottom: 4vh; position: relative; z-index: 2;">
-        <div style="font-size: clamp(4.5rem, 12vh, 6rem); margin-bottom: 1vh; filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));">🪙</div>
-        <h2 style="margin-top: 10px; font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
-            <span style="background-color: #fef08a; padding: 4px 20px; border-radius: 8px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(1deg);">
-                As Doma Coins
-            </span>
-        </h2>
-    </div>
-    
-    <div style="width:100%; background: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; box-shadow: 6px 6px 0px rgba(0,0,0,0.05); padding: 4vh 30px; position: relative; z-index: 2;">
-        <p style="margin-bottom:3vh; font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; text-align: center; color: #333;">
-            Durante toda a sua travessia, você será <strong style="color:#f59e0b; font-weight: 900; text-transform: uppercase;">recompensado(a)</strong> por cada passo que der. Cada reflexão vale <strong style="font-weight: 900; background: rgba(254, 240, 138, 0.6); padding: 0 5px;">Doma Coins</strong>!
-        </p>
-        
-        <div style="background: linear-gradient(135deg,#fef3c7,#fde047); border: 2px solid #1a1a1a; padding: 25px 20px; border-radius: 12px; text-align: center; margin-bottom: 3vh; box-shadow: 5px 5px 0px #1a1a1a; transform: rotate(-1deg);">
-            <p style="margin:0; font-size: clamp(1.2rem, 3vh, 1.5rem); font-weight: 900; color: #1a1a1a; font-family: 'Nunito', sans-serif;">
-                💰 Acumule moedas e troque por Presentes exclusivos em nosso Site! 
-            </p>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 2vh; padding: 0 10px;">
-            <button onclick="ganharMoedas(10, event); this.disabled = true; this.innerHTML = '✅ MOEDAS RESGATADAS!';" 
-                    style="background-color: #ff69b4; color: #1a1a1a; border: 4px solid #1a1a1a; padding: 18px 30px; font-size: clamp(1.1rem, 2.5vw, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; border-radius: 16px; cursor: pointer; box-shadow: 6px 6px 0px #1a1a1a; transition: all 0.1s ease; width: 100%; max-width: 600px; white-space: normal;">
-                Clique aqui para ganhar 10 Moedas de Boas Vindas 🎁
-            </button>
-        </div>
+<!-- SLIDE 4: DOMA COINS -->
+<div class="doma-pagina bg-minimalista-cores" id="pag-5" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.04; pointer-events: none; background-image: radial-gradient(#1a1a1a 2px, transparent 2px); background-size: 30px 30px;"></div>
 
-        <div style="margin-top: 4vh; text-align: center;">
-            <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; text-transform: uppercase;">
-                CONTINUAR  ➔
-            </button>
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100%;">
+        <div style="text-align:center; margin-bottom: 4vh; position: relative; z-index: 2;">
+            <div style="font-size: clamp(4.5rem, 12vh, 6rem); margin-bottom: 1vh; animation: pulseSoft 2s infinite; filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));">🪙</div>
+            <h2 class="doma-titulo-gigante" style="margin-top: 10px; font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                <span style="background-color: #fef08a; padding: 4px 20px; border-radius: 8px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(1deg);">
+                    As Doma Coins
+                </span>
+            </h2>
+        </div>
+        
+        <div class="glass-candy" style="width:100%; background: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; box-shadow: 6px 6px 0px rgba(0,0,0,0.05); padding: 4vh 30px; position: relative; z-index: 2;">
+            <p class="doma-texto-corrido" style="margin-bottom:3vh; font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; text-align: center;">
+                Durante toda a sua travessia, você será <strong style="color:#f59e0b; font-weight: 900; text-transform: uppercase;">recompensado(a)</strong> por cada passo que der. <br> Cada reflexão, cada exercício completado, cada insight conquistado vale <strong style="font-weight: 900; background: rgba(254, 240, 138, 0.6); padding: 0 5px;">Doma Coins</strong>!<br>
+            </p>
+            
+            <div style="background: linear-gradient(135deg,#fef3c7,#fde047); border: 2px solid #1a1a1a; padding: 25px 20px; border-radius: 12px; text-align: center; margin-bottom: 3vh; box-shadow: 5px 5px 0px #1a1a1a; transform: rotate(-1deg);">
+                <p style="margin:0; font-size: clamp(1.2rem, 3vh, 1.5rem); font-weight: 900; color: #1a1a1a; font-family: 'Nunito', sans-serif;">
+                    💰 Acumule moedas e troque por Presentes exclusivos em nosso Site ! 
+                </p>
+            </div>
+            
+            <style>
+                /* Mantendo a animação de mexidinha original */
+                @keyframes animacaoMexidinha {
+                    0%, 85%, 100% { transform: rotate(0deg); }
+                    88% { transform: rotate(-3deg) scale(1.02); }
+                    91% { transform: rotate(3deg) scale(1.02); }
+                    94% { transform: rotate(-3deg) scale(1.02); }
+                    97% { transform: rotate(3deg) scale(1.02); }
+                }
+            </style>
+
+            <div style="text-align: center; margin-bottom: 2vh; padding: 0 10px;">
+                <button class="btn-doma" onclick="ganharMoedas(10,event)" 
+                        style="background-color: #ff69b4; color: #1a1a1a; border: 4px solid #1a1a1a; padding: 18px 30px; font-size: clamp(1.1rem, 2.5vw, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; border-radius: 16px; cursor: pointer; box-shadow: 6px 6px 0px #1a1a1a, inset -5px -5px 0px rgba(0,0,0,0.2), inset 5px 5px 0px rgba(255,255,255,0.5); transition: all 0.1s ease; animation: animacaoMexidinha 3s infinite; width: 100%; max-width: 600px; white-space: normal; word-wrap: break-word;" 
+                        onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='8px 8px 0px #1a1a1a, inset -5px -5px 0px rgba(0,0,0,0.2), inset 5px 5px 0px rgba(255,255,255,0.5)';" 
+                        onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='6px 6px 0px #1a1a1a, inset -5px -5px 0px rgba(0,0,0,0.2), inset 5px 5px 0px rgba(255,255,255,0.5)';" 
+                        onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a, inset -2px -2px 0px rgba(0,0,0,0.2), inset 2px 2px 0px rgba(255,255,255,0.5)';">
+                    Clique aqui para ganhar 10 Moedas de Boas Vindas 🎁
+                </button>
+            </div>
+
+            <!-- BOTAO ADICIONADO AQUI -->
+            <div style="margin-top: 4vh; text-align: center;">
+                <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase;" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                    CONTINUAR  ➔
+                </button>
+            </div>
         </div>
     </div>
 </div>
