@@ -1,82 +1,151 @@
-<div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
+<style>
+    /* Trava do Sumário (Gamificação Original) */
+    .sumario-item-travado {
+        opacity: 0.5 !important;
+        cursor: not-allowed !important;
+        pointer-events: none !important; 
+        filter: grayscale(100%) !important;
+    }
+    .sumario-item-travado * {
+        pointer-events: none !important;
+    }
+    .sumario-item-travado h4::after {
+        content: " 🔒";
+        font-size: 0.9em;
+    }
+    .scroll-oculto::-webkit-scrollbar { display: none; }
+    .scroll-oculto { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<!-- Início da Página: Sumário -->
+<div class="doma-pagina ativa bg-minimalista-cores" id="pag-sumario" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative; display: flex;">
     
-    <div style="text-align: center; margin-bottom: 5vh; width: 100%; position: relative; z-index: 2;">
-        <!-- Título Estilo Etiqueta Gamificada -->
-        <h2 class="doma-titulo-gigante" style="margin-top: 10px; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
-            <span style="background-color: #fef08a; padding: 6px 25px; border-radius: 12px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(-2deg);">
-                Sumário
-            </span>
-        </h2>
-    </div>
+    <!-- Elementos Decorativos de Fundo (Estilo Caderno) -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; pointer-events: none; background-image: linear-gradient(#1a1a1a 1px, transparent 1px); background-size: 100% 40px;"></div>
 
-    <!-- Contêiner da Lista com Trilha Visual (Mapa) -->
-    <div style="width: 100%; display: flex; flex-direction: column; gap: 20px; max-height: 75vh; overflow-y: auto; padding: 10px 15px 30px 10px; position: relative; z-index: 2;" class="scroll-oculto">
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100%;">
         
-        <!-- Linha tracejada do caminho da jornada -->
-        <div style="position: absolute; top: 30px; bottom: 30px; left: 38px; width: 4px; background-image: linear-gradient(to bottom, #1a1a1a 50%, transparent 50%); background-size: 4px 16px; z-index: 0; opacity: 0.8;"></div>
-        
-        <!-- Item 1 (Desbloqueado para avançar) -->
-        <div class="item-sumario" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="mudarPagina(1)" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
-            <div style="background: #fef3c7; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👋</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Boas-Vindas e Missão</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Onde o jogo começa.</p>
-            </div>
+        <div style="text-align: center; margin-bottom: 5vh; width: 100%; position: relative; z-index: 2;">
+            <!-- Título Estilo Etiqueta Gamificada -->
+            <h2 class="doma-titulo-gigante" style="margin-top: 10px; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                <span style="background-color: #fef08a; padding: 6px 25px; border-radius: 12px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(-2deg);">
+                    Sumário
+                </span>
+            </h2>
         </div>
 
-        <!-- Item 2 -->
-        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #fdf2f8; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🪙</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Economia Doma 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Como usar sua carteira.</p>
+        <!-- Contêiner da Lista com Trilha Visual (Mapa) -->
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 20px; max-height: 75vh; overflow-y: auto; padding: 10px 15px 30px 10px; position: relative; z-index: 2;" class="scroll-oculto">
+            
+            <!-- Linha tracejada do caminho da jornada -->
+            <div style="position: absolute; top: 30px; bottom: 30px; left: 38px; width: 4px; background-image: linear-gradient(to bottom, #1a1a1a 50%, transparent 50%); background-size: 4px 16px; z-index: 0; opacity: 0.8;"></div>
+            
+            <!-- Item 1 -->
+            <div class="item-sumario" data-alvo="pag-3" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-3')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #fef3c7; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👋</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Boas-Vindas e Missão</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Onde o jogo começa.</p>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-5" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-5')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #fdf2f8; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🪙</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Economia Doma</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Como usar sua carteira.</p>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-7" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-7')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #e0f2fe; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👾</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Monstrinho Interno</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Seus mecanismos de defesa.</p>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-8" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-8')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #f0fdf4; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌉</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">A Travessia</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">A ponte para a sua essência.</p>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-10" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-10')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #e0e7ff; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌊</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Imersão Total</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Preparando a mente para o mergulho.</p>
+                </div>
+            </div>
+
+            <!-- Item O Próximo Nível -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-proximo-nivel" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-proximo-nivel')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                <div style="background: #fff7ed; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🧠</div>
+                <div>
+                    <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Próximo Nível</h4>
+                    <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Avance para a Condução Total.</p>
+                </div>
+            </div>
+
+            <!-- Item O Mapa Final -->
+            <div class="item-sumario sumario-item-travado" data-alvo="pag-mapa-final" style="background: #fffbeb; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 3px solid #f59e0b; cursor: pointer; box-shadow: 4px 4px 0px #f59e0b; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-mapa-final')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #f59e0b';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #f59e0b';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #f59e0b';">
+                <div style="background: #f59e0b; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #b45309; box-shadow: 2px 2px 0px #b45309; position: relative; z-index: 3;">🗺️</div>
+                <div>
+                    <h4 style="margin: 0; color: #b45309; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Mapa da Travessia</h4>
+                    <p style="margin: 4px 0 0 0; color: #b45309; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic; font-weight: bold;">Visão geral dos passos do tratamento.</p>
+                </div>
             </div>
         </div>
-
-        <!-- Item 3 -->
-        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #e0f2fe; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👾</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Monstrinho Interno 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Seus mecanismos de defesa.</p>
-            </div>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #f0fdf4; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌉</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">A Travessia 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">A ponte para a sua essência.</p>
-            </div>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #e0e7ff; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌊</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Imersão Total 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Preparando a mente para o mergulho.</p>
-            </div>
-        </div>
-
-        <!-- Item O Próximo Nível -->
-        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #fff7ed; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🧠</div>
-            <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Próximo Nível 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Avance para a Condução Total.</p>
-            </div>
-        </div>
-
-        <!-- Item O Mapa Final -->
-        <div class="item-sumario sumario-item-travado" style="background: #fffbeb; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 3px solid #f59e0b; cursor: pointer; box-shadow: 4px 4px 0px #f59e0b; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
-            <div style="background: #f59e0b; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #b45309; box-shadow: 2px 2px 0px #b45309; position: relative; z-index: 3;">🗺️</div>
-            <div>
-                <h4 style="margin: 0; color: #b45309; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Mapa da Travessia 🔒</h4>
-                <p style="margin: 4px 0 0 0; color: #b45309; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic; font-weight: bold;">Visão geral dos passos do tratamento.</p>
-            </div>
-        </div>
-
     </div>
 </div>
+<!-- Fim da Página: Sumário -->
+
+<script>
+// Script Isolado para garantir que a trava visual do sumário funcione perfeitamente
+// mesmo com o código fragmentado em módulos HTML separados.
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Mapeia os índices em que essas páginas apareciam no seu código original 
+    // (Isso garante que a leitura do seu localStorage continue 100% precisa)
+    const indicesOriginais = {
+        'pag-3': 4,
+        'pag-5': 6,
+        'pag-7': 8,
+        'pag-8': 9,
+        'pag-10': 11,
+        'pag-proximo-nivel': 12,
+        'pag-mapa-final': 13
+    };
+
+    function atualizarVisualSumarioLocal() {
+        let maxPaginaAlcancada = 0;
+        try {
+            maxPaginaAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+        } catch(e) {}
+
+        const itens = document.querySelectorAll('#pag-sumario .item-sumario');
+        
+        itens.forEach(item => {
+            const alvoId = item.getAttribute('data-alvo');
+            const alvoIndex = indicesOriginais[alvoId] || 999999;
+            
+            // Regra Original: pag-3 e pag-roleta sempre abertos. O restante depende do maxPaginaAlcancada
+            if (alvoId === 'pag-3' || alvoId === 'pag-roleta' || maxPaginaAlcancada >= alvoIndex) {
+                item.classList.remove('sumario-item-travado');
+            } else {
+                item.classList.add('sumario-item-travado');
+            }
+        });
+    }
+
+    // Roda a verificação inicial
+    atualizarVisualSumarioLocal();
+});
+</script>
