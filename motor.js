@@ -75,40 +75,40 @@ window.irParaModulo = function(index) {
 // o irParaTela converte o ID clicado (ex: 'pag-5') no Índice real do seu mapa.json (ex: 4).
 // IMPORTANTE: Ajuste os números abaixo para baterem com a ordem exata dos arquivos no seu mapa.json (Lembrando que começa no 0)
 const dicionarioDeTelas = {
-    'pag-3': 1,               // Boas Vindas
-    'pag-5': 2,               // Economia Doma
-    'pag-7': 3,               // O Monstrinho Interno
-    'pag-8': 4,               // A Travessia
-    'pag-10': 5,              // Imersão Total
-    'pag-proximo-nivel': 6,   // O Próximo Nível
-    'pag-mapa-final': 7,      // O Mapa da Travessia
-    'pag-roleta': 8,          // Roleta de Boas Vindas
-    'pag-capitulo-1': 9,      // O Acolhimento
-    'pag-mecanica-mente': 10, // Mecânica da Mente
-    'pag-intro-darkmode': 11, // Laboratório
-    'pag-26': 12,             // O Papel de Pão
-    'slide-intro-1': 13,      // Triagem
-    'pag-25-b': 14,           // Quem é o Domador
-    'pag-bagagem-domador': 15,// Bagagem do Domador
-    'acendendo-lanterna': 16, // Acendendo a Lanterna
-    'roleta_interna': 17,     // Roleta Interna
-    'pag-polvo': 18,          // Acolhendo o Polvo
-    'superpoder': 19,         // O Superpoder
-    'malabarista': 20,        // Malabarista
-    'aliviando-mochila': 21,  // Aliviando a Mochila
-    'espelho-restaura': 22,   // Espelho Restaura
-    'ponte-cristal': 23,      // Ponte Cristal
-    'checkin-ouro': 24,       // Check-in Ouro
-    'jogo-verdade': 25,       // Jogo da Verdade
-    'pag-diagnostico-profundo': 26, 
-    'pag-tribunal-intro': 27, 
-    'quem-voz': 28,           
-    'retrato-falado': 29,     
-    'resgate-crianca': 30,    
-    'pag-tesouro': 31,        
-    'loja-discos': 32,        
-    'pag-jogo-insights': 33,  
-    'pag-72': 34              // Final
+    'pag-3': 4,               // Boas Vindas
+    'pag-5': 5,               // Economia Doma
+    'pag-7': 6,               // O Monstrinho Interno
+    'pag-8': 7,               // A Travessia
+    'pag-10': 8,              // Imersão Total
+    'pag-proximo-nivel': 9,   // O Próximo Nível
+    'pag-mapa-final': 10,      // O Mapa da Travessia
+    'pag-roleta': 11,          // Roleta de Boas Vindas
+    'pag-capitulo-1': 12,      // O Acolhimento
+    'pag-mecanica-mente': 13, // Mecânica da Mente
+    'pag-intro-darkmode': 14, // Laboratório
+    'pag-26': 15,             // O Papel de Pão
+    'slide-intro-1': 16,      // Triagem
+    'pag-25-b': 17,           // Quem é o Domador
+    'pag-bagagem-domador': 18,// Bagagem do Domador
+    'acendendo-lanterna': 19, // Acendendo a Lanterna
+    'roleta_interna': 20,     // Roleta Interna
+    'pag-polvo': 21,          // Acolhendo o Polvo
+    'superpoder': 22,         // O Superpoder
+    'malabarista': 23,        // Malabarista
+    'aliviando-mochila': 24,  // Aliviando a Mochila
+    'espelho-restaura': 25,   // Espelho Restaura
+    'ponte-cristal': 26,      // Ponte Cristal
+    'checkin-ouro': 27,       // Check-in Ouro
+    'jogo-verdade': 28,       // Jogo da Verdade
+    'pag-diagnostico-profundo': 29, 
+    'pag-tribunal-intro': 30, 
+    'quem-voz': 31,           
+    'retrato-falado': 32,     
+    'resgate-crianca': 33,    
+    'pag-tesouro': 34,        
+    'loja-discos': 35,        
+    'pag-jogo-insights': 36,  
+    'pag-72': 37              // Final
 };
 
 window.irParaTela = function(idAlvo) {
