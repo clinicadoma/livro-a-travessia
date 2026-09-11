@@ -1,21 +1,3 @@
-<style>
-    /* TRAVAS DO SUMÁRIO (GAMIFICAÇÃO) - Preservado do original */
-    .sumario-item-travado {
-        opacity: 0.5 !important;
-        cursor: not-allowed !important;
-        pointer-events: none !important; 
-        filter: grayscale(100%) !important;
-    }
-    /* Esta linha mata qualquer clique nos emojis e textos dentro do botão trancado */
-    .sumario-item-travado * {
-        pointer-events: none !important;
-    }
-    .sumario-item-travado h4::after {
-        content: " 🔒";
-        font-size: 0.9em;
-    }
-</style>
-
 <!-- Início da Página: Sumário -->
 <div class="doma-pagina bg-minimalista-cores" id="pag-sumario" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
     
