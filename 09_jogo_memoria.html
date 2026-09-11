@@ -1,0 +1,156 @@
+<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
+    
+    <!-- PLACAR DO JOGO -->
+    <div id="status-jogo" style="display: flex; justify-content: space-between; font-weight: bold; color: #0284c7; margin-bottom: 2vh; font-family: 'Quicksand', sans-serif; width: 100%; max-width: 360px;">
+        <span style="font-size: 1.1rem;">⏳ <span id="game-timer" style="color: #0369a1;">--</span></span>
+        <span style="font-size: 1.1rem;">✨ <span id="game-pts" style="color: #0369a1;">0</span> pts</span>
+    </div>
+    
+    <!-- TABULEIRO DAS CARTAS -->
+    <div class="game-grid" id="grid"></div>
+    
+    <!-- TELA DE VITÓRIA (GAME OVER) -->
+    <div id="game-final" style="display: none; text-align: center; background: #ffffff; padding: 3vh 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #bae6fd; width: 100%; max-width: 360px;">
+        <h2 style="color:#0284c7; font-family: 'Orbitron', sans-serif; margin-top: 0; font-size: 1.4rem;">GAME OVER ✨</h2>
+        <p class="doma-texto-corrido" style="text-align: center; margin-bottom: 1vh; color: #334155; font-size: 0.95rem;"><strong>Monstrinhos acolhidos:</strong></p>
+        
+        <div id="acolhidos-list" style="margin-bottom: 2vh; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;"></div>
+        
+        <h3 style="color:#f59e0b; margin: 1vh 0; font-size: 1.3rem;">Sua Pontuação: <span id="final-pts" style="color: #d97706;">0</span></h3>
+        
+        <button class="btn-doma" onclick="window.resetGame()" style="margin-top: 1.5vh; padding: 1.5vh 20px; background: #f0f9ff; border: 2px solid #0ea5e9; color: #0284c7; box-shadow: none; font-weight: bold; border-radius: 12px; width: 100%;">
+            🔄 TENTAR NOVAMENTE
+        </button>
+        <button class="btn-doma btn-doma-azul" style="margin-top: 1.5vh; padding: 1.5vh 20px; font-weight: bold; border-radius: 12px; width: 100%;" onclick="mudarPagina(1)">
+            CONTINUAR A JORNADA ➔
+        </button>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    // 1. MOTOR DE ÁUDIO INTERNO DO JOGO
+    function playBipInterno(f, type, dur) {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = type; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + dur);
+        } catch(e) {}
+    }
+
+    // 2. DADOS DO JOGO
+    const monstrosMem = [
+        { n: "CAOS", i: "https://i.postimg.cc/7LxrhkDv/ansiedade.png" },
+        { n: "VALOR", i: "https://i.postimg.cc/cHCq7BvW/autoestisma.png" },
+        { n: "SOLIDÃO", i: "https://i.postimg.cc/ht0PpMtg/amor-proprio.png" },
+        { n: "RAIVA", i: "https://i.postimg.cc/d34cGNBq/Laranja.png" },
+        { n: "MEDO", i: "https://i.postimg.cc/ZRzWQ0h6/Coracao.png" },
+        { n: "CULPA", i: "https://i.postimg.cc/SN1Jhgpr/Captura-de-tela-2026-03-24-151245-removebg-preview.png" }
+    ];
+    let cartasM = [...monstrosMem, ...monstrosMem];
+    let selCards = [], encM = [], nomesEncM = [], pts = 0, jogandoM = false;
+    let timerIdx = null;
+
+    // 3. LÓGICA PRINCIPAL
+    window.montarGridM = function() {
+        if (timerIdx) clearInterval(timerIdx);
+        const grid = document.getElementById('grid');
+        document.getElementById('status-jogo').style.display = 'flex';
+        document.getElementById('game-final').style.display = 'none';
+        grid.style.display = 'grid'; grid.innerHTML = '';
+        pts = 0; document.getElementById('game-pts').innerText = "0";
+        encM = []; nomesEncM = []; selCards = [];
+        
+        cartasM.sort(() => 0.5 - Math.random());
+        cartasM.forEach((m, i) => {
+            const c = document.createElement('div'); c.className = 'game-card flipped'; 
+            c.onclick = () => {
+                if (!jogandoM || selCards.some(s => s.id === i) || encM.includes(i)) return;
+                playBipInterno(400, 'sine', 0.1); c.classList.add('flipped');
+                selCards.push({ nome: m.n, el: c, id: i });
+                
+                if (selCards.length === 2) {
+                    jogandoM = false;
+                    setTimeout(() => {
+                        if (selCards[0].nome === selCards[1].nome) {
+                            encM.push(selCards[0].id, selCards[1].id);
+                            nomesEncM.push(selCards[0].nome);
+                            pts += 10; document.getElementById('game-pts').innerText = pts;
+                            playBipInterno(523, 'sine', 0.2); setTimeout(()=>playBipInterno(659, 'sine', 0.2), 100); setTimeout(()=>playBipInterno(783, 'sine', 0.3), 200);
+                        } else {
+                            selCards[0].el.classList.remove('flipped');
+                            selCards[1].el.classList.remove('flipped');
+                            playBipInterno(150, 'sawtooth', 0.2); 
+                        }
+                        selCards = []; jogandoM = true;
+                        if (encM.length === cartasM.length) finalizarM();
+                    }, 600);
+                }
+            };
+            c.innerHTML = `<div class="card-face face-front"><img src="${m.i}" class="img-m"><span>${m.n}</span></div><div class="card-face face-back"><img src="https://i.postimg.cc/nz7dRt0b/Captura-de-tela-2025-09-27-133248.png" class="img-doma-logo"></div>`;
+            grid.appendChild(c);
+        });
+
+        // 4. TEMPORIZADOR
+        let tMemo = 30; // Tempo original restaurado
+        document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; 
+        timerIdx = setInterval(() => {
+            tMemo--; document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; playBipInterno(880, 'sine', 0.05); 
+            if (tMemo <= 0) {
+                clearInterval(timerIdx);
+                document.querySelectorAll('.game-card').forEach(el => el.classList.remove('flipped'));
+                jogandoM = true; partidaM();
+            }
+        }, 1000);
+    };
+
+    function partidaM() {
+        let tJogo = 180; 
+        document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
+        timerIdx = setInterval(() => {
+            tJogo--; document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
+            if (tJogo <= 0) finalizarM();
+        }, 1000);
+    }
+
+    // 5. ENCERRAMENTO E MOEDAS
+    function finalizarM() {
+        clearInterval(timerIdx); jogandoM = false;
+        document.getElementById('grid').style.display = 'none';
+        document.getElementById('status-jogo').style.display = 'none';
+        document.getElementById('game-final').style.display = 'block';
+        document.getElementById('final-pts').innerText = pts;
+        
+        const list = document.getElementById('acolhidos-list');
+        list.innerHTML = '';
+        [...new Set(nomesEncM)].forEach(n => {
+            const s = document.createElement('span'); s.className = 'tag-acolhido'; s.innerText = n; list.appendChild(s);
+        });
+
+        // Sistema Anti-Farming: Paga moedas apenas se bater o recorde antigo
+        let pontuacaoFinal = pts > 60 ? 60 : pts;
+        let maxMemoria = parseInt(localStorage.getItem('doma_max_memoria')) || 0;
+        
+        if (pontuacaoFinal > maxMemoria) {
+            let ganho = pontuacaoFinal - maxMemoria;
+            localStorage.setItem('doma_max_memoria', pontuacaoFinal);
+            
+            setTimeout(() => {
+                if (window.ganharMoedas) window.ganharMoedas(ganho);
+            }, 500);
+        }
+    }
+
+    window.resetGame = function() { window.montarGridM(); };
+
+    // Dispara a montagem do grid 200ms após injetar o slide na tela
+    setTimeout(window.montarGridM, 200);
+
+})();
+</script>
