@@ -1,0 +1,30 @@
+<div class="doma-pagina" id="pag-capitulo-1">
+    <div class="btn-voltar-sumario" onclick="irParaTela('pag-mapa-final')" style="position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.9); border: 2px solid #cbd5e1; border-radius: 8px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 99999;">☰</div>
+    <div class="wrapper-isolado" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+        <h2 class="doma-titulo-gigante" style="text-align: center;">CAPÍTULO 1<br><span style="color: #0ea5e9; font-size: 1.4rem;">O Acolhimento</span></h2>
+        
+        <div style="background: #f0f9ff; border: 3px solid #bae6fd; border-radius: 20px; padding: 4vh 20px; text-align: center; margin-top: 3vh; width: 100%; max-width: 500px;">
+            <p style="color: #0369a1; font-weight: 900; font-size: 1.1rem; margin-top:0;">📢 MISSÃO PRÁTICA! 🎮</p>
+            <p class="doma-texto-corrido" style="text-align: center; margin: 2vh 0; color: #0c4a6e;">O jogo abaixo não é só brincadeira, é um <strong>TREINAMENTO</strong>. Encontre os pares de cada "monstrinho".</p>
+            <button class="btn-doma btn-doma-azul efeito-tremor" onclick="window.revelarMonstrinhos(this, event)">🎮 REVELAR JOGO ➔</button>
+        </div>
+    </div>
+</div>
+
+<script>
+window.revelarMonstrinhos = function(btn, event) {
+    if(event) { event.preventDefault(); event.stopPropagation(); }
+    btn.disabled = true;
+
+    if (typeof window.mudarPagina === 'function') {
+        window.mudarPagina(1);
+    }
+    
+    setTimeout(function() {
+        if (typeof window.iniciarFluxoDoJogo === 'function') {
+            window.iniciarFluxoDoJogo();
+        }
+        btn.disabled = false;
+    }, 600);
+};
+</script>
