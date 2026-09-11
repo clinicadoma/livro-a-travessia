@@ -1,0 +1,56 @@
+<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
+    
+    <h2 style="margin-bottom: 3vh; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); font-family: 'Arial Black', Impact, sans-serif; text-align: center;">
+        <span style="background-color: #fef08a; padding: 4px 15px; border-radius: 8px; border: 2px solid #1a1a1a; box-shadow: 3px 3px 0px #1a1a1a; display: inline-block; transform: rotate(-2deg);">
+            Seja Bem-Vindo(a)! 👋
+        </span>
+    </h2>
+    
+    <div style="padding:4vh 30px; width:100%; background: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; box-shadow: 6px 6px 0px rgba(0,0,0,0.05); margin-bottom: 2vh; text-align: center;">
+        <p style="margin-bottom:2vh; font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; color: #333;">
+            Meu nome é <strong style="color:#C4622D; font-weight: 900; background: linear-gradient(180deg, transparent 60%, rgba(196, 98, 45, 0.2) 60%);">Daniela Pinheiros</strong>, e eu vou ser sua guia nessa travessia. Juntos, vamos explorar os <strong style="font-weight: 900;">monstrinhos invisíveis</strong> que habitam sua mente.
+        </p>
+        <p style="margin-bottom:0; font-size: clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.7; color: #333;">
+            Prepare-se para uma experiência <strong style="font-weight: 900;">interativa, gamificada e profundamente transformadora</strong>. Você não vai apenas ler — você vai <em style="font-family: 'Georgia', serif; font-size: 1.1em; color: #C4622D;">viver</em> cada etapa da jornada.
+        </p>
+    </div>
+
+    <!-- CAIXA 1: PERFIL -->
+    <div style="margin: 2.5vh 0; width: 100%; padding: 20px 25px; background-color: #fff5f8; border-radius: 12px; border: 2px solid #1a1a1a; box-shadow: 5px 5px 0px rgba(0,0,0,0.9); transition: transform 0.2s ease;">
+        <button onclick="var c = document.getElementById('caixa-autora'); var s = document.getElementById('seta-autora'); if(c.style.display === 'none'){c.style.display='block'; s.style.transform='rotate(180deg)';}else{c.style.display='none'; s.style.transform='rotate(0deg)';}" style="width: 100%; background: none; border: none; text-align: left; padding: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; outline: none;">
+            <div>
+                <span style="background-color: #E91E63; color: #ffffff; padding: 4px 10px; border-radius: 4px; border: 1px solid #1a1a1a; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Perfil</span>
+                <h3 style="font-family:'Cinzel', serif; font-size: clamp(1.2rem, 3.5vw, 1.5rem); color: #1a1a1a; font-weight: 900; margin: 10px 0 0 0;">Sobre a Autora</h3>
+            </div>
+            <span id="seta-autora" style="font-size: 1.5rem; color: #E91E63; transition: transform 0.3s; display: inline-block; text-shadow: 1px 1px 0px #1a1a1a;">▼</span>
+        </button>
+
+        <div id="caixa-autora" style="display: none; margin-top: 20px; border-top: 2px dashed #1a1a1a; padding-top: 20px;">
+            <p style="font-weight: 900; margin-bottom: 5px; color: #1a1a1a; font-size: 1.2rem;">Daniela Pinheiros</p>
+            <p style="font-size: 0.95rem; color: #444; margin-bottom: 15px; font-style: italic; font-family: 'Georgia', serif;">Psicanalista e Hipnoterapeuta | CBPC 2022-4371</p>
+            <p style="font-size: 1.05rem; line-height: 1.7; color: #1a1a1a; margin-bottom: 25px;">Fundadora da clínica <strong style="background: rgba(254, 240, 138, 0.6); padding: 0 4px;">Domadores de Monstros</strong>, um espaço dedicado à análise e transformação de jovens, adultos e idosos.</p>
+        </div>
+    </div>
+
+    <!-- CAIXA 2: CARTA AO LEITOR -->
+    <div style="margin: 2.5vh 0; width: 100%; padding: 20px 25px; background-color: #f8f9fc; border-radius: 12px; border: 2px solid #1a1a1a; box-shadow: 5px 5px 0px rgba(0,0,0,0.9); transition: transform 0.2s ease;">
+        <button onclick="var c = document.getElementById('caixa-carta'); var s = document.getElementById('seta-carta'); if(c.style.display === 'none'){c.style.display='block'; s.style.transform='rotate(180deg)';}else{c.style.display='none'; s.style.transform='rotate(0deg)';}" style="width: 100%; background: none; border: none; text-align: left; padding: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; outline: none;">
+            <div>
+                <span style="background-color: #1e1b4b; color: #ffffff; padding: 4px 10px; border-radius: 4px; border: 1px solid #1a1a1a; font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Carta ao Leitor</span>
+                <h3 style="font-family:'Cinzel', serif; font-size: clamp(1.2rem, 3.5vw, 1.5rem); color: #1a1a1a; font-weight: 900; margin: 10px 0 0 0;">Bem-vindo à Travessia</h3>
+            </div>
+            <span id="seta-carta" style="font-size: 1.5rem; color: #1e1b4b; transition: transform 0.3s; display: inline-block; text-shadow: 1px 1px 0px #1a1a1a;">▼</span>
+        </button>
+
+        <div id="caixa-carta" style="display: none; margin-top: 20px; border-top: 2px dashed #1a1a1a; padding-top: 20px;">
+            <p style="margin-bottom: 15px; color: #1a1a1a; line-height: 1.7; font-size: 1.05rem;">Este não é um livro de respostas fáceis, mas sim um guia para fazer as perguntas certas. Convido você a embarcar em uma exploração do seu mundo interior.</p>
+            <p style="margin-bottom: 0; color: #1a1a1a; line-height: 1.7; font-size: 1.05rem;">Na clínica Domadores de Monstros Internos, acreditamos que todos nós carregamos "monstros" — aquelas partes de nós mesmos que nos assustam ou paralisam. Eles não são nossos inimigos. São mensageiros.</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 1vh; margin-bottom: 4vh; text-align: center; width: 100%;">
+        <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; text-transform: uppercase;">
+            CONTINUAR ➔
+        </button>
+    </div>
+</div>
