@@ -1,0 +1,246 @@
+<style>
+    .scroll-oculto::-webkit-scrollbar { display: none; }
+    .scroll-oculto { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<div class="doma-pagina" id="pag-mapa-final" style="background: #f8fafc; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden;">
+    <div class="wrapper-isolado" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 3vh 15px;">
+        
+        <div style="background: white; padding: 3vh 15px; border-radius: 24px; box-shadow: 0 15px 35px rgba(30, 27, 75, 0.08); width: 100%; max-width: 400px; display: flex; flex-direction: column; max-height: 92vh;">
+                          
+            <div style="text-align: center; flex-shrink: 0;">
+                <div style="font-size: 3rem; margin-bottom: 1vh;">🗺️</div>
+                <h2 style="color: #1e1b4b; font-family: 'Quicksand', sans-serif; font-size: 1.5rem; font-weight: 900; margin-top: 0; margin-bottom: 1vh; text-align: center;">
+                    O Mapa da Sua Travessia
+                </h2>
+                <p style="color: #64748b; font-size: 0.85rem; font-weight: bold; margin-bottom: 2vh;">O progresso é salvo no seu dispositivo.</p>
+            </div>
+
+            <div class="scroll-oculto" style="overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; padding-right: 5px; margin-bottom: 2vh;">
+                
+                <div class="item-sumario" data-alvo="pag-roleta" onclick="irParaTela('pag-roleta')" style="background: #fdf2f8; border-left: 4px solid #be185d; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎡</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;"> Roleta de Boas Vindas</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Conheça nossos hóspedes.</p>
+                    </div>
+                </div>
+                
+                <div class="item-sumario" data-alvo="pag-capitulo-1" onclick="irParaTela('pag-capitulo-1')" style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🧩</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">O Acolhimento</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Treinamento prático e jogo.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-mecanica-mente" onclick="irParaTela('pag-mecanica-mente')" style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">⚙️</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Mecânica da Mente</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Fuga vs. Enfrentamento.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-intro-darkmode" onclick="irParaTela('pag-intro-darkmode')" style="background: #fdf2f8; border-left: 4px solid #be185d; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🔬</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Laboratório</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Mapear os sintomas.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-26" onclick="irParaTela('pag-26')" style="background: #fff7ed; border-left: 4px solid #c2410c; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">📜</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">O Papel de Pão</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Monstrinho ilusionista.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="slide-intro-1" onclick="irParaTela('slide-intro-1')" style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🏠</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Triagem de Vida</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Uma visão sobre seu lar.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-25-b" onclick="irParaTela('pag-25-b')" style="background: #fefce8; border-left: 4px solid #d4af37; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎩</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Quem é o Domador?</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Entenda o seu poder.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-bagagem-domador" onclick="irParaTela('pag-bagagem-domador')" style="background: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎒</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Bagagem do Domador</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Convite para a travessia.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="acendendo-lanterna" onclick="irParaTela('acendendo-lanterna')" style="background: #fefce8; border-left: 4px solid #facc15; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🔦</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Acendendo a Lanterna</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Iluminando o inconsciente.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="roleta_interna" onclick="irParaTela('roleta_interna')" style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎰</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Roleta Interna</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Descubra os hóspedes.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-polvo" onclick="irParaTela('pag-polvo')" style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🐙</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Acolhendo o Polvo</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">A exaustão do malabarista.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="superpoder" onclick="irParaTela('superpoder')" style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🦸‍♀️</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">O Superpoder</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Ação e protagonismo.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="malabarista" onclick="irParaTela('malabarista')" style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🤹‍♀️</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Desafios do Malabarista</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Enfrentando as quedas.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="aliviando-mochila" onclick="irParaTela('aliviando-mochila')" style="background: #faf5ff; border-left: 4px solid #a855f7; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🧳</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Aliviando a Mochila</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Descarregue o peso.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="espelho-restaura" onclick="irParaTela('espelho-restaura')" style="background: #fdf2f8; border-left: 4px solid #db2777; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🪞</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">O Luto no Espelho</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">O espelho em restauração.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="ponte-cristal" onclick="irParaTela('ponte-cristal')" style="background: #f0f9ff; border-left: 4px solid #0284c7; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🌉</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">A Ponte de Cristal</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Caminhando com segurança.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="checkin-ouro" onclick="irParaTela('checkin-ouro')" style="background: #f0fdf4; border-left: 4px solid #059669; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">✅</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Check-in & Planner</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Organização e vitórias.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="jogo-verdade" onclick="irParaTela('jogo-verdade')" style="background: #faf5ff; border-left: 4px solid #9333ea; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">⚖️</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Jogo da Verdade</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">A desidentificação da dor.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-diagnostico-profundo" onclick="irParaTela('pag-diagnostico-profundo')" style="background: #f0fdf4; border-left: 4px solid #059669; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🥚</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Diagnóstico Profundo</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">A quebra do ovo e laudo.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-tribunal-intro" onclick="irParaTela('pag-tribunal-intro')" style="background: #fff7ed; border-left: 4px solid #b45309; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🏛️</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">O Tribunal Interno</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">As vozes silenciadas.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="quem-voz" onclick="irParaTela('quem-voz')" style="background: #f0fdf4; border-left: 4px solid #059669; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">📼</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Ecos do Passado</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Árvore genealógica.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="retrato-falado" onclick="irParaTela('retrato-falado')" style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎨</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Retrato Falado</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Materialização do Monstrinho.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="resgate-crianca" onclick="irParaTela('resgate-crianca')" style="background: #fdf2f8; border-left: 4px solid #db2777; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🧸</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Resgate da Criança</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">E uma carta ao Domador.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-tesouro" onclick="irParaTela('pag-tesouro')" style="background: #f0fdf4; border-left: 4px solid #059669; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">💎</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Tesouro do Domador</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">A Caixa de Ferramentas.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="loja-discos" onclick="irParaTela('loja-discos')" style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">📻</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">A Vitrola Doma</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Trilhas da travessia.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-jogo-insights" onclick="irParaTela('pag-jogo-insights')" style="background: #f0f9ff; border-left: 4px solid #14b8a6; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s;">
+                    <span style="font-size: 1.2rem;">🎁</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Jornada de Insights</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">Jogo Interativo Final.</p>
+                    </div>
+                </div>
+
+                <div class="item-sumario" data-alvo="pag-72" onclick="irParaTela('pag-72')" style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; margin-bottom: 2vh;">
+                    <span style="font-size: 1.2rem;">🎉</span>
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: 800;">Final</h4>
+                        <p style="margin: 2px 0 0 0; color: #475569; font-size: 0.8rem;">O Destino Alcançado.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="flex-shrink: 0; width: 100%;">
+                <button class="btn-doma pulse-btn" style="background: #1e1b4b; color: white; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 1rem; border: none; box-shadow: 0 8px 20px rgba(30, 27, 75, 0.3);" onclick="mudarPagina(1)">
+                    INICIAR ➔
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
