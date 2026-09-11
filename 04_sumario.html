@@ -1,31 +1,82 @@
-<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
+<div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
+    
     <div style="text-align: center; margin-bottom: 5vh; width: 100%; position: relative; z-index: 2;">
-        <h2 style="margin-top: 10px; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif;">
+        <!-- Título Estilo Etiqueta Gamificada -->
+        <h2 class="doma-titulo-gigante" style="margin-top: 10px; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
             <span style="background-color: #fef08a; padding: 6px 25px; border-radius: 12px; border: 3px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(-2deg);">
                 Sumário
             </span>
         </h2>
     </div>
-    
-    <div style="width: 100%; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 2;">
+
+    <!-- Contêiner da Lista com Trilha Visual (Mapa) -->
+    <div style="width: 100%; display: flex; flex-direction: column; gap: 20px; max-height: 75vh; overflow-y: auto; padding: 10px 15px 30px 10px; position: relative; z-index: 2;" class="scroll-oculto">
+        
+        <!-- Linha tracejada do caminho da jornada -->
         <div style="position: absolute; top: 30px; bottom: 30px; left: 38px; width: 4px; background-image: linear-gradient(to bottom, #1a1a1a 50%, transparent 50%); background-size: 4px 16px; z-index: 0; opacity: 0.8;"></div>
         
-        <!-- O primeiro item avança na jornada -->
-        <div style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; position: relative; z-index: 2;" onclick="mudarPagina(1)">
+        <!-- Item 1 (Desbloqueado para avançar) -->
+        <div class="item-sumario" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="mudarPagina(1)" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
             <div style="background: #fef3c7; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👋</div>
             <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase;">Boas-Vindas e Missão</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-style: italic;">Onde o jogo começa (Clique para avançar).</p>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Boas-Vindas e Missão</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Onde o jogo começa.</p>
             </div>
         </div>
 
-        <!-- Os outros itens ficam travados até ele avançar -->
-        <div style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; opacity: 0.5; position: relative; z-index: 2;">
-            <div style="background: #fdf2f8; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🔒</div>
+        <!-- Item 2 -->
+        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #fdf2f8; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🪙</div>
             <div>
-                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase;">Economia Doma</h4>
-                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-style: italic;">Siga a jornada para desbloquear.</p>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Economia Doma 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Como usar sua carteira.</p>
             </div>
         </div>
+
+        <!-- Item 3 -->
+        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #e0f2fe; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">👾</div>
+            <div>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Monstrinho Interno 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Seus mecanismos de defesa.</p>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #f0fdf4; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌉</div>
+            <div>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">A Travessia 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">A ponte para a sua essência.</p>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #e0e7ff; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🌊</div>
+            <div>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Imersão Total 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Preparando a mente para o mergulho.</p>
+            </div>
+        </div>
+
+        <!-- Item O Próximo Nível -->
+        <div class="item-sumario sumario-item-travado" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #fff7ed; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🧠</div>
+            <div>
+                <h4 style="margin: 0; color: #1a1a1a; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Próximo Nível 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #444; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;">Avance para a Condução Total.</p>
+            </div>
+        </div>
+
+        <!-- Item O Mapa Final -->
+        <div class="item-sumario sumario-item-travado" style="background: #fffbeb; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 3px solid #f59e0b; cursor: pointer; box-shadow: 4px 4px 0px #f59e0b; transition: all 0.2s ease; position: relative; z-index: 2; opacity: 0.5;">
+            <div style="background: #f59e0b; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #b45309; box-shadow: 2px 2px 0px #b45309; position: relative; z-index: 3;">🗺️</div>
+            <div>
+                <h4 style="margin: 0; color: #b45309; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">O Mapa da Travessia 🔒</h4>
+                <p style="margin: 4px 0 0 0; color: #b45309; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic; font-weight: bold;">Visão geral dos passos do tratamento.</p>
+            </div>
+        </div>
+
     </div>
 </div>
