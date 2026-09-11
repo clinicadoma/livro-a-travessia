@@ -188,66 +188,73 @@ window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, mod
     });
 };
 
-window.irParaTela = function(idAlvo) {
-    // 1. Mapeia as páginas dinamicamente para nunca dar "undefined"
-    var paginasLocais = document.querySelectorAll('.doma-pagina');
-    
-    // 2. Garante que as variáveis globais de progresso existam
-    if (typeof window.pagAtiva === 'undefined') window.pagAtiva = 0;
-    if (typeof window.maxPaginaAlcancada === 'undefined') {
-        window.maxPaginaAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
-    }
-    if (typeof window.isUsuarioPremium === 'undefined') {
-        window.isUsuarioPremium = localStorage.getItem('acesso_vip_doma_liberado') === 'true';
-    }
+// ==========================================
+// MOTOR DE NAVEGAÇÃO GLOBAL (BLINDADO)
+// ==========================================
 
-    let indexTribunal = 0;
-    paginasLocais.forEach((p, i) => { if(p.id === 'pag-tribunal-intro') indexTribunal = i; });
+window.irParaTela = function(idAlvo) {
+    // 1. Lê todas as páginas direto do DOM em tempo real (Evita o erro "is not defined")
+    const todasPaginas = Array.from(document.querySelectorAll('.doma-pagina'));
     
-    let alvoIndex = 0;
-    paginasLocais.forEach((p, i) => { if (p.id === idAlvo) alvoIndex = i; });
+    // 2. Resgata o progresso do usuário com segurança
+    let maxPagAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+    let isPremium = localStorage.getItem('acesso_vip_doma_liberado') === 'true';
     
-    // --- TRAVA JAVASCRIPT: IMPEDE A ABERTURA DE ITENS AINDA NÃO ALCANÇADOS ---
-    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > window.maxPaginaAlcancada) {
+    let indexTribunal = todasPaginas.findIndex(p => p.id === 'pag-tribunal-intro');
+    let alvoIndex = todasPaginas.findIndex(p => p.id === idAlvo);
+    
+    if (alvoIndex === -1) return; // Se a página não existir, cancela a ação
+    
+    // 3. TRAVA DE GAMIFICAÇÃO: Impede pular para onde não alcançou
+    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > maxPagAlcancada) {
         return; 
     }
     
-    // Trava de Paywall (VIP)
-    if (alvoIndex >= indexTribunal && !window.isUsuarioPremium) {
+    // 4. TRAVA VIP (PAYWALL)
+    if (indexTribunal !== -1 && alvoIndex >= indexTribunal && !isPremium) {
         let modalVip = document.getElementById('slide-paywall-vip');
-        if(modalVip) modalVip.style.display = 'flex';
-        return;
+        if (modalVip) modalVip.style.display = 'flex';
+        return; 
     }
 
-    // Executa a troca de tela
-    paginasLocais.forEach((p, i) => {
-        if (p.id === idAlvo) {
-            // Remove a classe 'ativa' da página anterior de forma segura
-            if(paginasLocais[window.pagAtiva]) {
-                paginasLocais[window.pagAtiva].classList.remove('ativa');
-                paginasLocais[window.pagAtiva].style.display = '';
-            }
-            // Define a nova página
-            window.pagAtiva = i;
-            p.classList.add('ativa');
-            p.scrollTop = 0;
-        }
+    // 5. TROCA DE TELA: Esconde todas e mostra apenas o alvo
+    todasPaginas.forEach(p => {
+        p.classList.remove('ativa');
+        p.style.display = ''; // Limpa resquícios inline
     });
     
+    const paginaAlvo = todasPaginas[alvoIndex];
+    paginaAlvo.classList.add('ativa');
+    
+    // Atualiza a variável global para as setas saberem onde estamos
+    window.pagAtiva = alvoIndex; 
+    try { paginaAlvo.scrollTop = 0; window.scrollTo(0,0); } catch(e){}
+    
+    // 6. Atualiza progresso e Interface
     if (typeof window.atualizarVisibilidadeSeta === 'function') window.atualizarVisibilidadeSeta();
     
-    // Atualiza a pontuação de avanço no menu
-    if (paginasLocais[window.pagAtiva]) {
-        let idAtual = paginasLocais[window.pagAtiva].id;
-        if (idAtual !== 'pag-mapa-final' && idAtual !== 'pag-sumario' && idAtual !== 'pag-mapa-travessia') {
-            if (window.pagAtiva > window.maxPaginaAlcancada) {
-                window.maxPaginaAlcancada = window.pagAtiva;
-                localStorage.setItem('doma_max_pagina', window.maxPaginaAlcancada);
-            }
+    if (idAlvo !== 'pag-mapa-final' && idAlvo !== 'pag-sumario' && idAlvo !== 'pag-mapa-travessia') {
+        if (alvoIndex > maxPagAlcancada) {
+            localStorage.setItem('doma_max_pagina', alvoIndex);
         }
     }
-    
     if (typeof window.atualizarVisualSumario === 'function') window.atualizarVisualSumario();
+};
+
+window.mudarPagina = function(direcao) {
+    const todasPaginas = Array.from(document.querySelectorAll('.doma-pagina'));
+    
+    // Garante que o sistema saiba onde está, mesmo se a página recarregar
+    if (typeof window.pagAtiva === 'undefined') {
+        let indexAtivo = todasPaginas.findIndex(p => p.classList.contains('ativa'));
+        window.pagAtiva = indexAtivo !== -1 ? indexAtivo : 0;
+    }
+
+    let proximaPagina = (window.pagAtiva + direcao + todasPaginas.length) % todasPaginas.length;
+    let alvoId = todasPaginas[proximaPagina].id;
+    
+    // Usa a mesma inteligência blindada do irParaTela
+    window.irParaTela(alvoId);
 };
 
 iniciarSistema();
