@@ -1,0 +1,124 @@
+<div class="doma-pagina bg-grad-azul" id="tela-game" style="background: radial-gradient(circle at top right, #e0f2fe 0%, #ffffff 60%) #f8fafc; height: 100vh; overflow-y: auto;">
+    <div class="btn-voltar-sumario" onclick="irParaTela('pag-mapa-final')" style="position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.9); border: 2px solid #cbd5e1; border-radius: 8px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 99999;">☰</div>
+    <div class="wrapper-isolado" style="padding-top: 80px; display: flex; flex-direction: column; align-items: center;">
+        
+        <div id="status-jogo" style="display: flex; justify-content: space-between; font-weight: bold; color: #0284c7; margin-bottom: 1vh; font-family: 'Quicksand', sans-serif; width: 100%; max-width: 360px;">
+            <span style="font-size: 1.1rem;">⏳ <span id="game-timer" style="color: #0369a1;">--</span></span>
+            <span style="font-size: 1.1rem;">✨ <span id="game-pts" style="color: #0369a1;">0</span> pts</span>
+        </div>
+        
+        <div class="game-grid" id="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 360px; height: 52vh; max-height: 420px; margin: 1vh auto; perspective: 1000px;"></div>
+        
+        <div id="game-final" style="display: none; text-align: center; background: #ffffff; padding: 3vh 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #bae6fd; width: 100%; max-width: 360px;">
+            <h2 style="color:#0284c7; font-family: 'Orbitron', sans-serif; margin-top: 0; font-size: 1.4rem;">GAME OVER ✨</h2>
+            <p class="doma-texto-corrido" style="text-align: center; margin-bottom: 1vh; color: #334155; font-size: 0.95rem;"><strong>Monstrinhos acolhidos:</strong></p>
+            <div id="acolhidos-list" style="margin-bottom: 2vh; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;"></div>
+            <h3 style="color:#f59e0b; margin: 1vh 0; font-size: 1.3rem;">Sua Pontuação: <span id="final-pts" style="color: #d97706;">0</span></h3>
+            <button class="btn-doma" onclick="window.resetGame()" style="margin-top: 1.5vh; padding: 1.5vh 20px; background: #f0f9ff; border: 2px solid #0ea5e9; color: #0284c7; box-shadow: none;">🔄 TENTAR NOVAMENTE</button>
+            <button class="btn-doma btn-doma-azul" style="margin-top: 1vh; padding: 1.5vh 20px;" onclick="mudarPagina(1)">CONTINUAR ➔</button>
+        </div>
+    </div>
+</div>
+
+<script>
+window.monstrosMem = [
+    { n: "CAOS", i: "https://i.postimg.cc/7LxrhkDv/ansiedade.png" },
+    { n: "VALOR", i: "https://i.postimg.cc/cHCq7BvW/autoestisma.png" },
+    { n: "SOLIDÃO", i: "https://i.postimg.cc/ht0PpMtg/amor-proprio.png" },
+    { n: "RAIVA", i: "https://i.postimg.cc/d34cGNBq/Laranja.png" },
+    { n: "MEDO", i: "https://i.postimg.cc/ZRzWQ0h6/Coracao.png" },
+    { n: "CULPA", i: "https://i.postimg.cc/SN1Jhgpr/Captura-de-tela-2026-03-24-151245-removebg-preview.png" }
+];
+window.cartasM = [...window.monstrosMem, ...window.monstrosMem];
+window.selCardsM = []; window.encM = []; window.nomesEncM = []; 
+window.ptsM = 0; window.jogandoM = false; window.timerIdxM = null;
+
+window.iniciarFluxoDoJogo = function() {
+    setTimeout(window.montarGridM, 100);
+};
+
+window.montarGridM = function() {
+    if (window.timerIdxM) clearInterval(window.timerIdxM);
+    const grid = document.getElementById('grid');
+    document.getElementById('status-jogo').style.display = 'flex';
+    document.getElementById('game-final').style.display = 'none';
+    grid.style.display = 'grid'; grid.innerHTML = '';
+    window.ptsM = 0; document.getElementById('game-pts').innerText = "0";
+    window.encM = []; window.nomesEncM = []; window.selCardsM = [];
+    
+    window.cartasM.sort(() => 0.5 - Math.random());
+    window.cartasM.forEach((m, i) => {
+        const c = document.createElement('div'); c.className = 'game-card flipped'; 
+        c.onclick = () => {
+            if (!window.jogandoM || window.selCardsM.some(s => s.id === i) || window.encM.includes(i)) return;
+            c.classList.add('flipped');
+            window.selCardsM.push({ nome: m.n, el: c, id: i });
+            
+            if (window.selCardsM.length === 2) {
+                window.jogandoM = false;
+                setTimeout(() => {
+                    if (window.selCardsM[0].nome === window.selCardsM[1].nome) {
+                        window.encM.push(window.selCardsM[0].id, window.selCardsM[1].id);
+                        window.nomesEncM.push(window.selCardsM[0].nome);
+                        window.ptsM += 10; document.getElementById('game-pts').innerText = window.ptsM;
+                    } else {
+                        window.selCardsM[0].el.classList.remove('flipped');
+                        window.selCardsM[1].el.classList.remove('flipped');
+                    }
+                    window.selCardsM = []; window.jogandoM = true;
+                    if (window.encM.length === window.cartasM.length) window.finalizarM();
+                }, 600);
+            }
+        };
+        c.innerHTML = `<div class="card-face face-front" style="border-radius: 12px; background: white;"><img src="${m.i}" style="height: 50%; max-width: 80%; object-fit: contain;"><span>${m.n}</span></div><div class="card-face face-back" style="border-radius: 12px; background: white;"><img src="https://i.postimg.cc/nz7dRt0b/Captura-de-tela-2025-09-27-133248.png" style="width: 60%; object-fit: contain;"></div>`;
+        grid.appendChild(c);
+    });
+
+    let tMemo = 30; 
+    document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; 
+    window.timerIdxM = setInterval(() => {
+        tMemo--; document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; 
+        if (tMemo <= 0) {
+            clearInterval(window.timerIdxM);
+            document.querySelectorAll('.game-card').forEach(el => el.classList.remove('flipped'));
+            window.jogandoM = true; window.partidaM();
+        }
+    }, 1000);
+};
+
+window.partidaM = function() {
+    let tJogo = 180; 
+    document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
+    window.timerIdxM = setInterval(() => {
+        tJogo--; document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
+        if (tJogo <= 0) window.finalizarM();
+    }, 1000);
+};
+
+window.finalizarM = function() {
+    clearInterval(window.timerIdxM); window.jogandoM = false;
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('status-jogo').style.display = 'none';
+    document.getElementById('game-final').style.display = 'block';
+    document.getElementById('final-pts').innerText = window.ptsM;
+    
+    const list = document.getElementById('acolhidos-list');
+    list.innerHTML = '';
+    [...new Set(window.nomesEncM)].forEach(n => {
+        const s = document.createElement('span'); s.className = 'tag-acolhido'; s.innerText = n; list.appendChild(s);
+    });
+
+    let pontuacaoFinal = window.ptsM > 60 ? 60 : window.ptsM;
+    let maxMemoria = parseInt(localStorage.getItem('doma_max_memoria')) || 0;
+    
+    if (pontuacaoFinal > maxMemoria) {
+        let ganho = pontuacaoFinal - maxMemoria;
+        localStorage.setItem('doma_max_memoria', pontuacaoFinal);
+        setTimeout(() => {
+            if (typeof window.ganharMoedas === 'function') window.ganharMoedas(ganho, null);
+        }, 500);
+    }
+};
+
+window.resetGame = function() { window.montarGridM(); };
+</script>
