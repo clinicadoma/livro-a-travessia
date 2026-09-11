@@ -1,4 +1,19 @@
-<div class="wrapper-isolado">
+<style>
+    /* O CSS ORIGINAL DO JOGO RESTAURADO AQUI DENTRO */
+    .bg-grad-azul-jogo { background: radial-gradient(circle at top right, #e0f2fe 0%, #ffffff 60%) #f8fafc; }
+    .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 360px; height: 52vh; max-height: 420px; margin: 1vh auto; perspective: 1000px; padding: 5px 0; }
+    .game-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); cursor: pointer; will-change: transform; }
+    .game-card.flipped { transform: rotateY(180deg); }
+    .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Quicksand', sans-serif; font-weight: bold; font-size: clamp(10px, 2.5vw, 13px); text-align: center; box-sizing: border-box; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 5px; background: #ffffff; }
+    .face-front { transform: rotateY(180deg); border: 2px solid #e2e8f0; }
+    .face-back { transform: rotateY(0deg); border: 2px solid #e2e8f0; }
+    .img-m { width: auto; height: 50%; max-width: 80%; object-fit: contain; margin-bottom: 5px; }
+    .img-doma-logo { width: 60%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));}
+    .tag-acolhido { background: rgba(56, 189, 248, 0.2); color: #0284c7; border: 1px solid #0ea5e9; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; font-family: 'Quicksand', sans-serif; display: inline-block; margin: 3px;}
+</style>
+
+<div class="wrapper-isolado bg-grad-azul-jogo" style="min-height: 100vh; padding: 40px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    
     <div id="status-jogo" style="display: flex; justify-content: space-between; font-weight: bold; color: #0284c7; margin-bottom: 1vh; font-family: 'Quicksand', sans-serif; width: 100%; max-width: 360px;">
         <span style="font-size: 1.1rem;">⏳ <span id="game-timer" style="color: #0369a1;">--</span></span>
         <span style="font-size: 1.1rem;">✨ <span id="game-pts" style="color: #0369a1;">0</span> pts</span>
@@ -14,11 +29,11 @@
         <button class="btn-doma" onclick="window.resetGame()" style="margin-top: 1.5vh; padding: 1.5vh 20px; background: #f0f9ff; border: 2px solid #0ea5e9; color: #0284c7; box-shadow: none;">🔄 TENTAR NOVAMENTE</button>
         <button class="btn-doma btn-doma-azul" style="margin-top: 1vh; padding: 1.5vh 20px;" onclick="window.mudarPagina(1)">CONTINUAR ➔</button>
     </div>
+
 </div>
 
 <script>
 (function() {
-    // 1. O MOTOR DE ÁUDIO ORIGINAL RESTAURADO
     let audioCtxMemoria = null;
     let audioLiberadoMemoria = false;
 
@@ -47,7 +62,6 @@
     const tocarTriploPlim = () => { bip(880, 'sine', 0.1, 0); bip(880, 'sine', 0.1, 0.15); bip(880, 'sine', 0.3, 0.3); };
     const somAcerto = () => { bip(523, 'sine', 0.2, 0); bip(659, 'sine', 0.2, 0.1); bip(783, 'sine', 0.3, 0.2); };
 
-    // 2. LÓGICA E MATEMÁTICA ORIGINAL DO JOGO
     const monstrosMem = [
         { n: "CAOS", i: "https://i.postimg.cc/7LxrhkDv/ansiedade.png" },
         { n: "VALOR", i: "https://i.postimg.cc/cHCq7BvW/autoestisma.png" },
@@ -59,7 +73,9 @@
     
     let cartasM = [...monstrosMem, ...monstrosMem];
     let selCards = [], encM = [], nomesEncM = [], pts = 0, jogandoM = false;
-    let timerIdx = null;
+    
+    // Proteção: Zera qualquer timer anterior caso o usuário volte para a página
+    if (window.timerIdxDoma) clearInterval(window.timerIdxDoma);
 
     window.iniciarFluxoDoJogo = function() {
         initAudioM();
@@ -67,7 +83,7 @@
     }
 
     function montarGridM() {
-        if (timerIdx) clearInterval(timerIdx);
+        if (window.timerIdxDoma) clearInterval(window.timerIdxDoma);
         const grid = document.getElementById('grid');
         document.getElementById('status-jogo').style.display = 'flex';
         document.getElementById('game-final').style.display = 'none';
@@ -108,10 +124,10 @@
 
         let tMemo = 30; 
         document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; 
-        timerIdx = setInterval(() => {
+        window.timerIdxDoma = setInterval(() => {
             tMemo--; document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; bip(880, 'sine', 0.05); 
             if (tMemo <= 0) {
-                clearInterval(timerIdx);
+                clearInterval(window.timerIdxDoma);
                 document.querySelectorAll('.game-card').forEach(el => el.classList.remove('flipped'));
                 jogandoM = true; partidaM();
             }
@@ -121,14 +137,14 @@
     function partidaM() {
         let tJogo = 180; 
         document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
-        timerIdx = setInterval(() => {
+        window.timerIdxDoma = setInterval(() => {
             tJogo--; document.getElementById('game-timer').innerText = `Tempo: ${tJogo}s`;
             if (tJogo <= 0) finalizarM();
         }, 1000);
     }
 
     function finalizarM() {
-        clearInterval(timerIdx); jogandoM = false;
+        clearInterval(window.timerIdxDoma); jogandoM = false;
         document.getElementById('grid').style.display = 'none';
         document.getElementById('status-jogo').style.display = 'none';
         document.getElementById('game-final').style.display = 'block';
@@ -139,7 +155,6 @@
             const s = document.createElement('span'); s.className = 'tag-acolhido'; s.innerText = n; list.appendChild(s);
         });
 
-        // RECOMPENSA COM BASE NO RECORDE ORIGINAL MANTIDA
         let pontuacaoFinal = pts > 60 ? 60 : pts;
         let maxMemoria = parseInt(localStorage.getItem('doma_max_memoria')) || 0;
         
@@ -157,7 +172,7 @@
 
     window.resetGame = function() { montarGridM(); };
 
-    // Inicia o fluxo automaticamente 600ms após a injeção do slide na tela (imita o comportamento original do botão)
+    // Inicia o fluxo automaticamente 600ms após a injeção
     setTimeout(window.iniciarFluxoDoJogo, 600);
 
 })();
