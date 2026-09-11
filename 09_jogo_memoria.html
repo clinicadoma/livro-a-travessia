@@ -1,50 +1,53 @@
-<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
-    
-    <!-- PLACAR DO JOGO -->
-    <div id="status-jogo" style="display: flex; justify-content: space-between; font-weight: bold; color: #0284c7; margin-bottom: 2vh; font-family: 'Quicksand', sans-serif; width: 100%; max-width: 360px;">
+<div class="wrapper-isolado">
+    <div id="status-jogo" style="display: flex; justify-content: space-between; font-weight: bold; color: #0284c7; margin-bottom: 1vh; font-family: 'Quicksand', sans-serif; width: 100%; max-width: 360px;">
         <span style="font-size: 1.1rem;">⏳ <span id="game-timer" style="color: #0369a1;">--</span></span>
         <span style="font-size: 1.1rem;">✨ <span id="game-pts" style="color: #0369a1;">0</span> pts</span>
     </div>
     
-    <!-- TABULEIRO DAS CARTAS -->
     <div class="game-grid" id="grid"></div>
     
-    <!-- TELA DE VITÓRIA (GAME OVER) -->
     <div id="game-final" style="display: none; text-align: center; background: #ffffff; padding: 3vh 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #bae6fd; width: 100%; max-width: 360px;">
         <h2 style="color:#0284c7; font-family: 'Orbitron', sans-serif; margin-top: 0; font-size: 1.4rem;">GAME OVER ✨</h2>
         <p class="doma-texto-corrido" style="text-align: center; margin-bottom: 1vh; color: #334155; font-size: 0.95rem;"><strong>Monstrinhos acolhidos:</strong></p>
-        
         <div id="acolhidos-list" style="margin-bottom: 2vh; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;"></div>
-        
         <h3 style="color:#f59e0b; margin: 1vh 0; font-size: 1.3rem;">Sua Pontuação: <span id="final-pts" style="color: #d97706;">0</span></h3>
-        
-        <button class="btn-doma" onclick="window.resetGame()" style="margin-top: 1.5vh; padding: 1.5vh 20px; background: #f0f9ff; border: 2px solid #0ea5e9; color: #0284c7; box-shadow: none; font-weight: bold; border-radius: 12px; width: 100%;">
-            🔄 TENTAR NOVAMENTE
-        </button>
-        <button class="btn-doma btn-doma-azul" style="margin-top: 1.5vh; padding: 1.5vh 20px; font-weight: bold; border-radius: 12px; width: 100%;" onclick="mudarPagina(1)">
-            CONTINUAR A JORNADA ➔
-        </button>
+        <button class="btn-doma" onclick="window.resetGame()" style="margin-top: 1.5vh; padding: 1.5vh 20px; background: #f0f9ff; border: 2px solid #0ea5e9; color: #0284c7; box-shadow: none;">🔄 TENTAR NOVAMENTE</button>
+        <button class="btn-doma btn-doma-azul" style="margin-top: 1vh; padding: 1.5vh 20px;" onclick="window.mudarPagina(1)">CONTINUAR ➔</button>
     </div>
-
 </div>
 
 <script>
 (function() {
-    // 1. MOTOR DE ÁUDIO INTERNO DO JOGO
-    function playBipInterno(f, type, dur) {
+    // 1. O MOTOR DE ÁUDIO ORIGINAL RESTAURADO
+    let audioCtxMemoria = null;
+    let audioLiberadoMemoria = false;
+
+    function initAudioM() {
+        if (audioLiberadoMemoria) return;
         try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.type = type; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
-            o.connect(g); g.connect(audioCtx.destination);
-            o.start(); o.stop(audioCtx.currentTime + dur);
+            audioCtxMemoria = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtxMemoria.state === 'suspended') audioCtxMemoria.resume();
+            audioLiberadoMemoria = true;
         } catch(e) {}
     }
 
-    // 2. DADOS DO JOGO
+    function bip(f, t, d, delay = 0) {
+        if (!audioCtxMemoria || !audioLiberadoMemoria) return;
+        try {
+            const o = audioCtxMemoria.createOscillator();
+            const g = audioCtxMemoria.createGain();
+            o.type = t; o.frequency.setValueAtTime(f, audioCtxMemoria.currentTime + delay);
+            g.gain.setValueAtTime(0.1, audioCtxMemoria.currentTime + delay);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtxMemoria.currentTime + delay + d);
+            o.connect(g); g.connect(audioCtxMemoria.destination);
+            o.start(audioCtxMemoria.currentTime + delay); o.stop(audioCtxMemoria.currentTime + delay + d);
+        } catch(e) {}
+    }
+    
+    const tocarTriploPlim = () => { bip(880, 'sine', 0.1, 0); bip(880, 'sine', 0.1, 0.15); bip(880, 'sine', 0.3, 0.3); };
+    const somAcerto = () => { bip(523, 'sine', 0.2, 0); bip(659, 'sine', 0.2, 0.1); bip(783, 'sine', 0.3, 0.2); };
+
+    // 2. LÓGICA E MATEMÁTICA ORIGINAL DO JOGO
     const monstrosMem = [
         { n: "CAOS", i: "https://i.postimg.cc/7LxrhkDv/ansiedade.png" },
         { n: "VALOR", i: "https://i.postimg.cc/cHCq7BvW/autoestisma.png" },
@@ -53,12 +56,17 @@
         { n: "MEDO", i: "https://i.postimg.cc/ZRzWQ0h6/Coracao.png" },
         { n: "CULPA", i: "https://i.postimg.cc/SN1Jhgpr/Captura-de-tela-2026-03-24-151245-removebg-preview.png" }
     ];
+    
     let cartasM = [...monstrosMem, ...monstrosMem];
     let selCards = [], encM = [], nomesEncM = [], pts = 0, jogandoM = false;
     let timerIdx = null;
 
-    // 3. LÓGICA PRINCIPAL
-    window.montarGridM = function() {
+    window.iniciarFluxoDoJogo = function() {
+        initAudioM();
+        setTimeout(montarGridM, 100);
+    }
+
+    function montarGridM() {
         if (timerIdx) clearInterval(timerIdx);
         const grid = document.getElementById('grid');
         document.getElementById('status-jogo').style.display = 'flex';
@@ -72,7 +80,7 @@
             const c = document.createElement('div'); c.className = 'game-card flipped'; 
             c.onclick = () => {
                 if (!jogandoM || selCards.some(s => s.id === i) || encM.includes(i)) return;
-                playBipInterno(400, 'sine', 0.1); c.classList.add('flipped');
+                bip(400, 'sine', 0.1); c.classList.add('flipped');
                 selCards.push({ nome: m.n, el: c, id: i });
                 
                 if (selCards.length === 2) {
@@ -82,11 +90,12 @@
                             encM.push(selCards[0].id, selCards[1].id);
                             nomesEncM.push(selCards[0].nome);
                             pts += 10; document.getElementById('game-pts').innerText = pts;
-                            playBipInterno(523, 'sine', 0.2); setTimeout(()=>playBipInterno(659, 'sine', 0.2), 100); setTimeout(()=>playBipInterno(783, 'sine', 0.3), 200);
+                            somAcerto();
+                            tocarTriploPlim(); 
                         } else {
                             selCards[0].el.classList.remove('flipped');
                             selCards[1].el.classList.remove('flipped');
-                            playBipInterno(150, 'sawtooth', 0.2); 
+                            bip(150, 'sawtooth', 0.2); 
                         }
                         selCards = []; jogandoM = true;
                         if (encM.length === cartasM.length) finalizarM();
@@ -97,18 +106,17 @@
             grid.appendChild(c);
         });
 
-        // 4. TEMPORIZADOR
-        let tMemo = 30; // Tempo original restaurado
+        let tMemo = 30; 
         document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; 
         timerIdx = setInterval(() => {
-            tMemo--; document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; playBipInterno(880, 'sine', 0.05); 
+            tMemo--; document.getElementById('game-timer').innerText = `Memorize: ${tMemo}s`; bip(880, 'sine', 0.05); 
             if (tMemo <= 0) {
                 clearInterval(timerIdx);
                 document.querySelectorAll('.game-card').forEach(el => el.classList.remove('flipped'));
                 jogandoM = true; partidaM();
             }
         }, 1000);
-    };
+    }
 
     function partidaM() {
         let tJogo = 180; 
@@ -119,21 +127,19 @@
         }, 1000);
     }
 
-    // 5. ENCERRAMENTO E MOEDAS
     function finalizarM() {
         clearInterval(timerIdx); jogandoM = false;
         document.getElementById('grid').style.display = 'none';
         document.getElementById('status-jogo').style.display = 'none';
         document.getElementById('game-final').style.display = 'block';
         document.getElementById('final-pts').innerText = pts;
-        
         const list = document.getElementById('acolhidos-list');
         list.innerHTML = '';
         [...new Set(nomesEncM)].forEach(n => {
             const s = document.createElement('span'); s.className = 'tag-acolhido'; s.innerText = n; list.appendChild(s);
         });
 
-        // Sistema Anti-Farming: Paga moedas apenas se bater o recorde antigo
+        // RECOMPENSA COM BASE NO RECORDE ORIGINAL MANTIDA
         let pontuacaoFinal = pts > 60 ? 60 : pts;
         let maxMemoria = parseInt(localStorage.getItem('doma_max_memoria')) || 0;
         
@@ -142,15 +148,17 @@
             localStorage.setItem('doma_max_memoria', pontuacaoFinal);
             
             setTimeout(() => {
-                if (window.ganharMoedas) window.ganharMoedas(ganho);
+                if (typeof window.ganharMoedas === 'function') {
+                    window.ganharMoedas(ganho, null);
+                }
             }, 500);
         }
     }
 
-    window.resetGame = function() { window.montarGridM(); };
+    window.resetGame = function() { montarGridM(); };
 
-    // Dispara a montagem do grid 200ms após injetar o slide na tela
-    setTimeout(window.montarGridM, 200);
+    // Inicia o fluxo automaticamente 600ms após a injeção do slide na tela (imita o comportamento original do botão)
+    setTimeout(window.iniciarFluxoDoJogo, 600);
 
 })();
 </script>
