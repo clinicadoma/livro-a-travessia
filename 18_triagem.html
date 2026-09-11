@@ -1,0 +1,666 @@
+<style>
+    /* CSS EXCLUSIVO DA TRIAGEM E DIAGNÓSTICO */
+    .doma-triagem-container { width: 100%; min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f3e8ff); position: relative; padding: 20px 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+    
+    .grid-categorias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; max-width: 500px; margin: 0 auto; padding: 10px 15px; box-sizing: border-box; }
+    .btn-categoria { width: calc(50% - 5px); background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 85px; box-sizing: border-box; }
+    .btn-categoria.selecionada { border-color: #059669; background: #ecfdf5; transform: scale(1.05); box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2); }
+    .btn-categoria .icone { font-size: 1.8rem; }
+    .btn-categoria .titulo { font-weight: 900; color: #1e1b4b; font-size: 0.75rem; text-transform: uppercase; line-height: 1.1; }
+
+    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 110px; width: 100%; max-width: 500px; margin: 30px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
+    .cesto { width: 48%; height: 100%; position: relative; background: rgba(255, 255, 255, 0.3); border-left: 2px solid rgba(255, 255, 255, 0.9); border-right: 2px solid rgba(255, 255, 255, 0.9); border-radius: 8px 8px 20px 20px; box-shadow: inset 5px 0 10px rgba(255,255,255,0.6), inset -5px 0 10px rgba(255,255,255,0.6), 0 10px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; transition: all 0.2s ease; }
+    .cesto::before { content: ''; position: absolute; top: -8px; left: -2px; right: -2px; height: 16px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.2); z-index: 3; box-shadow: inset 0 5px 10px rgba(0,0,0,0.05); }
+    #cesto-existe { border-bottom: 5px solid #ef4444; background-color: rgba(239, 68, 68, 0.08); } #cesto-existe::before { border-color: rgba(239, 68, 68, 0.5); }
+    #cesto-nao-existe { border-bottom: 5px solid #64748b; background-color: rgba(100, 116, 139, 0.08); } #cesto-nao-existe::before { border-color: rgba(100, 116, 139, 0.5); }
+    .cesto-hover { transform: scale(1.05); background-color: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); } .cesto-hover::before { border-color: #d4af37 !important; }
+    .cesto-label { position: absolute; top: -45px; width: 100%; left: 0; font-size: 0.9rem; font-weight: 900; color: #1e1b4b; background: white; padding: 8px 2px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.08); text-align: center; line-height: 1.2; z-index: 5; text-transform: uppercase; }
+    .cesto-label span { display: block; font-size: 0.6rem; margin-top: 2px; }
+    .cesto-interior { width: 100%; height: 100%; position: absolute; bottom: 0; left: 0; overflow: hidden; border-radius: 0 0 15px 15px; z-index: 1; }
+
+    .area-peca { min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-sizing: border-box; margin-bottom: 5px; width: 100%; }
+    .instrucao-arraste { background: #fef08a; border: 2px dashed #eab308; padding: 8px; border-radius: 8px; font-size: 0.75rem; color: #854d0e; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; width: 95%; max-width: 320px; margin-bottom: 12px; margin-top: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+    .peca-quebra-cabeca { width: 140px; min-height: 75px; height: auto; background: linear-gradient(135deg, #d4af37, #b5952f); position: relative; z-index: 100; cursor: grab; display: flex; justify-content: center; align-items: center; text-align: center; border-radius: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); color: white; font-weight: 900; font-size: 0.85rem; padding: 10px; box-sizing: border-box; touch-action: none !important; transition: transform 0.1s; }
+    .peca-quebra-cabeca::before { content: ''; position: absolute; right: -10px; top: calc(50% - 10px); width: 20px; height: 20px; background: #b5952f; border-radius: 50%; z-index: -1; }
+    .peca-quebra-cabeca::after { content: ''; position: absolute; bottom: -10px; left: calc(50% - 10px); width: 20px; height: 20px; background: #c5a233; border-radius: 50%; z-index: -1; }
+    .peca-quebra-cabeca:active { cursor: grabbing; opacity: 0.95; }
+    .dragging { transition: none !important; z-index: 9999; animation: none !important; box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important; transform: scale(1.1) !important; }
+    .peca-fantasma { position: absolute; width: 140px; height: 75px; background: #d4af37; border-radius: 10px; opacity: 0.4; pointer-events: none; z-index: 50; transition: opacity 0.4s, transform 0.4s; }
+    .mini-peca { position: absolute; width: 20px; height: 14px; background: #d4af37; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
+    
+    @keyframes quicarPeca { 0% { transform: translateY(-50px) rotate(0deg); opacity: 1; } 60% { transform: translateY(10px) rotate(15deg); } 80% { transform: translateY(-5px) rotate(5deg); } 100% { transform: translateY(0) rotate(10deg); opacity: 0.9; } }
+    .quique { animation: quicarPeca 0.5s ease-out forwards; }
+
+    .area-explicacao { display: flex; align-items: center; justify-content: center; padding: 0 5px 5px 5px; box-sizing: border-box; margin-top: 15px; width: 100%; }
+    .caixa-explicacao { background: #ffffff; border: 3px solid #d4af37; border-radius: 12px; padding: 20px 15px; width: 95%; max-width: 450px; text-align: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; }
+    
+    .tela-interna { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeInFesta 0.5s ease-out forwards; }
+    .tela-interna.ativa { display: flex; }
+    
+    @keyframes fadeInFesta { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes girarSirene { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg) scale(1.1); filter: drop-shadow(0 0 15px rgba(225,29,72,0.6)); } 100% { transform: rotate(-15deg); } }
+
+    /* Modais e Botões Internos */
+    .btn-alerta-vermelho { background: #e11d48; color: white; border: none; padding: 18px; width: 100%; max-width: 400px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 8px 20px rgba(225, 29, 72, 0.3); text-transform: uppercase; margin-top: 20px; transition: 0.2s; }
+    .btn-alerta-vermelho:active { transform: scale(0.98); }
+    .card-diagnostico { background: white; border: 1px solid #e2e8f0; padding: 20px 15px; border-radius: 16px; text-align: left; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 12px; }
+    .btn-tatica-individual { background: #f97316; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2); text-transform: uppercase; margin-top: 15px; transition: background 0.2s; }
+    
+    .check-card-tatico { display: flex; align-items: center; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; position: relative; text-align: left; }
+    .check-card-tatico.selecionado { border-color: #f97316; background: #fff7ed; }
+    .check-card-tatico input { position: absolute; opacity: 0; }
+    .check-card-tatico span { font-size: 1rem; font-weight: 600; color: #334155; display: block; padding-left: 35px; position: relative; line-height: 1.4; }
+    .check-card-tatico.selecionado span { color: #9a3412; font-weight: 800; }
+    .check-card-tatico span::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border: 2px solid #cbd5e1; border-radius: 6px; background: white; transition: all 0.2s; }
+    .check-card-tatico.selecionado span::before { background: #f97316; border-color: #f97316; }
+    .check-card-tatico.selecionado span::after { content: '✓'; position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: white; font-weight: 900; font-size: 14px; }
+    
+    .input-acao { width: 100%; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; margin-top: 15px; font-size: 1.05rem; box-sizing: border-box; resize: vertical; background: #f8fafc; color: #1e293b; font-family: 'Nunito', sans-serif; }
+</style>
+
+<div class="doma-triagem-container">
+
+    <!-- ÁUDIOS ESPECÍFICOS DA TRIAGEM -->
+    <audio id="AUD_PEGAR" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="AUD_DROP_EXISTE" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
+    <audio id="AUD_DROP_NAO_EXISTE" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="AUD_SIRENE" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3" preload="auto"></audio>
+
+    <!-- TELA 1: CATEGORIAS -->
+    <div id="triagem-tela-categorias" class="tela-interna ativa" style="background: white; padding: 30px 15px; border-radius: 20px; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="font-size: 1.6rem; margin: 0; color: #1e1b4b; font-weight: 900; text-transform: uppercase;">Mapeamento Tático</h2>
+            <p style="color: #64748b; font-weight: 600; font-size: 1rem; margin-top: 8px;">Escolha <strong>apenas UMA área</strong> da sua vida para organizar e domar hoje:</p>
+        </div>
+        <div class="grid-categorias">
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('relacionamentos', this)"><span class="icone">❤️‍🔥</span><span class="titulo">Relacionamentos</span></div>
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('trabalho', this)"><span class="icone">💼</span><span class="titulo">Trabalho & Carreira</span></div>
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('familia', this)"><span class="icone">👨‍👩‍👧‍👦</span><span class="titulo">Família</span></div>
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('autocuidado', this)"><span class="icone">🧘‍♀️</span><span class="titulo">Saúde & Autocuidado</span></div>
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('financeiro', this)"><span class="icone">💰</span><span class="titulo">Financeiro</span></div>
+            <div class="btn-categoria" onclick="iniciarJogoTriagem('estudos', this)"><span class="icone">📚</span><span class="titulo">Estudos & Foco</span></div>
+        </div>
+    </div>
+
+    <!-- TELA 2: O JOGO DE ARRASTAR -->
+    <div id="triagem-tela-jogo" class="tela-interna" style="background: white; padding: 20px 15px; border-radius: 20px; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+        <div style="text-align: center; width: 100%;">
+            <h2 style="margin: 0; color: #1e1b4b; font-weight: 800; font-size: 1.2rem;"><span id="titulo-area-jogo" style="color: #d4af37;"></span> Qual o destino dessa peça?</h2>
+            <div style="width: 100%; max-width: 350px; margin: 15px auto 5px auto; background: rgba(212, 175, 55, 0.2); border-radius: 10px; height: 10px;">
+                <div id="barra-progresso" style="width: 0%; background: #d4af37; height: 100%; border-radius: 10px; transition: width 0.3s; box-shadow: 0 0 10px rgba(212,175,55,0.8);"></div>
+            </div>
+            <p id="texto-progresso" style="font-size: 0.9rem; color: #b5952f; margin: 0; font-weight: bold;">0 / 10</p>
+        </div>
+
+        <div class="area-cestos">
+            <div id="cesto-existe" class="cesto" data-alvo="existe">
+                <div class="cesto-label">SIM<br><span style="color:#ef4444;">Existe no seu Lar?</span></div>
+                <div class="cesto-interior" id="interior-existe"></div>
+            </div>
+            <div id="cesto-nao-existe" class="cesto" data-alvo="nao-existe">
+                <div class="cesto-label">NÃO<br><span style="color:#64748b;">Não existe!</span></div>
+                <div class="cesto-interior" id="interior-nao-existe"></div>
+            </div>
+        </div>
+
+        <div class="area-peca" id="area-jogo-fisica">
+            <p id="texto-instrucao" class="instrucao-arraste">👇 Arraste para o cesto correto 👇</p>
+            <div id="peca-arrastavel" class="peca-quebra-cabeca"><span id="texto-peca-jogo" style="line-height: 1.3;">...</span></div>
+            
+            <div id="area-botao-diagnostico" style="display: none; text-align: center; width: 100%; margin-top: 20px;">
+                <button class="btn-doma pulse-btn" style="background: linear-gradient(135deg, #d4af37, #b5952f); color: white; width: 100%; border: none; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);" onclick="mostrarDiagnosticoTriagem()">VER DIAGNÓSTICO CLÍNICO ❯</button>
+            </div>
+        </div>
+
+        <div class="area-explicacao">
+            <div class="caixa-explicacao" id="caixa-desc">
+                <span id="icone-tipo" style="font-size: 0.75rem; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold; text-transform: uppercase;">Aguarde...</span>
+                <p id="desc-peca" style="font-size: 0.95rem; margin: 10px 0 0 0; line-height: 1.5; font-weight: 700; color: #1e1b4b; min-height: 45px;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 3: LAUDO CLÍNICO (SIRENE) -->
+    <div id="triagem-tela-laudo" class="tela-interna" style="background: white; padding: 40px 20px; border-radius: 20px; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); text-align: center;">
+        <div style="font-size: 5rem; margin-bottom: 15px; animation: girarSirene 1s infinite alternate;" id="icone-diagnostico">🚨</div>
+        <h3 id="titulo-modal-sirene" style="color: #1e1b4b; font-weight: 900; font-size: 1.8rem; margin: 0 0 15px 0; text-transform: uppercase;">Laudo Clínico</h3>
+        <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+            <p id="msg-sirene-diagnostico" style="color: #334155; font-size: 1.1rem; line-height: 1.6; font-weight: 600; margin: 0;"></p>
+        </div>
+        <button class="btn-alerta-vermelho" id="btn-avancar-alerta" onclick="prepararEspelhoAutoescrita()">VER ESPELHO DA REALIDADE ➔</button>
+    </div>
+
+    <!-- TELA 4: ESPELHO DA REALIDADE -->
+    <div id="triagem-tela-espelho" class="tela-interna" style="background: white; padding: 30px 15px; border-radius: 20px; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 6px solid #7c3aed;">
+        <div id="conteudo-autoescrita" style="width: 100%;"></div>
+        <button class="btn-doma pulse-btn" style="background: #7c3aed; color: white; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; margin-top: 25px; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);" onclick="abrirPlanoGeral()">AVANÇAR PARA O MAPA TÁTICO ❯</button>
+    </div>
+
+    <!-- TELA 5: PLANO TÁTICO -->
+    <div id="triagem-tela-plano" class="tela-interna" style="background: white; padding: 30px 15px; border-radius: 20px; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+        <div style="display: inline-block; background: #1e1b4b; color: white; padding: 6px 15px; border-radius: 20px; font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase;">Protocolo de Tratamento</div>
+        <h2 style="font-size: 2rem; margin: 0 0 20px 0; color: #1e1b4b; font-weight: 900; text-align: center;">Seu Plano Tático</h2>
+        
+        <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 25px; border-radius: 20px; margin-bottom: 25px; color: white; text-align: center; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🎯</div>
+            <h3 style="margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 900;">A Regra de Ouro</h3>
+            <p style="font-size: 1.05rem; line-height: 1.5; margin: 0; font-weight: 600;">Você deve focar em resolver <strong style="color:#fffbeb; text-decoration: underline;">APENAS UMA</strong> pendência tóxica ou ponto cego por vez.</p>
+        </div>
+
+        <div id="area-lista-pecas" style="width: 100%; display: flex; flex-direction: column;"></div>
+
+        <div style="width: 100%; background: #f8fafc; border: 2px solid #e2e8f0; padding: 25px 15px; border-radius: 20px; margin-top: 30px; text-align: center; box-sizing: border-box;">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">✍️</div>
+            <h3 style="color: #1e1b4b; margin: 0 0 15px 0; font-size: 1.3rem; font-weight: 900;">Firme Seu Compromisso</h3>
+            <input type="text" id="nome-assinatura" placeholder="Digite sua assinatura..." style="width: 100%; padding: 18px; border-radius: 12px; border: 2px solid #cbd5e1; font-weight: bold; background: white; font-size: 1.1rem; box-sizing: border-box; text-align: center; color: #334155; outline: none;">
+        </div>
+
+        <button class="btn-doma" style="background: linear-gradient(135deg, #d4af37, #b5952f); color: white; border: none; width: 100%; border-radius: 15px; padding: 20px; font-weight: 900; font-size: 1.1rem; margin-top: 25px; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);" onclick="validarEAvancarData()">AVANÇAR E DATAR ❯</button>
+    </div>
+
+    <!-- TELA 6: DATA DE INÍCIO -->
+    <div id="triagem-tela-data" class="tela-interna" style="background: white; padding: 40px 20px; border-radius: 20px; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); text-align: center;">
+        <div style="font-size: 4.5rem; margin-bottom: 15px;">🗓️</div>
+        <h2 style="font-size: 2.2rem; margin: 0 0 15px 0; color: #1e1b4b; font-weight: 900;">Quando começamos?</h2>
+        <p style="color: #475569; font-size: 1.1rem; font-weight: 500; margin-bottom: 30px; line-height: 1.6;">Todo tratamento eficiente precisa de um <strong>Dia 1</strong>. Assuma a responsabilidade e defina a data exata da mudança.</p>
+        <div style="width: 100%; background: #f8fafc; padding: 30px 20px; border-radius: 20px; border: 2px solid #cbd5e1; margin-bottom: 30px; box-sizing: border-box;">
+            <label style="display: block; font-weight: 900; color: #1e293b; margin-bottom: 15px; font-size: 1.2rem;">Data de Início:</label>
+            <input type="date" id="data-inicio-tratamento" style="width: 100%; padding: 15px; border: 2px solid #94a3b8; border-radius: 12px; font-size: 1.1rem; font-family: 'Nunito', sans-serif; font-weight: bold; text-align: center; box-sizing: border-box; outline: none;">
+        </div>
+        <button class="btn-doma pulse-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; width: 100%; border: none; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);" onclick="revelarContratoFinal()">ASSINAR MEU CONTRATO FINAL ❯</button>
+    </div>
+
+    <!-- TELA 7: CONTRATO FINAL -->
+    <div id="triagem-tela-contrato" class="tela-interna" style="background: white; padding: 40px 20px; border-radius: 20px; max-width: 600px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); text-align: center;"></div>
+
+    <!-- MODAL SOBREPOSTO: DEFINIR TÁTICA -->
+    <div id="modal-tatica-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); z-index: 999999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(8px);">
+        <div style="background: white; width: 100%; max-width: 450px; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3); animation: fadeInFesta 0.3s ease-out; max-height: 90vh;">
+            <div style="padding: 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.2rem; text-transform: uppercase;">Definir Tática</h3>
+                <button onclick="document.getElementById('modal-tatica-overlay').style.display='none'" style="background: transparent; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer;">✕</button>
+            </div>
+            <div id="modal-tatica-conteudo" style="padding: 20px; overflow-y: auto; flex: 1;"></div>
+            <div id="area-botoes-modal" style="padding: 20px; border-top: 1px solid #e2e8f0; background: #fff; display: flex; gap: 10px; justify-content: space-between;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL SOBREPOSTO: SUCESSO -->
+    <div id="modal-sucesso-jornada" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 999999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(10px);">
+        <div style="background: white; width: 100%; max-width: 400px; padding: 40px 20px; border-radius: 24px; text-align: center; border-top: 8px solid #10b981; animation: fadeInFesta 0.4s ease-out;">
+            <div style="font-size: 4.5rem; margin-bottom: 15px;">🏆</div>
+            <h3 style="color: #065f46; font-weight: 900; font-size: 1.8rem; margin: 0 0 15px 0;">Contrato Selado!</h3>
+            <p style="color: #475569; font-size: 1.1rem; line-height: 1.5; font-weight: 600; margin-bottom: 25px;">O seu plano tático foi ativado com sucesso. Você assumiu o controle e agora pode continuar a sua travessia.</p>
+            <button class="btn-doma" style="background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); cursor: pointer;" onclick="document.getElementById('modal-sucesso-jornada').style.display='none'; window.mudarPagina(1);">ENTENDIDO ❯</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    // 1. O BANCO DE DADOS (Restaurado 100% original da Clínica Doma)
+    const bancoDePecas = {
+        'estudos': [
+            { t: "Misturar a Cama e o Estudo", desc: "Estudar onde se dorme confunde a via libidinal do repouso com a da obrigação.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você deita para dormir e a mente acelera com culpa; senta na mesa e o corpo pede cama.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A paz do seu descanso e o foco real no aprendizado.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Separar o ambiente: Ler apenas na mesa."], d_outro: ["Impedir que usem meu quarto como área de passagem."] },
+            { t: "Celular Ativo Durante o Estudo", desc: "O celular atua como objeto de gozo rápido, fragmentando a atenção flutuante.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você lê o mesmo parágrafo três vezes porque a mente fugiu para o Instagram.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Seu tempo livre.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Deixar celular em outro cômodo por 50 min."], d_outro: ["Avisar contatos que não responderei no horário de estudo."] },
+            { t: "Culpa Extrema ao Falhar na Meta", desc: "O Superego pune cruelmente qualquer desvio da meta diária.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você se xinga e se pune severamente por não bater a meta diária.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A autoconfiança e a coragem de tentar de novo.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Trocar 'sou preguiçosa' por 'estou cansada'."], d_outro: ["Cortar conversas com quem cobra perfeição de mim."] },
+            { t: "Comparação Constante (Redes)", desc: "Comparar seus bastidores com o palco idealizado do colega.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você vê o colega gabaritando e sente que seu effort não vale nada.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Sua identidade e motivação.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Parar de seguir perfil que causa gatilho."], d_outro: ["Cortar assunto quando o outro tenta ostentar produtividade."] },
+            { t: "Procrastinar Arrumando o Quarto", desc: "Fugir da tarefa organizando o ambiente para não encarar a falta de saber.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você limpa a casa inteira para não ter que encarar a folha em branco.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O enfrentamento do problema.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Regra dos 5 min de início forçado."], d_outro: ["Delegar a bagunça que não é minha para o responsável."] },
+            { t: "Fuga de Simulados", desc: "Fuga de simulados por medo de ferir o seu 'Ideal do Eu'.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você só estuda a teoria porque errar no simulado dói demais.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A chance de aprovação.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Fazer simulados aceitando o erro como dado."], d_outro: ["Não compartilhar minhas notas com quem me julga."] },
+            { t: "Estudo Passivo", desc: "Só ler e grifar, simulando conhecimento sem elaboração.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você grifa o livro inteiro achando que aprendeu, mas trava na hora de explicar.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A solidez mental.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Explicar a matéria em voz alta."], d_outro: ["Recusar dicas milagrosas de terceiros."] },
+            { t: "Aceitação do Erro", desc: "Aceitar que a perfeição é uma fantasia e focar na constância do possível.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta aceitar o erro como parte do processo.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A resiliência necessária para aprender com leveza.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Celebrar o 'feito' em vez do 'perfeito'."], d_outro: ["Impedir que terceiros desvalorizem minhas pequenas vitórias."] },
+            { t: "Pausar e Descansar Sem Culpa", desc: "Pausar sem que a voz interna te acuse de preguiça.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta separar um tempo de descanso real.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A regeneração mental e a energia.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Agendar a pausa no alarme e respeitar como lei."], d_outro: ["Dizer 'não' a quem tentar ocupar meu tempo de descanso."] },
+            { t: "Limites de Início e Fim", desc: "Limites claros de hora de início e fim da sessão de estudos.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estipular uma hora exata para começar e terminar.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A organização psíquica essencial para equilibrar suas obrigações.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Desligar o material na hora exata estipulada."], d_outro: ["Avisar a casa do horário exato que estarei indisponível."] }
+        ],
+        'relacionamentos': [
+            { t: "Sinais de Alerta do Corpo", desc: "Sentir taquicardia ou tensão apenas por saber que o parceiro está chegando.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você sente um nó no estômago só de ouvir a chave na porta.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua saúde física e a paz dentro da própria casa.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Observar meu corpo: se travar, sair de perto."], d_outro: ["Dizer 'Não continuo a conversa com você nesse tom'."] },
+            { t: "Aceitar Distorção (Gaslighting)", desc: "Permitir que o outro distorça os fatos, fazendo você duvidar da sua memória.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você escuta 'isso é coisa da sua cabeça' até pedir desculpas.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A confiança na sua própria memória.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Anotar os fatos no celular para não duvidar de mim."], d_outro: ["Firmar: 'Eu sei o que ouvi' e encerrar o assunto."] },
+            { t: "Perdoar Abuso em Troca de Presente", desc: "Cair no ciclo da agressão seguida por lua de mel e presentes.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Ele te humilha na sexta, chora e te dá flores no domingo.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O seu valor inegociável.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Lembrar que abuso não se apaga com presente."], d_outro: ["Recusar o presente e manter a consequência do abuso."] },
+            { t: "Suportar o Castigo do Silêncio", desc: "Aceitar que o outro te puna com gelo verbal por dias.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Após uma briga, ele te ignora como se você não existisse.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua dignidade adulta.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Focar na minha própria vida e rotina normalmente."], d_outro: ["Deixar o outro no silêncio dele sem tentar resgatá-lo."] },
+            { t: "Ceder Sexualmente Sem Desejo", desc: "Ter relações sexuais apenas para evitar brigas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você transa torcendo para acabar logo, só para ele não fechar a cara.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O respeito pelo seu próprio corpo.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Praticar o auto-respeito corporal absoluto."], d_outro: ["Dizer 'não' claramente e sair da cama se houver pressão."] },
+            { t: "Microtraições Validadas", desc: "Tolerar flertes e desrespeitos sob a desculpa de 'brincadeira'.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Ele flerta e se você reclama, ele te chama de controladora.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A segurança emocional.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Validar o que sinto: se me machuca, não é bobeira."], d_outro: ["Impor o limite claro sobre respeito nas redes e presencialmente."] },
+            { t: "Pisar em Ovos", desc: "Viver medindo cada palavra com terror da próxima explosão.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você pensa três vezes antes de falar do dia a dia.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A liberdade de ser você mesma.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Agir com naturalidade, independentemente do humor dele."], d_outro: ["Retirar-se imediatamente do ambiente ao primeiro sinal de explosão."] },
+            { t: "Dizer 'Não' e Impor Limites", desc: "Dizer 'não' com firmeza e serenidade, demarcando seu espaço.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta conseguir dizer 'não' com firmeza para pedidos absurdos.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> A sua integridade psíquica.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Treinar o 'não' no espelho até perder a culpa."], d_outro: ["Manter a negativa inabalável mesmo se o outro fizer chantagem."] },
+            { t: "Confiança Mútua", desc: "Acreditar na lealdade do parceiro, sem vigilância constante.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estabelecer uma base de segurança real com o parceiro.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A tranquilidade mental de estar em um relacionamento estável.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Abandonar a vigilância de redes sociais e aparelhos."], d_outro: ["Exigir transparência contínua nas atitudes."] },
+            { t: "Dividir Tarefas no Dia a Dia", desc: "Compartilhar a carga mental, logística e física das obrigações.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta um equilíbrio claro na divisão das obrigações diárias.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Um ambiente leve e colaborativo.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Delegar tarefas sem ficar fiscalizando."], d_outro: ["Exigir que o parceiro assuma integralmente suas responsabilidades."] }
+        ],
+        'trabalho': [
+            { t: "Trabalhar Até a Exaustão", desc: "Trabalhar sem pausas até o corpo colapsar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você se orgulha de sair às 21h do escritório.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Sua imunidade despenca e não sobra energia vital.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Desligar PC no horário exato."], d_outro: ["Não responder a demandas fora do escopo no fim do dia."] },
+            { t: "Síndrome da Impostora", desc: "A fantasia de que você é uma fraude e será desmascarada.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Te elogiam e você diz 'foi sorte'.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Promoções e vive estressada.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Aceitar elogios apenas com 'Obrigado'."], d_outro: ["Exigir crédito nominal nas entregas feitas por mim."] },
+            { t: "Tolerar Chefe Sádico", desc: "Tolerar chefias sádicas e humilhações em silêncio.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> O chefe grita e você abaixa a cabeça com medo de perder a vaga.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A espinha dorsal do seu Eu.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Separar emocionalmente quem eu sou do cargo."], d_outro: ["Pedir que toda ordem abusiva seja enviada por e-mail."] },
+            { t: "Assumir a Culpa da Equipe", desc: "Assumir a culpa por erros alheios para manter a harmonia.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Alguém erra e você toma a frente para consertar.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O respeito profissional. Vira o para-raio.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Não me oferecer para arrumar os erros alheios."], d_outro: ["Nomear o verdadeiro responsável na reunião."] },
+            { t: "Checar E-mails no Fim de Semana", desc: "Abrir grupos de trabalho 'só para dar uma olhadinha'.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Domingo à noite a ansiedade ataca por causa do Slack.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A regeneração do seu cérebro.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Desativar notificações de apps aos fins de semana."], d_outro: ["Configurar mensagem automática de ausência."] },
+            { t: "Depender de Elogios", desc: "Esperar que a empresa assuma o papel parental validando todo seu esforço.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você trabalha dobrado e se sente um lixo quando o chefe não elogia.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A maturidade emocional.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Validar meus próprios resultados e documentá-los."], d_outro: ["Cobrar o aumento documentado invez de elogios."] },
+            { t: "Pavor de Ser Demitida", desc: "Agir pisando em ovos por terror de abandono corporativo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você evita expor qualquer ideia nova com medo de desagradar.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Sua capacidade de crescimento. O medo te paralisa.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Lembrar que o trabalho é um contrato, não uma adoção."], d_outro: ["Pedir feedback formal invez de adivinhar intenções."] },
+            { t: "Separar Identidade do Crachá", desc: "Compreender profunda e racionalmente que você não é o seu crachá.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta compreender que você é muito maior do que seu cargo.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Estabilidade e paz emocional para desligar do trabalho.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Não usar o cargo para me apresentar em eventos sociais."], d_outro: ["Não permitir que problemas da empresa invadam minha casa."] },
+            { t: "Pausar para Desconectar a Mente", desc: "Levantar e desconectar a mente a cada ciclo de foco profundo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta interromper o ritmo de trabalho ao longo do dia para respirar.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A regulação necessária do sistema nervoso basal.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Levantar da cadeira a cada 90 minutos."], d_outro: ["Não aceitar reuniões marcadas no meu horário de almoço."] },
+            { t: "Focar Apenas no que Gera Resultado", desc: "Fazer o essencial que gera resultado, sem se perder em ativismo vazio.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta priorizar de forma cirúrgica as tarefas que trazem retorno real.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Produtividade focada e tempo livre de qualidade.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Priorizar 3 tarefas vitais por dia."], d_outro: ["Exigir pauta clara antes de aceitar qualquer reunião."] }
+        ],
+        'familia': [
+            { t: "Ser Pombo-Correio de Brigas", desc: "Ser o mensageiro de parentes que não se falam.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Sua mãe reclama do seu pai para você. Você engole a raiva dos dois.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua própria paz. Sua energia vital é sugada.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Sair de grupos focados em brigas."], d_outro: ["Dizer 'Resolva diretamente com ele, não me envolva'."] },
+            { t: "Visitas Sem Aviso Prévio", desc: "Parentes que entram sem bater ou exigem sua presença.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você está de pijama no domingo e a campainha toca.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O espaço sagrado da sua individualidade.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Manter a porta de casa trancada."], d_outro: ["Não abrir a porta se não foi combinado previamente."] },
+            { t: "Dívida de Felicidade Aos Pais", desc: "Sentir que deve a sua vida e a sua felicidade aos seus pais.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você recusa uma viagem porque acha que 'deve' cuidar da mãe que sofre.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O seu próprio futuro.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Viver meus planos sem pedir aprovação parental."], d_outro: ["Dizer 'Minha vida é minha' ao ouvir cobranças."] },
+            { t: "Competir Inconscientemente com Irmãos", desc: "Competição para provar quem é o 'melhor' filho.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você compra coisas caras só para o seu pai dizer que você é a filha prestativa.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A bússola do seu próprio desejo.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Validar minhas vitórias sem olhar para o lado."], d_outro: ["Cortar os pais quando tentarem comparar os filhos."] },
+            { t: "Guardar Segredos Familiares", desc: "Segredos graves mantidos sob o tapete por décadas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Todos sabem que houve uma traição, mas fingem ser comercial de margarina.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A clareza mental e a saúde física.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Falar sobre o segredo na terapia."], d_outro: ["Não aceitar o pacto de silêncio se isso me adoecer."] },
+            { t: "Tentar Salvar Parente de Vícios", desc: "Tentar curar parentes dos vícios e péssimas escolhas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você limpa a sujeira ou esconde a bebida do adicto.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A própria vida e finanças.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Aceitar que não posso curar a dor de outro adulto."], d_outro: ["Recusar dar dinheiro para cobrir rombos do vício."] },
+            { t: "Cuidar de Todos e Esquecer de Mim", desc: "Cuidar de todos os adoentados e negligenciar o próprio corpo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você marca médico para filhos, mas está há anos sem fazer um exame.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua estrutura vital.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Priorizar minhas refeições e sono antes de cuidar do outro."], d_outro: ["Exigir que outros parentes assumam turnos de cuidado."] },
+            { t: "Viver Meus Planos em Paz", desc: "Amar a família, mas recusar o roteiro neurótico que te deram.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta assumir seus projetos e metas pessoais sem buscar aprovação.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A autonomia sobre a sua própria história adulta.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Parar de pedir permissão para viajar ou mudar."], d_outro: ["Cortar críticas aos meus sonhos com 'Não pedi opinião'."] },
+            { t: "Aceitar Que Eles Não Vão Mudar", desc: "Suportar a frustração de que eles não vão mudar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta abandonar a fantasia de transformar seus parentes.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> O alívio psíquico de aceitar o real familiar.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Abolir a fantasia de ter a família perfeita."], d_outro: ["Não discutir para tentar mudar a visão deles."] },
+            { t: "Proteger Minha Casa de Traumas", desc: "Impor limites para que sua casa não seja filial do trauma.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estabelecer barreiras para impedir que fofocas invadam seu lar.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> O seu santuário logístico de descanso.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Manter minha casa focada apenas no meu descanso."], d_outro: ["Convidar a se retirar quem desrespeitar as regras da minha casa."] }
+        ],
+        'autocuidado': [
+            { t: "Sacrificar o Sono Para Produzir", desc: "Negligenciar o sono para produzir mais.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você corta 2 horas de sono para arrumar a cozinha de madrugada.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> Seu cérebro perde a capacidade de regular emoções no dia seguinte.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Estabelecer horário fixo de repouso."], d_outro: ["Não permitir barulhos desnecessários do parceiro após 22h."] },
+            { t: "Comer Para Esconder a Angústia", desc: "Engolir comida para tamponar a angústia diária.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Engole um pacote de doces inteiro sem mastigar direito.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A digestão da emoção e a saúde corporal.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Anotar a emoção antes de morder para trazer à consciência."], d_outro: ["Não permitir que tragam gatilhos de doces para casa."] },
+            { t: "Ouvir Voz Interna Que Me Humilha", desc: "A voz interna que xinga você diante de qualquer mínimo erro.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você erra e pensa na hora 'eu sou muito burra mesmo'.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O amor próprio.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Trocar 'sou burra' por 'eu errei agora'."], d_outro: ["Afastar-se de quem faz eco à voz punitiva externa."] },
+            { t: "Ignorar Dores Físicas", desc: "Ignorar dores agudas e continuar forçando o limite do corpo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Suas costas travam, mas você toma um analgésico e vai trabalhar.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A janela de cura. O alarme foi calado.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Fazer pausa rígida ao sentir a menor dor aguda."], d_outro: ["Dizer 'Não posso pegar peso' sem pedir desculpas."] },
+            { t: "Rolar o Feed Horas (Anestesia)", desc: "Rolar o feed do celular infinitamente para não pensar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> O relógio marca 23h, você abre o TikTok e quando percebe são 2h da manhã.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O processamento onírico. A angústia cresce.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Ficar 5 min olhando pela janela sem qualquer tela."], d_outro: ["Não responder mensagens instantaneamente para frear o ritmo do outro."] },
+            { t: "Cuidar da Estética e Odiar o Corpo", desc: "Cuidar da estética externa, mas odiar a própria imagem.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você gasta fortunas no cabeleireiro, mas chora quando se olha no espelho.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A morada vital.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Não falar sobre dieta ou peso por 7 dias corridos."], d_outro: ["Proibir comentários de parentes sobre meu peso."] },
+            { t: "Acreditar Que Só Tenho Valor Exausta", desc: "Achar que só tem valor se estiver exausta e sofrendo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você deita para ler um livro e sente um comichão terrível para ir limpar a casa.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O gozo da vida livre.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Assistir algo fútil sem peso na consciência."], d_outro: ["Delegar tarefas ao parceiro/filhos ativamente."] },
+            { t: "Ficar em Silêncio e Escutar a Mim", desc: "Ficar minutos em silêncio tolerando os próprios pensamentos.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta tolerar momentos de silêncio absoluto para ouvir a si mesmo.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A elaboração psíquica profunda.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Fazer 5 minutos de respiração sem música no carro."], d_outro: ["Exigir 30 min inegociáveis de porta fechada ao chegar em casa."] },
+            { t: "Proteger o Lazer (Zero Culpa)", desc: "Proteger seu tempo de lazer sem a culpa de não ser útil.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta defender seu tempo de lazer contra a cobrança de ser produtiva.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Investimento na pulsão de vida.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Gastar dinheiro no meu hobby sem o mínimo de arrependimento."], d_outro: ["Dizer 'Não abro mão do meu treino' para demandas familiares."] },
+            { t: "Parar Quando o Corpo Pede", desc: "Parar e repousar no exato momento em que o corpo pedir arrego.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta respeitar os alarmes fisiológicos descansando assim que o cansaço aperta.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> A integridade do seu corpo.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Deitar no chão ao sentir o corpo colapsar."], d_outro: ["Comunicar exaustão e cancelar o compromisso alheio sem culpa."] }
+        ],
+        'financeiro': [
+            { t: "Comprar Por Impulso", desc: "Comprar objetos por impulso para preencher um vazio.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Compra blusinhas online às 23h sentindo um alívio de 10 minutos.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O controle patrimonial. A euforia dura segundos.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Esperar 24h antes de confirmar qualquer carrinho."], d_outro: ["Sair de grupos de promoções enviados por amigos."] },
+            { t: "Pavor de Olhar a Fatura", desc: "Evitar olhar os extratos por puro terror da matemática.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você arrasta a notificação da fatura com taquicardia.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A clareza lógica. A conta vira um monstro sombrio.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Olhar o saldo bancário por 5 min toda semana."], d_outro: ["Cobrar de forma direta dívidas pequenas de amigos."] },
+            { t: "Delegar Controle ao Parceiro", desc: "Delegar 100% do controle do seu dinheiro ao cônjuge.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você precisa 'pedir' pro esposo transferir para comprar um pão.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O lugar de mulher adulta e seu poder de ir e vir.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Abrir uma conta bancária de uso exclusivo meu."], d_outro: ["Comunicar: 'A partir de agora eu gerencio minha parte'."] },
+            { t: "Pagar Tudo Para Comprar Afeto", desc: "Pagar tudo para terceiros com medo de não ser amada.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você paga o jantar inteiro porque no fundo teme não ter outro valor.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O amor genuíno e seu caixa. Atrai relações parasitárias.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Dar presentes apenas simbólicos e baratos."], d_outro: ["Dizer 'Cada um paga o seu' logo ao sentar na mesa."] },
+            { t: "Pavor Irracional de Gastar R$ 10", desc: "Guardar dinheiro com pavor, privando-se de qualquer conforto.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Está morrendo de sede no calor, mas não compra a água por pena de gastar.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> O fluxo do desfrute. O dinheiro paralisa sua vivência real.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Destinar 5% da renda fixa para culpa-zero (lazer)."], d_outro: ["Ignorar palpites sobre como eu gasto meus fundos de lazer."] },
+            { t: "Autossabotagem: Torrar Dinheiro", desc: "Dar um jeito de gastar tudo no mesmo dia em que recebe.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Recebe um extra e instantaneamente decide que precisa trocar a TV.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A evolução financeira. O cérebro acha que você não merece.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Automatizar o investimento no mesmo dia em que o salário cai."], d_outro: ["Não contar para parentes que recebi um bônus."] },
+            { t: "Aceitar Receber Menos", desc: "Não saber o preço real da própria hora ou aceitar receber pouco.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> O cliente chora desconto e você abaixa o preço imediatamente.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua dignidade material.", c: "T", tipo: "mental", pedeNome: true, d_eu: ["Calcular e fixar o valor real da minha hora de trabalho."], d_outro: ["Dizer o meu preço ao cliente sem gaguejar e sem desconto."] },
+            { t: "Manter Reserva de Autonomia", desc: "Ter reserva para poder ir embora de onde dói.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta construir um fundo financeiro seguro e próprio.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> A garantia física da sua liberdade de escolha.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Depositar o valor religiosamente todo dia 5."], d_outro: ["Manter sigilo total sobre o valor dessa reserva."] },
+            { t: "Planejar Gastos Sem Terror", desc: "Planejar os gastos e desejos sem o terror da escassez.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estipular limites baseados em dados numéricos.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Previsibilidade e desfrute real dos recursos.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Fazer uma planilha simples com entradas e limites."], d_outro: ["Não aceitar que o outro gaste além da cota combinada."] },
+            { t: "Encarar Números Sem Peso Moral", desc: "Saber o que entra e o que sai sem atribuir peso moral.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta tratar os valores estritamente como dados matemáticos livres de culpa.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> Clareza técnica e maturidade resolutiva.", c: "D", type: "emocional", pedeNome: true, d_eu: ["Validar o ato de pagar um boleto como um poder de resolução."], d_outro: ["Cobrar prestação de contas exata de sócios ou cônjuge."] }
+        ]
+    };
+
+    // 2. VARIÁVEIS GLOBAIS DA SESSÃO DE TRIAGEM
+    let pecasExibicao = [];
+    let registroEscolhas = [];
+    let indexAtual = 0;
+    let categoriaSelecionadaGlobal = null;
+    let indiceTaticaEmEdicao = null; 
+    let triagemConcluida = false;
+
+    // 3. FUNÇÕES GLOBAIS EXPOSTAS
+    window.iniciarJogoTriagem = function(categoria, elemento) {
+        document.querySelectorAll('.btn-categoria').forEach(btn => btn.classList.remove('selecionada'));
+        elemento.classList.add('selecionada');
+        categoriaSelecionadaGlobal = categoria;
+        
+        let som = document.getElementById('som-click');
+        if(som) { som.currentTime = 0; som.play().catch(e=>{}); }
+
+        pecasExibicao = bancoDePecas[categoria].slice().sort(() => Math.random() - 0.5).slice(0, 10);
+        registroEscolhas = [];
+        indexAtual = 0;
+        
+        const titulos = { 'estudos': 'Estudos', 'relacionamentos': 'Relacionamentos', 'trabalho': 'Trabalho', 'familia': 'Família', 'autocuidado': 'Autocuidado', 'financeiro': 'Financeiro' };
+        document.getElementById('titulo-area-jogo').innerText = `[${titulos[categoria]}]`;
+        
+        document.getElementById('triagem-tela-categorias').style.display = 'none';
+        document.getElementById('triagem-tela-jogo').style.display = 'flex';
+        
+        mostrarProximaPecaTriagem();
+        setTimeout(configurarDragAndDropTriagem, 100);
+    };
+
+    function mostrarProximaPecaTriagem() {
+        const peca = document.getElementById('peca-arrastavel');
+        const desc = document.getElementById('caixa-desc');
+        const textPeca = document.getElementById('texto-peca-jogo');
+        const textDesc = document.getElementById('desc-peca');
+        
+        peca.style.transition = 'transform 0.1s';
+        peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
+        peca.style.opacity = '1';
+        
+        if (indexAtual < pecasExibicao.length) {
+            const item = pecasExibicao[indexAtual];
+            textPeca.innerText = item.t;
+            textDesc.innerHTML = item.desc;
+            
+            const iconeSpan = document.getElementById('icone-tipo');
+            if (item.tipo === 'fisico') { 
+                iconeSpan.innerText = '💪 Base Física'; 
+                iconeSpan.style.backgroundColor = '#6366f1'; 
+                desc.style.borderColor = '#6366f1'; 
+            } else if (item.tipo === 'mental') { 
+                iconeSpan.innerText = '⚙️ Mundo Mental'; 
+                iconeSpan.style.backgroundColor = '#3b82f6'; 
+                desc.style.borderColor = '#3b82f6'; 
+            } else { 
+                iconeSpan.innerText = '🧠 Emocional'; 
+                iconeSpan.style.backgroundColor = '#ec4899'; 
+                desc.style.borderColor = '#ec4899'; 
+            }
+        } else {
+            peca.style.display = 'none';
+            document.getElementById('texto-instrucao').style.display = 'none';
+            document.getElementById('caixa-desc').style.display = 'none';
+            document.getElementById('area-botao-diagnostico').style.display = 'block';
+        }
+    }
+
+    // 4. MOTOR DRAG AND DROP
+    function configurarDragAndDropTriagem() {
+        const peca = document.getElementById('peca-arrastavel');
+        const areaJogo = document.getElementById('area-jogo-fisica');
+        let isDragging = false, startX, startY, currentX, currentY, cestoAlvo = null;
+
+        function onDragStart(e) {
+            if(indexAtual >= pecasExibicao.length) return;
+            e.stopPropagation(); isDragging = true; peca.classList.add('dragging');
+            let clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
+            let clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
+            startX = clientX; startY = clientY;
+            const aud = document.getElementById('AUD_PEGAR'); if(aud){aud.currentTime=0;aud.play().catch(e=>{});}
+        }
+
+        function onDragMove(e) {
+            if (!isDragging) return;
+            if (e.cancelable) e.preventDefault();
+            let clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
+            let clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
+            currentX = clientX - startX; currentY = clientY - startY;
+            let rotation = currentX * 0.05;
+            peca.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotation}deg)`;
+            
+            let rectPeca = peca.getBoundingClientRect();
+            let cX = rectPeca.left + (rectPeca.width/2);
+            let cY = rectPeca.top + (rectPeca.height/2);
+            let cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
+            let cTemp = null; let minD = Infinity;
+
+            cestos.forEach(c => {
+                let rC = c.getBoundingClientRect();
+                let rcX = rC.left + (rC.width/2);
+                let dX = Math.abs(cX - rcX);
+                if (cY > rC.top - 100) { if (dX < minD) { minD = dX; cTemp = c; } }
+            });
+
+            cestos.forEach(c => {
+                if (c === cTemp) c.classList.add('cesto-hover');
+                else c.classList.remove('cesto-hover');
+            });
+            cestoAlvo = cTemp;
+        }
+
+        function onDragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false; peca.classList.remove('dragging');
+            document.querySelectorAll('.cesto').forEach(c => c.classList.remove('cesto-hover'));
+            
+            if (cestoAlvo) {
+                let alvoStr = cestoAlvo.getAttribute('data-alvo');
+                if(alvoStr === 'existe') {
+                    let a = document.getElementById('AUD_DROP_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});}
+                } else {
+                    let a = document.getElementById('AUD_DROP_NAO_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});}
+                }
+                processarJogada(alvoStr);
+            } else {
+                peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
+            }
+        }
+
+        peca.addEventListener('touchstart', onDragStart, {passive: false});
+        document.addEventListener('touchmove', onDragMove, {passive: false});
+        document.addEventListener('touchend', onDragEnd);
+        peca.addEventListener('mousedown', onDragStart);
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('mouseup', onDragEnd);
+    }
+
+    function processarJogada(alvoStr) {
+        const itemOriginal = pecasExibicao[indexAtual];
+        registroEscolhas.push({ 
+            texto: itemOriginal.t, escolha: alvoStr, real: itemOriginal.c, 
+            tipo: itemOriginal.tipo, d_eu: itemOriginal.d_eu, d_outro: itemOriginal.d_outro, 
+            pedeNome: itemOriginal.pedeNome, cons: itemOriginal.cons, taticaDefinida: null
+        });
+
+        // Efeito visual no cesto
+        const interior = document.getElementById('interior-' + alvoStr);
+        const mini = document.createElement('div');
+        mini.className = 'mini-peca quique';
+        mini.style.left = (Math.random() * 60 + 10) + '%';
+        mini.style.bottom = '10px';
+        mini.style.transform = `rotate(${(Math.random() - 0.5) * 60}deg)`;
+        interior.appendChild(mini);
+
+        indexAtual++;
+        let pct = (indexAtual / 10) * 100;
+        document.getElementById('barra-progresso').style.width = pct + '%';
+        document.getElementById('texto-progresso').innerText = indexAtual + ' / 10';
+        
+        mostrarProximaPecaTriagem();
+    }
+
+    // 5. DIAGNÓSTICO FINAL (LAUDO)
+    window.mostrarDiagnosticoTriagem = function() {
+        document.getElementById('triagem-tela-jogo').style.display = 'none';
+        document.getElementById('triagem-tela-laudo').style.display = 'block';
+        
+        const aud = document.getElementById('AUD_SIRENE');
+        if(aud) { aud.currentTime=0; aud.play().catch(e=>{}); }
+
+        let acertos = 0;
+        registroEscolhas.forEach(item => {
+            if ((item.real === 'D' && item.escolha === 'existe') || (item.real === 'T' && item.escolha === 'nao-existe')) acertos++;
+        });
+
+        const pct = (acertos / 10) * 100;
+        const msgBox = document.getElementById('msg-sirene-diagnostico');
+        const tit = document.getElementById('titulo-modal-sirene');
+        const icon = document.getElementById('icone-diagnostico');
+        const btn = document.getElementById('btn-avancar-alerta');
+
+        if (pct >= 80) {
+            tit.innerText = 'Laudo: Estrutura Blindada'; icon.innerText = '🛡️'; tit.style.color = '#059669';
+            btn.style.background = '#10b981'; msgBox.innerText = 'O mapeamento mostra que sua casa interna tem uma base fortíssima. Você sabe proteger seus limites.';
+        } else if (pct >= 40) {
+            tit.innerText = 'Laudo: Reforma Necessária'; icon.innerText = '⚠️'; tit.style.color = '#c2410c';
+            btn.style.background = '#ea580c'; msgBox.innerText = 'Seu Lar tem pontos fortes, mas existem infiltrações emocionais ocupando o lugar da sua paz psíquica.';
+        } else {
+            tit.innerText = 'Laudo: Atenção Crítica'; icon.innerText = '🚨'; tit.style.color = '#be123c';
+            btn.style.background = '#e11d48'; msgBox.innerText = 'A fundação do seu Lar está comprometida. A energia vital está sendo drenada. Inicie a reforma imediata.';
+        }
+    };
+
+    // 6. ESPELHO DA REALIDADE (AUTOESCRITA)
+    window.prepararEspelhoAutoescrita = function() {
+        document.getElementById('triagem-tela-laudo').style.display = 'none';
+        
+        let tox = [], defFaltantes = [], saudaveis = [];
+        registroEscolhas.forEach(i => {
+            if (i.real === 'T' && i.escolha === 'existe') tox.push(i.texto);
+            if (i.real === 'D' && i.escolha === 'nao-existe') defFaltantes.push(i.texto);
+            if (i.real === 'D' && i.escolha === 'existe') saudaveis.push(i.texto);
+        });
+
+        let tot = tox.length + saudaveis.length;
+        let pTox = tot > 0 ? Math.round((tox.length/tot)*100) : 0;
+        let pSau = tot > 0 ? Math.round((saudaveis.length/tot)*100) : 0;
+
+        let htmlLista = '';
+        if(tox.length > 0) {
+            htmlLista += `<div style="background: #fff1f2; padding: 15px; border-radius: 12px; margin-top: 20px;">
+                <strong style="color: #be123c;">🚨 Suas Infiltrações Atuais:</strong>
+                <ul style="color: #9f1239; margin-top: 10px; font-weight: 500;">`;
+            tox.forEach(t => htmlLista += `<li>${t}</li>`);
+            htmlLista += `</ul></div>`;
+        }
+
+        let html = `
+            <div style="font-size: 3.5rem; text-align: center; margin-bottom: 10px;">🪞</div>
+            <h2 style="color: #1e1b4b; text-align: center; font-size: 1.6rem; font-weight: 900; text-transform: uppercase;">O Espelho da Realidade</h2>
+            <div style="margin: 20px 0; padding: 20px; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
+                <div style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 8px;">
+                    <span style="color: #e11d48;">Tóxicas: ${pTox}%</span><span style="color: #10b981;">Saudáveis: ${pSau}%</span>
+                </div>
+                <div style="width: 100%; height: 20px; background: #e2e8f0; border-radius: 10px; display: flex; overflow: hidden;">
+                    <div style="width: ${pTox}%; background: #e11d48;"></div>
+                    <div style="width: ${pSau}%; background: #10b981;"></div>
+                </div>
+            </div>
+            ${htmlLista}
+            <div style="margin-top: 20px;">
+                <h4 style="text-align: center; color: #1e293b;">Terapia da Autoescrita</h4>
+                <p style="color: #475569; font-size: 0.95rem;">Escreva uma carta a si mesma(o) descrevendo o que sente ao ver a casa que construiu. Sem filtros.</p>
+                <textarea rows="6" style="width: 100%; padding: 15px; border-radius: 12px; border: 2px dashed #cbd5e1; font-family: 'Nunito', sans-serif; font-size: 1rem; color: #1e293b; background: #fafafa; outline: none; margin-top: 10px;">Diante dessa realidade, eu percebo que...</textarea>
+            </div>
+        `;
+        document.getElementById('conteudo-autoescrita').innerHTML = html;
+        document.getElementById('triagem-tela-espelho').style.display = 'flex';
+        window.scrollTo(0,0);
+    };
+
+    // 7. PLANO TÁTICO
+    window.abrirPlanoGeral = function() {
+        document.getElementById('triagem-tela-espelho').style.display = 'none';
+        document.getElementById('triagem-tela-plano').style.display = 'block';
+        window.scrollTo(0,0);
+        renderizarListaDePecasNoPlano();
+    };
+
+    function renderizarListaDePecasNoPlano() {
+        const areaLista = document.getElementById('area-lista-pecas');
+        let htmlPontosCegos = '';
+        let htmlToxicasPresentes = '';
+        let taticaJaDefinida = registroEscolhas.some(it => it.taticaDefinida !== null);
+        let temSelecionada = registroEscolhas.some(it => it.selecionadaParaTratar === true);
+
+        registroEscolhas.forEach((item, index) => {
+            let isAcerto = (item.real === 'T' && item.escolha === 'nao-existe') || (item.real === 'D' && item.escolha === 'existe');
+            if(!isAcerto) {
+                let isD = item.real === 'D';
+                let isSelecionada = item.selecionadaParaTratar || item.taticaDefinida !== null;
+                let btnHtml = '';
+                let styleCard = isSelecionada ? "background: #fff7ed; border-color: #f97316;" : "background: #fff; border-color: #e2e8f0;";
+                let blockPointer = "";
+
+                if (taticaJaDefinida && !item.taticaDefinida) {
+                    btnHtml = `<div style="margin-top:10px; color:#64748b; font-weight:bold; font-size:0.8rem; text-align:center;">🔒 BLOQUEADO</div>`;
+                    blockPointer = "opacity: 0.5; pointer-events: none;";
+                } else if (isSelecionada) {
+                    if (item.taticaDefinida) {
+                        btnHtml = `<button class="btn-tatica-individual" onclick="window.abrirModalTatica(${index})" style="background:#10b981;">✅ TÁTICA ATIVA (EDITAR)</button>`;
+                    } else {
+                        btnHtml = `<button class="btn-tatica-individual" onclick="window.abrirModalTatica(${index})" style="animation: pulseBtn 2s infinite;">🎯 DEFINIR INTERVENÇÃO</button>`;
+                    }
+                } else if (temSelecionada) {
+                    btnHtml = `<div style="margin-top:10px; color:#64748b; font-weight:bold; font-size:0.8rem; text-align:center;">🔒 BLOQUEADO</div>`;
+                    blockPointer = "opacity: 0.6;";
+                } else {
+                    btnHtml = `<div style="margin-top:10px; color:#94a3b8; font-weight:bold; font-size:0.8rem; text-align:center;">⚠️ MARQUE A CAIXA</div>`;
+                }
+
+                let cHtml = `
+                <div class="card-diagnostico" style="${styleCard} ${blockPointer}">
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <input type="checkbox" style="width: 20px; height: 20px; accent-color: #f97316;" onchange="window.alternarSelecaoPeca(${index})" ${isSelecionada ? 'checked' : ''}>
+                        <strong style="margin:0; font-size:0.95rem; color: #1e1b4b;">${item.texto}</strong>
+                    </div>
+                    ${btnHtml}
+                </div>`;
+
+                if(isD) htmlPontosCegos += cHtml; else htmlToxicasPresentes += cHtml;
+            }
+        });
+
+        areaLista.innerHTML = '';
+        if(htmlToxicasPresentes) areaLista.innerHTML += `<h4 style="color: #be123c; margin: 15px 0 10px 0; font-size: 1.1rem; text-transform: uppercase;">🚨 Remover Tóxicas:</h4>${htmlToxicasPresentes}`;
+        if(htmlPontosCegos) areaLista.innerHTML += `<h4 style="color: #b45309; margin: 15px 0 10px 0; font-size: 1.1rem; text-transform: uppercase;">⚠️ Resgatar Pilares:</h4>${htmlPontosCegos}`;
+    }
+
+    window.alternarSelecaoPeca = function(index) {
+        let taticaExistente = registroEscolhas.some(it => it.taticaDefinida !== null);
+        if (taticaExistente && registroEscolhas[index].taticaDefinida === null) return;
+        
+        registroEscolhas.forEach((it, i) => { if(i !== index) it.selecionadaParaTratar = false; });
+        registroEscolhas[index].selecionadaParaTratar = !registroEscolhas[index].selecionadaParaTratar;
+        renderizarListaDePecasNoPlano();
+    };
+
+    // 8. TÁTICA E SALVAMENTO
+    window.abrirModalTatica = function(index) {
+        indiceTaticaEmEdicao = index;
+        const item = registroEscolhas[index];
+        const conteudo = document.getElementById('modal-tatica-conteudo');
+        
+        let acaoInt = item.d_eu ? `<h4 style="color:#0f766e; margin:10px 0;">🔹 Manejo Interno</h4>` + item.d_eu.map(d => `<label class="check-card-tatico"><input type="radio" name="rInt" value="${d}"><span>${d}</span></label>`).join('') : '';
+        let acaoExt = item.d_outro ? `<h4 style="color:#b91c1c; margin:15px 0 10px 0;">🔸 Limite Externo</h4>` + item.d_outro.map(d => `<label class="check-card-tatico"><input type="radio" name="rExt" value="${d}"><span>${d}</span></label>`).join('') : '';
+        
+        conteudo.innerHTML = `
+            <div style="background:#e0e7ff; color:#3730a3; padding:8px 12px; border-radius:8px; font-weight:bold; font-size:0.85rem; margin-bottom:15px;">AÇÃO CONTRA: ${item.texto}</div>
+            ${acaoInt} ${acaoExt}
+            <textarea id="tatica-livre" class="input-acao" rows="2" placeholder="Ou escreva sua própria tática..."></textarea>
+        `;
+        
+        document.getElementById('area-botoes-modal').innerHTML = `<button onclick="window.salvarTaticaModal()" class="btn-doma pulse-btn" style="background:#10b981; color:white; width:100%; border:none; padding:15px; border-radius:12px; font-weight:900;">SALVAR TÁTICAS ✅</button>`;
+        document.getElementById('modal-tatica-overlay').style.display = 'flex';
+    };
+
+    window.salvarTaticaModal = function() {
+        const conteudo = document.getElementById('modal-tatica-conteudo');
+        let selInt = conteudo.querySelector('input[name="rInt"]:checked');
+        let selExt = conteudo.querySelector('input[name="rExt"]:checked');
+        let textLivre = document.getElementById('tatica-livre').value.trim();
+        
+        if(!selInt && !selExt && textLivre === "") {
+            alert("Selecione ou escreva pelo menos uma tática!"); return;
+        }
+
+        registroEscolhas[indiceTaticaEmEdicao].taticaDefinida = {
+            acaoInt: selInt ? selInt.value : "", acaoExt: selExt ? selExt.value : "", acaoLivre: textLivre
+        };
+        document.getElementById('modal-tatica-overlay').style.display = 'none';
+        renderizarListaDePecasNoPlano();
+    };
+
+    window.validarEAvancarData = function() {
+        if(!registroEscolhas.some(it => it.taticaDefinida !== null)) { alert("Defina a tática de uma peça primeiro."); return; }
+        if(document.getElementById('nome-assinatura').value.trim() === '') { alert("Assine seu nome."); return; }
+        document.getElementById('triagem-tela-plano').style.display = 'none';
+        document.getElementById('triagem-tela-data').style.display = 'block';
+        window.scrollTo(0,0);
+    };
+
+    window.revelarContratoFinal = function() {
+        let data = document.getElementById('data-inicio-tratamento').value;
+        if(!data) { alert("Defina a data!"); return; }
+        let nome = document.getElementById('nome-assinatura').value.trim();
+        let partesData = data.split('-'); let dataF = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+        
+        let taticasHtml = '';
+        registroEscolhas.forEach(it => {
+            if(it.taticaDefinida) {
+                taticasHtml += `<div style="background:#f8fafc; border:2px dashed #cbd5e1; padding:15px; border-radius:12px; margin-bottom:15px; text-align:left;">
+                    <strong style="color:#1e293b;">${it.texto}</strong>
+                    ${it.taticaDefinida.acaoInt ? `<br><span style="color:#0f766e;">🔹 ${it.taticaDefinida.acaoInt}</span>` : ''}
+                    ${it.taticaDefinida.acaoExt ? `<br><span style="color:#b91c1c;">🔸 ${it.taticaDefinida.acaoExt}</span>` : ''}
+                    ${it.taticaDefinida.acaoLivre ? `<br><span style="color:#475569;">✍️ ${it.taticaDefinida.acaoLivre}</span>` : ''}
+                </div>`;
+            }
+        });
+
+        document.getElementById('triagem-tela-data').style.display = 'none';
+        document.getElementById('triagem-tela-contrato').innerHTML = `
+            <div style="font-size: 3rem; margin-bottom: 10px;">📜</div>
+            <h2 style="color: #1e1b4b; margin: 0 0 20px 0; font-size: 1.8rem; font-weight: 900; text-transform: uppercase;">Contrato de Tratamento</h2>
+            <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-bottom: 25px;">Eu, <strong>${nome}</strong>, declaro que a partir de <strong>${dataF}</strong> assumo a responsabilidade sobre o meu Lar interno.</p>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h3 style="color: #0f766e; font-size: 1.1rem; margin: 0 0 15px 0; text-transform: uppercase;">Meu Protocolo Clínico</h3>
+                ${taticasHtml}
+            </div>
+            <button class="btn-doma pulse-btn" style="background: #10b981; color: white; width: 100%; border: none; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.1rem;" onclick="document.getElementById('modal-sucesso-jornada').style.display='flex'">SELAR E SALVAR CONTRATO ✅</button>
+        `;
+        document.getElementById('triagem-tela-contrato').style.display = 'block';
+        window.scrollTo(0,0);
+    };
+
+})();
+</script>
