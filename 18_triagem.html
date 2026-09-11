@@ -1,7 +1,14 @@
 <style>
     /* CSS EXCLUSIVO DA TRIAGEM E DIAGNÓSTICO */
-    .doma-triagem-container { width: 100%; min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f3e8ff); position: relative; padding: 20px 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+    .doma-triagem-container { 
+        width: 100%; min-height: 100vh; background: linear-gradient(135deg, #e0f2fe, #f3e8ff); position: relative; padding: 20px 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Nunito', sans-serif; overflow-x: hidden;
+        /* TRAVAS PARA IMPEDIR A SELEÇÃO DE TEXTO DURANTE O ARRASTO */
+        user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
     
+    /* LIBERA SELEÇÃO APENAS NOS CAMPOS DE TEXTO */
+    .doma-triagem-container input, .doma-triagem-container textarea { user-select: auto; -webkit-user-select: auto; }
+
     .grid-categorias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; max-width: 500px; margin: 0 auto; padding: 10px 15px; box-sizing: border-box; }
     .btn-categoria { width: calc(50% - 5px); background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px 5px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 85px; box-sizing: border-box; }
     .btn-categoria.selecionada { border-color: #059669; background: #ecfdf5; transform: scale(1.05); box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2); }
@@ -21,12 +28,11 @@
     .area-peca { min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-sizing: border-box; margin-bottom: 5px; width: 100%; }
     .instrucao-arraste { background: #fef08a; border: 2px dashed #eab308; padding: 8px; border-radius: 8px; font-size: 0.75rem; color: #854d0e; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; width: 95%; max-width: 320px; margin-bottom: 12px; margin-top: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-    .peca-quebra-cabeca { width: 140px; min-height: 75px; height: auto; background: linear-gradient(135deg, #d4af37, #b5952f); position: relative; z-index: 100; cursor: grab; display: flex; justify-content: center; align-items: center; text-align: center; border-radius: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); color: white; font-weight: 900; font-size: 0.85rem; padding: 10px; box-sizing: border-box; touch-action: none !important; transition: transform 0.1s; }
+    .peca-quebra-cabeca { width: 140px; min-height: 75px; height: auto; background: linear-gradient(135deg, #d4af37, #b5952f); position: relative; z-index: 100; cursor: grab; display: flex; justify-content: center; align-items: center; text-align: center; border-radius: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); color: white; font-weight: 900; font-size: 0.85rem; padding: 10px; box-sizing: border-box; touch-action: none !important; -webkit-user-drag: none; }
     .peca-quebra-cabeca::before { content: ''; position: absolute; right: -10px; top: calc(50% - 10px); width: 20px; height: 20px; background: #b5952f; border-radius: 50%; z-index: -1; }
     .peca-quebra-cabeca::after { content: ''; position: absolute; bottom: -10px; left: calc(50% - 10px); width: 20px; height: 20px; background: #c5a233; border-radius: 50%; z-index: -1; }
     .peca-quebra-cabeca:active { cursor: grabbing; opacity: 0.95; }
-    
-    .dragging { transition: none !important; z-index: 9999; animation: none !important; box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important; transform: scale(1.1) !important; }
+    .dragging { z-index: 9999; box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important; transform: scale(1.1) !important; }
     .peca-fantasma { position: absolute; width: 140px; height: 75px; background: #d4af37; border-radius: 10px; opacity: 0.4; pointer-events: none; z-index: 50; transition: opacity 0.4s, transform 0.4s; }
     .mini-peca { position: absolute; width: 20px; height: 14px; background: #d4af37; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
     
@@ -203,7 +209,7 @@
 
 <script>
 (function() {
-    // 1. O BANCO DE DADOS (Restaurado 100% original da Clínica Doma)
+    // 1. O BANCO DE DADOS 
     const bancoDePecas = {
         'estudos': [
             { t: "Misturar a Cama e o Estudo", desc: "Estudar onde se dorme confunde a via libidinal do repouso com a da obrigação.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você deita para dormir e a mente acelera com culpa; senta na mesa e o corpo pede cama.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A paz do seu descanso e o foco real no aprendizado.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Separar o ambiente: Ler apenas na mesa."], d_outro: ["Impedir que usem meu quarto como área de passagem."] },
@@ -250,7 +256,7 @@
             { t: "Tentar Salvar Parente de Vícios", desc: "Tentar curar parentes dos vícios e péssimas escolhas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você limpa a sujeira ou esconde a bebida do adicto.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A própria vida e finanças.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Aceitar que não posso curar a dor de outro adulto."], d_outro: ["Recusar dar dinheiro para cobrir rombos do vício."] },
             { t: "Cuidar de Todos e Esquecer de Mim", desc: "Cuidar de todos os adoentados e negligenciar o próprio corpo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você marca médico para filhos, mas está há anos sem fazer um exame.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua estrutura vital.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Priorizar minhas refeições e sono antes de cuidar do outro."], d_outro: ["Exigir que outros parentes assumam turnos de cuidado."] },
             { t: "Viver Meus Planos em Paz", desc: "Amar a família, mas recusar o roteiro neurótico que te deram.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta assumir seus projetos e metas pessoais sem buscar aprovação.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A autonomia sobre a sua própria história adulta.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Parar de pedir permissão para viajar ou mudar."], d_outro: ["Cortar críticas aos meus sonhos com 'Não pedi opinião'."] },
-            { t: "Aceitar Que Eles Não Vão Mudar", desc: "Suportar a frustração de que eles não vão mudar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta abandonar a fantasia de transformar seus parentes.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> O alívio psíquico de aceitar o real familiar.", c: "D", type: "emocional", pedeNome: true, d_eu: ["Abolir a fantasia de ter a família perfeita."], d_outro: ["Não discutir para tentar mudar a visão deles."] },
+            { t: "Aceitar Que Eles Não Vão Mudar", desc: "Suportar a frustração de que eles não vão mudar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta abandonar a fantasia de transformar seus parentes.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> O alívio psíquico de aceitar o real familiar.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Abolir a fantasia de ter a família perfeita."], d_outro: ["Não discutir para tentar mudar a visão deles."] },
             { t: "Proteger Minha Casa de Traumas", desc: "Impor limites para que sua casa não seja filial do trauma.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estabelecer barreiras para impedir que fofocas invadam seu lar.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> O seu santuário logístico de descanso.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Manter minha casa focada apenas no meu descanso."], d_outro: ["Convidar a se retirar quem desrespeitar as regras da minha casa."] }
         ],
         'autocuidado': [
@@ -287,13 +293,13 @@
     let indiceTaticaEmEdicao = null; 
     let fisicaJaConfigurada = false;
 
-    // 3. ÁUDIOS LOCAIS (Resgate das chamadas originais)
+    // 3. ÁUDIOS LOCAIS 
     function tocarPegarPecaSeguro() { let a = document.getElementById('AUD_PEGAR'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
     function tocarDropPraticoSeguro() { let a = document.getElementById('AUD_DROP_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
     function tocarDropAusenteSeguro() { let a = document.getElementById('AUD_DROP_NAO_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
-    function tocarHoverCestoSeguro() { /* Pode adicionar um click sutil se quiser */ }
+    function tocarHoverCestoSeguro() { /* Som sutil opcional */ }
 
-    // 4. FUNÇÕES GLOBAIS EXPOSTAS
+    // 4. INICIAR O JOGO
     window.iniciarJogoTriagem = function(categoria, elemento) {
         document.querySelectorAll('.btn-categoria').forEach(btn => btn.classList.remove('selecionada'));
         elemento.classList.add('selecionada');
@@ -314,7 +320,6 @@
         
         mostrarProximaPecaTriagem();
         
-        // CORREÇÃO CRÍTICA: Configura a física apenas UMA VEZ!
         if (!fisicaJaConfigurada) {
             configurarFisicaJogo();
             fisicaJaConfigurada = true;
@@ -327,7 +332,6 @@
         const textPeca = document.getElementById('texto-peca-jogo');
         const textDesc = document.getElementById('desc-peca');
         
-        // Garante que a peça volte exatamente pro centro e recupere a animação de "pedra viva"
         peca.style.transition = 'transform 0.1s';
         peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
         peca.style.opacity = '1';
@@ -360,7 +364,7 @@
         }
     }
 
-    // 5. MOTOR DRAG AND DROP RESTAURADO 100% ORIGINAL
+    // 5. MOTOR DRAG AND DROP CORRIGIDO (COLISÃO REAL)
     function configurarFisicaJogo() {
         var peca = document.getElementById('peca-arrastavel');
         var areaJogo = document.getElementById('area-jogo-fisica');
@@ -384,6 +388,7 @@
             if(indexAtual >= pecasExibicao.length) return;
             e.stopPropagation(); 
             isDragging = true; 
+            peca.style.transition = 'none'; // Tira a transição para colar no dedo imediatamente
             peca.classList.add('dragging'); 
             peca.classList.remove('animada');
             
@@ -394,7 +399,7 @@
             startY = clientY; 
             currentX = 0; 
             currentY = 0; 
-            cestoAlvo = null; // CRÍTICO: Zera o alvo no primeiro clique
+            cestoAlvo = null; // Zera o alvo no início do clique
 
             tocarPegarPecaSeguro();
         }
@@ -418,24 +423,20 @@
                 rastroTimer = setTimeout(function() { rastroTimer = null; }, 80); 
             }
             
-            var rectPeca = peca.getBoundingClientRect();
-            var centroXPeca = rectPeca.left + (rectPeca.width / 2);
-            var centroYPeca = rectPeca.top + (rectPeca.height / 2);
-            
             var cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
             var cestoTemp = null;
-            var menorDistanciaX = Infinity;
             
+            // LÓGICA DE COLISÃO PRECISA: O mouse/dedo deve estar DENTRO ou muito perto do cesto
+            var rectPeca = peca.getBoundingClientRect();
+            var cxPeca = rectPeca.left + (rectPeca.width / 2);
+            var cyPeca = rectPeca.top + (rectPeca.height / 2);
+
             cestos.forEach(function(cesto) {
-                var rectCesto = cesto.getBoundingClientRect();
-                var centroXCesto = rectCesto.left + (rectCesto.width / 2);
-                var distanciaX = Math.abs(centroXPeca - centroXCesto);
-                
-                if (centroYPeca > rectCesto.top - 120) {
-                    if (distanciaX < menorDistanciaX) {
-                        menorDistanciaX = distanciaX;
-                        cestoTemp = cesto;
-                    }
+                var rect = cesto.getBoundingClientRect();
+                // Expansão da área de detecção (+30px) para facilitar no celular
+                if (cxPeca > rect.left - 30 && cxPeca < rect.right + 30 && 
+                    cyPeca > rect.top - 30 && cyPeca < rect.bottom + 30) {
+                    cestoTemp = cesto;
                 }
             });
 
@@ -465,11 +466,8 @@
             if (cestoAlvo) {
                 var rectCesto = cestoAlvo.getBoundingClientRect();
                 var rectPecaInicial = peca.getBoundingClientRect();
-                var cX = currentX || 0;
-                var cY = currentY || 0;
-                
-                var destX = (rectCesto.left + rectCesto.width / 2) - (rectPecaInicial.left - cX + rectPecaInicial.width / 2);
-                var destY = (rectCesto.top + rectCesto.height / 2) - (rectPecaInicial.top - cY + rectPecaInicial.height / 2);
+                var destX = (rectCesto.left + rectCesto.width / 2) - (rectPecaInicial.left - currentX + rectPecaInicial.width / 2);
+                var destY = (rectCesto.top + rectCesto.height / 2) - (rectPecaInicial.top - currentY + rectPecaInicial.height / 2);
                 
                 peca.style.transition = 'transform 0.15s ease-in, opacity 0.15s';
                 peca.style.transform = 'translate(' + destX + 'px, ' + destY + 'px) scale(0.4)';
@@ -482,13 +480,15 @@
                 else if (alvoStr === 'nao-existe') tocarDropAusenteSeguro();
                 
                 var cestoCapturado = cestoAlvo;
+                cestoAlvo = null; // Zera imediatamente para proteger o próximo clique
                 setTimeout(function() { window.jogarNoCesto(cestoCapturado); }, 150);
             } else {
+                // Se soltou fora, a peça volta macia para o centro
+                peca.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                 peca.style.transform = 'translate(0px, 0px) rotate(0deg)'; 
-                peca.classList.add('animada');
+                setTimeout(function(){ peca.classList.add('animada'); }, 200);
             }
             
-            cestoAlvo = null; // CRÍTICO: Previne que o clique dispare o cesto passado
             currentX = 0; 
             currentY = 0;
         }
@@ -749,6 +749,6 @@
         document.getElementById('triagem-tela-contrato').style.display = 'block';
         window.scrollTo(0,0);
     };
-
+    // FIM
 })();
 </script>
