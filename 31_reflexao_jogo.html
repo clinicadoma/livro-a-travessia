@@ -1,0 +1,45 @@
+<!-- REFLEXÃO DO JOGO -->
+<div class="doma-pagina bg-minimalista-cores" id="pag-reflexao-jogo" style="background-color: #f8fafc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; pointer-events: none; background-image: radial-gradient(#0ea5e9 2px, transparent 2px); background-size: 25px 25px;"></div>
+
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100%;">
+        
+        <h2 class="doma-titulo-gigante" style="margin-bottom: 4vh; text-align: center; position: relative; z-index: 2;">
+            <span style="font-family: 'Arial Black', Impact, sans-serif; font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); background: linear-gradient(180deg, transparent 50%, #fef08a 50%); padding: 0 10px; display: inline-block; transform: rotate(-1deg);">
+                A Reflexão do Jogo
+            </span>
+        </h2>
+
+        <div style="width: 100%; max-width: 250px; margin-bottom: 4vh; position: relative; z-index: 2; filter: drop-shadow(6px 6px 0px rgba(14, 165, 233, 0.15));">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+                <path d="M120,40 L170,55 L150,150 L100,135 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M125,55 L135,58 M145,135 L135,132" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+                <path d="M135,90 C135,85 145,80 150,90 C155,80 165,85 165,90 C165,100 150,110 150,110 C150,110 135,100 135,90 Z" fill="#fef08a" stroke="#1a1a1a" stroke-width="3"/>
+                <path d="M100,30 C60,30 30,60 30,100 C30,120 40,140 50,150 C50,160 45,180 45,180 L100,180 C110,160 120,130 120,100 C120,60 110,30 100,30 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M30,100 C45,100 55,110 60,125" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+                <rect x="70" y="70" width="10" height="30" fill="#0ea5e9" stroke="#1a1a1a" stroke-width="3" rx="2"/>
+                <rect x="90" y="70" width="10" height="30" fill="#0ea5e9" stroke="#1a1a1a" stroke-width="3" rx="2"/>
+                <path d="M10,80 L20,85 M10,120 L20,115 M15,100 L25,100" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div style="background: #ffffff; padding: 5vh 30px; border-radius: 16px; border: 3px solid #1a1a1a; width: 100%; box-shadow: 8px 8px 0px #0ea5e9; position: relative; z-index: 2;">
+            <div style="position: absolute; top: -12px; left: 20px; width: 40px; height: 15px; background: rgba(254, 240, 138, 0.9); border: 2px solid #1a1a1a; transform: rotate(-5deg);"></div>
+            <p class="doma-texto-corrido" style="font-size: clamp(1.1rem, 2.5vh, 1.25rem); color: #1a1a1a; margin-bottom: 0; line-height: 1.6;">
+                <span style="font-size: 1.5em; vertical-align: middle;">🤔</span> 
+                <strong style="font-weight: 900; font-family: 'Nunito', sans-serif;">Me conta uma coisa: como você se sentiu ao jogar?</strong>
+            </p>
+            <p class="doma-texto-corrido" style="margin-top: 3vh; font-size: clamp(1.05rem, 2.2vh, 1.15rem); color: #334155; line-height: 1.7;">
+                Aposto que, por alguns segundos, a sua mente precisou desligar o 
+                <span style="text-transform: uppercase; font-weight: 900; color: #1a1a1a; background: #e0f2fe; border: 2px solid #1a1a1a; padding: 2px 8px; border-radius: 4px; box-shadow: 2px 2px 0px #0284c7; display: inline-block; transform: rotate(-1deg); margin: 0 4px;">MODO PROBLEMA</span> 
+                para focar nas cartas, não é? Esse movimento de pausa é o primeiro passo para a sua melhora.
+            </p>
+
+            <div style="margin-top: 5vh; text-align: center;">
+                <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase;" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                    CONTINUAR  ➔
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
