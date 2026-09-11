@@ -1,0 +1,275 @@
+<style>
+    /* CSS EXCLUSIVO DO TRIBUNAL INTERNO */
+    .doma-tribunal-container { width: 100%; min-height: 100vh; background-color: #faf6ee; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Nunito', sans-serif; overflow-x: hidden; position: relative; }
+    
+    .tela-interna-trb { display: none; width: 100%; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; animation: fadeInFesta 0.5s ease-out forwards; }
+    .tela-interna-trb.ativa { display: flex; }
+    
+    @keyframes fadeInFesta { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes trb_flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes trb_shaking { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+    /* ESTILOS DE INTRODUÇÃO E INTERROGATÓRIO */
+    .trb_intro_box { background: white; border: 4px solid #fbbf24; padding: 30px 15px; border-radius: 20px; text-align: center; width: 100%; max-width: 450px; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.05); }
+    .trb_titulo_forte { color: #1e3a8a; font-weight: 900; font-size: 1.8rem; margin: 15px 0 10px 0; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; }
+    .trb_texto_p { color: #475569; font-size: 1.05rem; line-height: 1.6; font-weight: 600; margin-bottom: 0; }
+    .trb_divider { width: 60px; height: 4px; background: #e2e8f0; margin: 25px auto; border-radius: 2px; }
+
+    .trb_pergunta_card { background: white; border-top: 8px solid #3b82f6; padding: 35px 20px; border-radius: 20px; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+    .trb_tag { color: #3b82f6; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; display: block; margin-bottom: 20px; letter-spacing: 1px; }
+    .trb_pergunta_txt { font-size: 1.15rem; font-weight: 800; color: #1e293b; margin-bottom: 25px; line-height: 1.5; }
+    .trb_input { width: 100%; padding: 15px; border: 2px dashed #cbd5e1; border-radius: 12px; margin-bottom: 25px; font-family: inherit; font-style: italic; font-size: 1.05rem; color: #1e293b; outline: none; box-sizing: border-box; transition: border-color 0.3s; }
+    .trb_input:focus { border-color: #3b82f6; background: #f0f9ff; }
+
+    /* ESTILOS DA ÁRVORE GENEALÓGICA */
+    .trb_eco_intro { text-align: center; max-width: 450px; width: 100%; }
+    .trb_titulo_eco { font-family: 'Arial Black', Impact, sans-serif; font-weight: 900; color: #5d4037; font-size: 1.8rem; margin-top: 0; }
+    .trb_eco_caixa_txt { background: white; padding: 25px 20px; border-radius: 15px; border-left: 5px solid #e67e22; text-align: left; margin: 20px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .trb_eco_caixa_txt p { color: #4b5563; font-size: 1.05rem; line-height: 1.6; margin-top: 0; margin-bottom: 10px; font-weight: 500; }
+
+    .trb_wrapper_arvore { width: 100%; max-width: 500px; margin: 0 auto; text-align: center; padding-bottom: 40px; }
+    .trb_instrucao { background: #fff7ed; border: 1px dashed #fdba74; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+    .trb_instrucao p { margin: 0; color: #c2410c; font-size: 0.95rem; line-height: 1.5; }
+    .trb_tree_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
+    .trb_family_card { background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 20px 10px; position: relative; min-height: 160px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .trb_family_card.selected { border-color: #e67e22; background: #fffcf8; box-shadow: 0 8px 15px rgba(230, 126, 34, 0.15); transform: translateY(-3px); }
+    .trb_frase_escondida { display: none; font-size: 0.85rem; font-style: italic; color: #78350f; margin-top: 15px; line-height: 1.4; font-weight: 600; }
+    .trb_family_card.selected .trb_frase_escondida { display: block; animation: fadeInFesta 0.3s ease-out; }
+    .trb_select_caixa { width: 100%; margin-top: 15px; }
+    .trb_select_caixa select { width: 100%; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.8rem; font-weight: bold; padding: 8px; outline: none; color: #475569; background: white; cursor: pointer; }
+
+    .trb_memoria_box { background: white; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: left; }
+    .trb_ritual_box { background: #f0fdf4; border: 2px solid #22c55e; padding: 20px; border-radius: 15px; margin-bottom: 25px; text-align: left; cursor: pointer; transition: 0.2s; }
+    .trb_ritual_box:hover { background: #dcfce7; }
+    .trb_check_label { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; font-weight: 900; color: #166534; font-size: 1rem; line-height: 1.4; margin: 0; }
+    .trb_check_label input { width: 22px; height: 22px; margin-top: 2px; accent-color: #166534; cursor: pointer; }
+
+    /* VEREDITO E DECRETO */
+    .trb_veredito_box { border: 6px solid #854d0e; padding: 35px 20px; border-radius: 20px; background: white; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .trb_veredito_tit { color: #854d0e; font-weight: 900; font-size: 1.8rem; margin-top: 0; font-family: 'Arial Black', sans-serif; text-transform: uppercase; }
+    .trb_veredito_txt { color: #475569; font-size: 1.1rem; line-height: 1.6; font-weight: 600; margin-bottom: 25px; }
+    .trb_btn_fake { background: transparent; color: #ef4444; border: 3px solid #ef4444; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; margin-bottom: 15px; cursor: pointer; transition: 0.2s; font-size: 1rem; font-family: 'Nunito', sans-serif; }
+    .trb_btn_fake:active { transform: scale(0.95); }
+    .trb_btn_real { background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; box-shadow: 0 8px 20px rgba(16,185,129,0.3); cursor: pointer; transition: 0.2s; font-size: 1rem; font-family: 'Nunito', sans-serif; text-transform: uppercase; }
+    .trb_btn_real:active { transform: scale(0.95); }
+
+    .trb_sentenca_card { background: linear-gradient(180deg, #f0fdf4, #ffffff); border: 4px solid #10b981; padding: 40px 25px; border-radius: 24px; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 15px 35px rgba(16, 185, 129, 0.15); }
+    .trb_sentenca_tit { color: #065f46; font-weight: 900; font-size: 1.6rem; margin-top: 15px; font-family: 'Arial Black', sans-serif; }
+    .trb_sentenca_lista { text-align: left; margin: 25px 0 35px 0; color: #1e293b; font-weight: 700; font-size: 1rem; line-height: 1.8; }
+</style>
+
+<div class="doma-tribunal-container">
+    <div class="btn-voltar-sumario" onclick="if(window.irParaTela) window.irParaTela('pag-mapa-final')">☰</div>
+
+    <!-- 1. INTRODUÇÃO DO TRIBUNAL -->
+    <div id="trb-tela-0" class="tela-interna-trb ativa">
+        <div class="trb_intro_box">
+            <div style="font-size: 65px; margin-bottom: 10px; animation: trb_flutuar 3s infinite;">⚖️</div>
+            <h2 class="trb_titulo_forte">O Tribunal Interno</h2>
+            <p class="trb_texto_p">As vozes silenciadas agora vão falar. Prepare-se para o interrogatório dos ecos do seu passado.</p>
+            <div class="trb_divider"></div>
+            <p style="color: #b45309; font-weight: 900; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 25px; letter-spacing: 1px;">A fuga termina aqui.</p>
+            <button class="btn-doma pulse-btn" style="background: #1e3a8a; color: white; width: 100%; border: none; padding: 18px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3); cursor: pointer;" onclick="avancarTrb(1)">ENTRAR NO TRIBUNAL ➔</button>
+        </div>
+    </div>
+
+    <!-- 2. AVALIAÇÃO DAS PERDAS (1 a 5) -->
+    <div id="trb-tela-1" class="tela-interna-trb">
+        <div class="trb_pergunta_card">
+            <span class="trb_tag">Avaliação das Perdas (1/5)</span>
+            <p class="trb_pergunta_txt">Qual é a dor mais profunda que você tenta esconder enquanto o sintoma dita as regras?</p>
+            <input type="text" id="trb_in_1" class="trb_input" placeholder="Escreva com sinceridade...">
+            <button class="btn-doma" style="background: #3b82f6; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer;" onclick="validarPerguntaTrb(1, 2)">CONFIRMAR RESPOSTA ➔</button>
+        </div>
+    </div>
+
+    <div id="trb-tela-2" class="tela-interna-trb">
+        <div class="trb_pergunta_card">
+            <span class="trb_tag">Avaliação das Perdas (2/5)</span>
+            <p class="trb_pergunta_txt">Quantos sonhos ou momentos de paz você já enterrou no "cemitério de desculpas" do sintoma?</p>
+            <input type="text" id="trb_in_2" class="trb_input" placeholder="Lembre do que você já perdeu...">
+            <button class="btn-doma" style="background: #3b82f6; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer;" onclick="validarPerguntaTrb(2, 3)">CONFIRMAR RESPOSTA ➔</button>
+        </div>
+    </div>
+
+    <div id="trb-tela-3" class="tela-interna-trb">
+        <div class="trb_pergunta_card">
+            <span class="trb_tag">Avaliação das Perdas (3/5)</span>
+            <p class="trb_pergunta_txt">Qual foi a última vez que você sentiu exaustão ou raiva de si mesmo(a) por ter cedido a condução da sua vida?</p>
+            <input type="text" id="trb_in_3" class="trb_input" placeholder="Descreva esse momento...">
+            <button class="btn-doma" style="background: #3b82f6; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer;" onclick="validarPerguntaTrb(3, 4)">CONFIRMAR RESPOSTA ➔</button>
+        </div>
+    </div>
+
+    <div id="trb-tela-4" class="tela-interna-trb">
+        <div class="trb_pergunta_card">
+            <span class="trb_tag">Avaliação das Perdas (4/5)</span>
+            <p class="trb_pergunta_txt">Se você não tivesse pavor do julgamento alheio, o que faria AGORA para resgatar sua vida?</p>
+            <input type="text" id="trb_in_4" class="trb_input" placeholder="O que você faria de diferente?">
+            <button class="btn-doma" style="background: #3b82f6; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer;" onclick="validarPerguntaTrb(4, 5)">CONFIRMAR RESPOSTA ➔</button>
+        </div>
+    </div>
+
+    <div id="trb-tela-5" class="tela-interna-trb">
+        <div class="trb_pergunta_card" style="border-top-color: #ea580c;">
+            <span class="trb_tag" style="color: #ea580c;">Avaliação das Perdas (5/5)</span>
+            <p class="trb_pergunta_txt">Se essa corrente quebrar hoje, qual responsabilidade você terá que assumir sobre o seu destino?</p>
+            <input type="text" id="trb_in_5" class="trb_input" placeholder="Escreva seu compromisso..." style="border-color: #fdba74;">
+            <button class="btn-doma" style="background: #ea580c; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);" onclick="validarPerguntaTrb(5, 6)">FINALIZAR INTERROGATÓRIO ➔</button>
+        </div>
+    </div>
+
+    <!-- 3. DE QUEM É ESSA VOZ? -->
+    <div id="trb-tela-6" class="tela-interna-trb" style="background: #fdfaf6;">
+        <div class="trb_eco_intro">
+            <div style="font-size: 5rem; margin-bottom: 10px;">📼</div>
+            <h2 class="trb_titulo_eco">De Quem é Essa Voz?</h2>
+            <div class="trb_eco_caixa_txt">
+                <p>O seu inconsciente funciona como um gravador antigo. Na psicanálise, chamamos isso de <b>introjeção</b>.</p>
+                <p>Muitas crenças que te paralisam hoje são apenas ecos de adultos assustados. Vamos devolver essas frases aos donos originais?</p>
+            </div>
+            <button class="btn-doma pulse-btn" style="background: #5d4037; color: white; width: 100%; border: none; padding: 18px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 15px;" onclick="avancarTrb(7)">VER ÁRVORE GENEALÓGICA ➔</button>
+        </div>
+    </div>
+
+    <!-- 4. ÁRVORE GENEALÓGICA E RITUAL -->
+    <div id="trb-tela-7" class="tela-interna-trb" style="background: #fdfaf6; justify-content: flex-start; padding-top: 40px;">
+        <div class="trb_wrapper_arvore">
+            <div class="trb_instrucao">
+                <p><b>A ORIGEM DA CRIA:</b><br>Toque nos rostos para revelar a frase. Em seguida, selecione quem dizia isso para você na infância.</p>
+            </div>
+
+            <div class="trb_tree_grid">
+                <div class="trb_family_card" onclick="this.classList.toggle('selected'); tocarSomClick();">
+                    <span style='font-size: 2.5rem;'>👨</span>
+                    <div class="trb_select_caixa" onclick="event.stopPropagation()">
+                        <select><option disabled selected>QUEM DIZIA?</option><option>PAI</option><option>TIO</option><option>AVÔ</option><option>IRMÃO(A)</option><option>OUTRO</option></select>
+                    </div>
+                    <div class="trb_frase_escondida">"Engole o choro, a vida é dura e você tem que ser forte o tempo todo."</div>
+                </div>
+                <div class="trb_family_card" onclick="this.classList.toggle('selected'); tocarSomClick();">
+                    <span style='font-size: 2.5rem;'>👩</span>
+                    <div class="trb_select_caixa" onclick="event.stopPropagation()">
+                        <select><option disabled selected>QUEM DIZIA?</option><option>MÃE</option><option>TIA</option><option>AVÓ</option><option>IRMÃO(A)</option><option>OUTRA</option></select>
+                    </div>
+                    <div class="trb_frase_escondida">"Cuidado! O mundo é perigoso e você não vai conseguir fazer isso sozinho(a)."</div>
+                </div>
+                <div class="trb_family_card" onclick="this.classList.toggle('selected'); tocarSomClick();">
+                    <span style='font-size: 2.5rem;'>👵</span>
+                    <div class="trb_select_caixa" onclick="event.stopPropagation()">
+                        <select><option disabled selected>QUEM DIZIA?</option><option>AVÓ</option><option>MÃE</option><option>TIA</option><option>IRMÃO(A)</option><option>OUTRA</option></select>
+                    </div>
+                    <div class="trb_frase_escondida">"O que os outros vão pensar se você falhar? Isso é uma vergonha para nós!"</div>
+                </div>
+                <div class="trb_family_card" onclick="this.classList.toggle('selected'); tocarSomClick();">
+                    <span style='font-size: 2.5rem;'>👴</span>
+                    <div class="trb_select_caixa" onclick="event.stopPropagation()">
+                        <select><option disabled selected>QUEM DIZIA?</option><option>AVÔ</option><option>PAI</option><option>TIO</option><option>IRMÃO(A)</option><option>OUTRO</option></select>
+                    </div>
+                    <div class="trb_frase_escondida">"Dinheiro não dá em árvore, nascemos para sofrer e trabalhar até cair."</div>
+                </div>
+            </div>
+
+            <div class="trb_memoria_box">
+                <label style="font-size: 1.05rem; font-weight: 900; color: #dc2626; letter-spacing: 1px; display: block; margin-bottom: 10px;">🧠 MEMÓRIA DESBLOQUEADA:</label>
+                <span style="display: block; margin-bottom: 15px; color: #475569; font-weight: 600; font-size: 0.95rem;">Qual lembrança veio à mente agora? Descreva a cena com detalhes...</span>
+                <textarea id="trb_memoria_txt" rows="6" style="min-height: 140px; width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #cbd5e1; font-family: inherit; font-size: 0.95rem; background: #fafafa; resize: vertical; outline: none; line-height: 1.6; color: #1e293b; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: border-color 0.3s;" onfocus="this.style.borderColor='#dc2626'" onblur="this.style.borderColor='#cbd5e1'" placeholder="Ex: 'Lembrei de quando eu tinha 8 anos...'"></textarea>
+            </div>
+
+            <div class="trb_ritual_box" onclick="document.getElementById('trb_check_ritual').click();">
+                <label class="trb_check_label">
+                    <input type="checkbox" id="trb_check_ritual" onclick="event.stopPropagation(); if(this.checked && typeof tocarSomMagico === 'function') tocarSomMagico();">
+                    <span>Clique para afirmar: "Eu devolvo essa voz ao dono original e me liberto deste peso agora."</span>
+                </label>
+            </div>
+
+            <button class="btn-doma pulse-btn" style="background: #3e2723; color: white; width: 100%; border: none; padding: 18px; border-radius: 12px; font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 0 8px 20px rgba(93, 64, 55, 0.4);" onclick="concluirEcosTrb()">AVANÇAR PARA VEREDITO ➔</button>
+        </div>
+    </div>
+
+    <!-- 5. VEREDITO E PROVOCAÇÃO -->
+    <div id="trb-tela-8" class="tela-interna-trb">
+        <div class="trb_veredito_box" id="trb_veredito_container">
+            <h3 class="trb_veredito_tit">O Interrogatório Acabou</h3>
+            <p class="trb_veredito_txt" style="margin-top: 15px;">O Tribunal desmascarou o sintoma. Ele usava as vozes do passado como megafone para te assustar. Agora, ele está desarmado.</p>
+            <p style="font-weight: 900; color: #1e3a8a; font-size: 1.15rem; margin: 30px 0 20px 0;">De quem é a condução daqui para frente?</p>
+            <button class="trb_btn_fake" onclick="contestarVereditoTrb()">VOU CONTINUAR FUGINDO 💣</button>
+            <button class="trb_btn_real pulse-btn" onclick="avancarTrb(9)">ASSUMO A RESPONSABILIDADE 🔨</button>
+        </div>
+    </div>
+
+    <!-- 6. DECRETO DE EMANCIPAÇÃO -->
+    <div id="trb-tela-9" class="tela-interna-trb">
+        <div class="trb_sentenca_card">
+            <div style="font-size: 4rem; margin-bottom: 10px;">📜</div>
+            <h2 class="trb_sentenca_tit">Decreto de Emancipação</h2>
+            <div class="trb_sentenca_lista">
+                <p style="border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">✔️ <b style="color: #047857;">Fim do Sequestro:</b> As vozes do passado foram silenciadas.</p>
+                <p style="border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">✔️ <b style="color: #047857;">Troca de Papéis:</b> O sintoma agora é apenas um aviso, não o dono da casa.</p>
+                <p>✔️ <b style="color: #b91c1c;">A Regra de Ouro:</b> Fica terminantemente proibido se abandonar.</p>
+            </div>
+            <button class="btn-doma pulse-btn" style="background: linear-gradient(45deg, #10b981, #059669); color: white; width: 100%; border: none; padding: 20px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); cursor: pointer; text-transform: uppercase;" onclick="window.mudarPagina(1)">IR PARA O RETRATO FALADO ➔</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let telaAtualTrb = 0;
+
+    function tocarSomClick() {
+        const audio = document.getElementById('som-click');
+        if(audio) { audio.currentTime = 0; audio.play().catch(e=>{}); }
+    }
+
+    function avancarTrb(proximaTela) {
+        tocarSomClick();
+        document.getElementById('trb-tela-' + telaAtualTrb).classList.remove('ativa');
+        document.getElementById('trb-tela-' + proximaTela).classList.add('ativa');
+        telaAtualTrb = proximaTela;
+        window.scrollTo(0, 0);
+    }
+
+    function validarPerguntaTrb(numInput, proximaTela) {
+        const input = document.getElementById('trb_in_' + numInput);
+        if (!input || !input.value.trim() || !window.isCoerente(input.value)) {
+            if (window.abrirModalDoma) {
+                window.abrirModalDoma("Atenção, Domador!", "O Tribunal exige uma resposta clara e honesta para prosseguir. Não tente pular esta etapa.", "alerta");
+            }
+            return;
+        }
+        
+        // Se preencheu certo, ganha 5 moedas invisivelmente pelo esforço
+        if (window.ganharMoedas) window.ganharMoedas(5, null);
+        
+        avancarTrb(proximaTela);
+    }
+
+    function concluirEcosTrb() {
+        const checkRitual = document.getElementById('trb_check_ritual');
+        const textMemoria = document.getElementById('trb_memoria_txt');
+
+        if (!textMemoria.value.trim() || !window.isCoerente(textMemoria.value)) {
+            if (window.abrirModalDoma) window.abrirModalDoma("Memória Vazia", "Descreva a sua lembrança com coerência antes de devolver a voz ao passado.", "alerta");
+            return;
+        }
+
+        if (!checkRitual.checked) {
+            if (window.abrirModalDoma) window.abrirModalDoma("Ritual Incompleto", "Você precisa marcar a caixa de seleção afirmando que devolve a voz ao dono original.", "alerta");
+            return;
+        }
+
+        if (window.ganharMoedas) window.ganharMoedas(10, null);
+        avancarTrb(8);
+    }
+
+    function contestarVereditoTrb() {
+        if (window.abrirModalDoma) {
+            window.abrirModalDoma("Fuga Bloqueada 🛑", "A culpa não é sua pelas feridas que te causaram no passado, mas a responsabilidade de se curar hoje é 100% sua! O Tribunal não aceita desistências.", "alerta");
+        }
+        const box = document.getElementById('trb_veredito_container');
+        box.style.animation = "none"; 
+        void box.offsetWidth;
+        box.style.animation = "trb_shaking 0.4s";
+    }
+</script>
