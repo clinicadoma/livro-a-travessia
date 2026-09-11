@@ -1,0 +1,53 @@
+<style>
+    .caixa-fuga-neon {
+        background: linear-gradient(90deg, #f43f5e, #e11d48);
+        color: white;
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(225, 29, 72, 0.4);
+        position: relative;
+        overflow: hidden;
+        margin-top: 25px;
+        border: 2px solid #fda4af;
+    }
+    .caixa-fuga-neon::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent);
+        transform: skewX(-20deg);
+        animation: brilhoPassando 3s infinite;
+    }
+    @keyframes brilhoPassando {
+        0% { left: -100%; }
+        100% { left: 200%; }
+    }
+    @keyframes piscaNeon {
+        0%, 100% { text-shadow: 0 0 10px #e11d48, 0 0 20px #e11d48, 0 0 40px #e11d48; opacity: 1; }
+        50% { text-shadow: 0 0 5px #e11d48, 0 0 10px #e11d48; opacity: 0.8; }
+    }
+</style>
+
+<div class="doma-pagina bg-minimalista-cores" id="pag-20" style="background-color: #111827; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    <!-- Fundo com efeito "Túnel em movimento" -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background: repeating-linear-gradient(90deg, #1f2937, #1f2937 10px, transparent 10px, transparent 20px);"></div>
+
+    <div class="wrapper-isolado" style="padding-top: 8vh; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100%;">
+        
+        <div style="width: 100%; position: relative; z-index: 2; text-align: center;">
+            <div class="caixa-fuga-neon" style="display: inline-block; padding: clamp(30px, 6vh, 50px) 40px; border: 4px solid #374151; border-radius: 16px; background: #1f2937; box-shadow: 10px 10px 0px rgba(0,0,0,0.5);">
+                <strong style="font-size: clamp(1.4rem, 4vh, 1.8rem); letter-spacing: 1px; color: #f3f4f6; font-weight: 900; text-transform: uppercase; font-family: 'Arial Black', sans-serif;">
+                    A <span class="marca-neon" style="color: #f43f5e; animation: piscaNeon 1.5s infinite alternate; text-shadow: 0 0 10px #e11d48, 0 0 20px #e11d48;">fuga</span> <br>só alimenta o monstro.
+                </strong>
+            </div>
+        </div>
+
+        <div style="margin-top: 8vh; text-align: center; z-index: 2;">
+            <button onclick="mudarPagina(1)" style="background-color: #f43f5e; color: #ffffff; border: 2px solid #ffffff; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 0 0 15px rgba(244, 63, 94, 0.6); transition: all 0.2s ease; text-transform: uppercase;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 25px rgba(244, 63, 94, 0.8)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 15px rgba(244, 63, 94, 0.6)';" onmousedown="this.style.transform='scale(0.95)';">
+                CONTINUAR  ➔
+            </button>
+        </div>
+    </div>
+</div>
