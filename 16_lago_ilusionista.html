@@ -1,0 +1,191 @@
+<style>
+    .lago-wrapper-main { min-height: 100vh; overflow-y: auto; overflow-x: hidden; background: linear-gradient(to bottom, #f0fdfa, #e0f2fe, #f0fdfa); font-family: 'Nunito', sans-serif; position: relative; }
+    .intro-papel-pao { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #d4b496; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: all 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+    .intro-papel-pao.amassado { transform: scale(0) rotate(720deg); opacity: 0; filter: brightness(0.4) blur(8px); }
+    .conteudo-papel { text-align: center; padding: 30px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(93, 64, 55, 0.2); border-radius: 15px; max-width: 80%; }
+    .texto-intro { font-family: 'Courier New', Courier, monospace; font-size: clamp(1.4rem, 4vw, 2.2rem); color: #5d4037; font-weight: bold; line-height: 1.4; margin-bottom: 30px; }
+    .btn-iniciar-zen { background: #5d4037; color: #e3c5a8; border: none; padding: 15px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.3s ease; text-transform: uppercase; }
+    
+    .container-quebra-cabeca-total { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; overflow: hidden; }
+    .peca { position: absolute; font-size: clamp(24px, 3.5vw, 40px); top: -60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); animation: quedaPecaLivre 14s infinite linear; opacity: 0.7; }
+    .c-roxo { color: #8b5cf6; } .c-azul { color: #3b82f6; } .c-turq { color: #06b6d4; } .c-ouro { color: #facc15; }
+    @keyframes quedaPecaLivre { 0% { top: -60px; transform: rotate(0deg) scale(0.8); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 105vh; transform: rotate(360deg) scale(0.9); opacity: 0; } }
+
+    .cenario-lago-novo { position: relative; width: 100%; height: clamp(300px, 45vh, 400px); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; margin-bottom: 20px; z-index: 5; }
+    .lago-base { position: relative; width: clamp(260px, 85vw, 400px); height: clamp(70px, 20vw, 100px); background: rgba(186, 230, 253, 0.3); border-radius: 50%; z-index: 5; overflow: visible; }
+    
+    .btn-play-lago { background: linear-gradient(to bottom, #0ea5e9, #0284c7); color: white; border: none; border-bottom: 4px solid #0369a1; padding: 15px 35px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s ease; z-index: 20; margin-top: 10px; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3); }
+    .eco-da-letra { color: #0284c7; font-style: italic; font-weight: 600; font-size: clamp(0.9rem, 2vh, 1.1rem); margin-bottom: 25px; text-align: center; letter-spacing: 0.5px; animation: respiracaoLetra 5s infinite alternate ease-in-out; z-index: 10; }
+    @keyframes respiracaoLetra { 0% { opacity: 0.4; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); text-shadow: 0 0 10px rgba(14, 165, 233, 0.3); } }
+
+    .container-avancar-lago { position: absolute; bottom: 85px; left: 50%; transform: translate(-50%, 20px); text-align: center; opacity: 0; transition: all 1.5s ease; pointer-events: none; z-index: 100; }
+    .container-avancar-lago.visivel { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+    .seta-avancar { display: inline-block; color: #7c3aed; font-weight: 900; letter-spacing: 2px; background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 20px; border: 2px solid #7c3aed; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; animation: bounceSeta 2s infinite; }
+    @keyframes bounceSeta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+
+    .slide-pecinhas { position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; background: linear-gradient(120deg, rgb(238, 242, 255), rgb(240, 245, 255), rgb(255, 241, 242)); z-index: 20; transform: translateX(100%); opacity: 0; transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; pointer-events: none; }
+    .slide-pecinhas.visivel { transform: translateX(0); opacity: 1; pointer-events: auto; }
+    .conteudo-pecinhas { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-radius: 24px; padding: clamp(20px, 4vw, 40px); max-width: 800px; text-align: center; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.9); }
+    
+    .btn-mapear-realidade { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #ffffff; border: none; padding: 18px 30px; font-size: 1.15rem; font-weight: 900; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 8px 25px rgba(225, 29, 72, 0.4); transition: all 0.3s ease; width: 100%; max-width: 350px; margin: 25px auto 10px auto; display: flex; justify-content: center; align-items: center; animation: pulsarBotao 2s infinite; }
+    @keyframes pulsarBotao { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
+    .esconder-definitivo { display: none !important; }
+</style>
+
+<div class="lago-wrapper-main">
+    <div id="intro-papel-pao" class="intro-papel-pao">
+        <div class="conteudo-papel">
+            <p class="texto-intro">
+                Eu já me fiz pequeno(a),<br>
+                já fui rascunho em papel de pão...<br>
+                <span style="display: block; font-size: 0.8em; margin-top: 10px; font-style: italic; opacity: 0.8;">Quer saber?</span>
+            </p>
+            <button id="btn-iniciar-experiencia" class="btn-iniciar-zen">Aperte e veja a mensagem</button>
+        </div>
+    </div>
+
+    <div class="container-quebra-cabeca-total">
+        <div class="peca c-roxo" style="left: 5%; animation-delay: 0s;">🧩</div>
+        <div class="peca c-azul" style="left: 15%; animation-delay: 4s;">🧩</div>
+        <div class="peca c-turq" style="left: 25%; animation-delay: 2s;">🧩</div>
+        <div class="peca c-ouro" style="left: 40%; animation-delay: 6s; font-size: 20px; opacity: 0.5;">🧩</div>
+        <div class="peca c-roxo" style="left: 60%; animation-delay: 8s; font-size: 22px; opacity: 0.5;">🧩</div>
+        <div class="peca c-turq" style="left: 75%; animation-delay: 3s;">🧩</div>
+        <div class="peca c-ouro" style="left: 85%; animation-delay: 5s;">🧩</div>
+    </div>
+
+    <div class="wrapper-isolado" id="wrapper-lago" style="position: relative; padding: clamp(60px, 10vh, 120px) 20px; width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; z-index: 10;">
+        <div class="cenario-lago-novo">
+            <div id="container-avancar" class="container-avancar-lago">
+                <p style="color: #1e1b4b; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">Sua jornada continua...</p>
+                <div class="seta-avancar">AVANÇAR ❯</div>
+            </div>
+            <div class="lago-base"></div>
+        </div>
+
+        <div id="legenda-dinamica-lago" class="eco-da-letra">"Aperte o play para ouvir..."</div>
+
+        <button id="btn-lago-zen" class="btn-play-lago">
+            <span id="icone-lago">▶</span> Tocar Mensagem
+        </button>
+    </div>
+
+    <div id="slide-pecinhas" class="slide-pecinhas">
+        <div class="conteudo-pecinhas">
+            <h1 style="color: #be123c; font-size: clamp(1.6rem, 4vw, 2.2rem); margin-top: 0; margin-bottom: 5px; font-weight: 900; text-transform: uppercase;">A Ilusão do Controle</h1>
+            <p style="color: #881337; font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">Você acha que está dirigindo, mas quem está no volante?</p>
+            <p style="font-size: 1.05rem; color: #334155; line-height: 1.6; margin-bottom: 15px;">A música ecoa: <em>"Sou voz, sou inteira"</em>. Mas, na vida real, a voz que dita as regras quase nunca é a sua.</p>
+            <div style="background: #fef2f2; padding: 15px; border-radius: 12px; border-left: 6px solid #ef4444; margin-bottom: 20px; text-align: left;">
+                <p style="margin: 0; color: #991b1b; font-size: 1rem; line-height: 1.5;">Apresento a você <strong>O Ilusionista</strong>. Um Monstrinho que age nos bastidores, disfarçado de "intuição" ou "bom senso". Ele te convence de que aguentar situações que te machucam é apenas ser <em>"forte"</em> ou <em>"prudente"</em>.</p>
+            </div>
+            <p style="font-size: 1.05rem; color: #2563eb; line-height: 1.6; margin-bottom: 15px;">Ele te faz acreditar que você está na condução. Mas na verdade, ele está <strong>boicotando o seu Lar</strong>, te obrigando a guardar peças que já apodreceram só porque o conhecido é "mais seguro".</p>
+            
+            <button class="btn-mapear-realidade" onclick="window.mudarPagina(1)">MAPEAR MINHA REALIDADE ❯</button>
+        </div>
+    </div>
+
+    <audio id="audio-lago-zen" preload="auto">
+        <source src="https://music.wixstatic.com/mp3/253e81_4bae4fd39de1420aa8a2f96e31a81823.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+<script>
+(function() {
+    const btnPlay = document.getElementById('btn-lago-zen');
+    const btnIniciar = document.getElementById('btn-iniciar-experiencia');
+    const audio = document.getElementById('audio-lago-zen');
+    const icone = document.getElementById('icone-lago');
+    const papelIntro = document.getElementById('intro-papel-pao');
+    const painelAvancar = document.getElementById('container-avancar');
+    const btnClicavel = document.querySelector('.seta-avancar');
+    const wrapperLago = document.getElementById('wrapper-lago');
+    const slidePecinhas = document.getElementById('slide-pecinhas');
+    const legendaLago = document.getElementById('legenda-dinamica-lago');
+
+    let tocando = false;
+
+    const cronogramaLegendas = [
+        { tempo: 0.0, texto: "🎵 (Respire fundo. Sinta a musica...) 🎵" },
+        { tempo: 13.0, texto: "Eu já fui rascunho em papel de pão..." },
+        { tempo: 19.0, texto: "Tentando adivinhar a forma de me encaixar" },
+        { tempo: 24.0, texto: "Para caber no molde que o mundo ofereceu" },
+        { tempo: 29.0, texto: "Mas o desenho mudou e o molde morreu" },
+        { tempo: 35.0, texto: "Meus limites são prioridades do meu jardim" },
+        { tempo: 41.0, texto: "Protegendo o que floresce em mim" },
+        { tempo: 44.0, texto: "Sou quebra-cabeça em movimento" },
+        { tempo: 47.0, texto: "Pego as peças soltas e faço a minha história" },
+        { tempo: 53.0, texto: "As temporárias ensinam o caminho" },
+        { tempo: 58.0, texto: "As definitivas criam meu aconchego" },
+        { tempo: 63.0, texto: "Não vou nunca mais me apagar" },
+        { tempo: 66.0, texto: "pra luz do outro brilhar" },
+        { tempo: 68.0, texto: "A coragem de ser inteira é o meu lugar" },
+        { tempo: 74.0, texto: "O respeito não é um pedido, é um alicerce" },
+        { tempo: 78.0, texto: "A voz que se encontra, a paz que floresce" },
+        { tempo: 82.0, texto: "Não preciso de cola pra me remendar" },
+        { tempo: 88.0, texto: "Sou mosaico de mar sem data pra findar" },
+        { tempo: 94.0, texto: "O que é meu eu guardo, o que é seu devolvo" },
+        { tempo: 99.0, texto: "Neste novo solo eu me resolvo" },
+        { tempo: 103.0, texto: "Sou quebra-cabeça em movimento" },
+        { tempo: 106.0, texto: "Pego as peças soltas e faço a minha história" },
+        { tempo: 112.0, texto: "As temporárias ensinam o caminho" },
+        { tempo: 117.0, texto: "As definitivas criam meu aconchego" },
+        { tempo: 122.0, texto: "Não vou nunca mais me apagar" },
+        { tempo: 125.0, texto: "pra luz do outro brilhar" },
+        { tempo: 127.0, texto: "A coragem de ser inteira é o meu lugar" },
+        { tempo: 134.0, texto: "Inteira..." },
+        { tempo: 136.0, texto: "Peça por peça, agora eu sou o meu próprio lar." }
+    ];
+
+    function liberarAvanco() {
+        if (painelAvancar) painelAvancar.classList.add('visivel');
+    }
+
+    if(btnIniciar && audio) {
+        btnIniciar.addEventListener('click', () => {
+            papelIntro.classList.add('amassado');
+            audio.play().catch(e => console.log("Erro áudio"));
+            tocando = true;
+            icone.innerText = '⏸'; btnPlay.innerHTML = '⏸ Pausar Mensagem';
+            setTimeout(() => { papelIntro.style.display = 'none'; }, 1800);
+            setTimeout(liberarAvanco, 136000);
+        });
+    }
+
+    if(btnPlay && audio) {
+        btnPlay.addEventListener('click', () => {
+            if (!tocando) { audio.play(); tocando = true; icone.innerText = '⏸'; btnPlay.innerHTML = '⏸ Pausar Mensagem'; } 
+            else { audio.pause(); tocando = false; icone.innerText = '▶'; btnPlay.innerHTML = '▶ Tocar Mensagem'; }
+        });
+    }
+
+    if(audio) {
+        audio.addEventListener('timeupdate', () => {
+            if (legendaLago) {
+                let textoAtual = "...";
+                for (let i = 0; i < cronogramaLegendas.length; i++) {
+                    if (audio.currentTime >= cronogramaLegendas[i].tempo) textoAtual = cronogramaLegendas[i].texto;
+                }
+                if (legendaLago.innerText !== `"${textoAtual}"`) legendaLago.innerText = `"${textoAtual}"`;
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            tocando = false;
+            icone.innerText = '▶'; btnPlay.innerHTML = '▶ Ouvir Novamente';
+            if (legendaLago) legendaLago.innerText = `"Aperte o play para ouvir..."`;
+            liberarAvanco();
+        });
+    }
+
+    if(btnClicavel) {
+        btnClicavel.addEventListener('click', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            wrapperLago.style.transition = "all 1s ease-in-out";
+            wrapperLago.style.opacity = "0";
+            wrapperLago.style.transform = "scale(0.95)";
+            setTimeout(() => { slidePecinhas.classList.add('visivel'); window.scrollTo(0,0); }, 400);
+            setTimeout(() => { wrapperLago.classList.add('esconder-definitivo'); }, 1200);
+        });
+    }
+})();
+</script>
