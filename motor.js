@@ -76,11 +76,11 @@ window.irParaModulo = function(index) {
 // IMPORTANTE: Ajuste os números abaixo para baterem com a ordem exata dos arquivos no seu mapa.json (Lembrando que começa no 0)
 const dicionarioDeTelas = {
     'pag-3': 4,               // Boas Vindas
-    'pag-5': 5,               // Economia Doma
-    'pag-7': 6,               // O Monstrinho Interno
-    'pag-8': 7,               // A Travessia
-    'pag-10': 8,              // Imersão Total
-    'pag-proximo-nivel': 9,   // O Próximo Nível
+    'pag-5': 6,               // Economia Doma
+    'pag-7': 7,               // O Monstrinho Interno
+    'pag-8': 8,               // A Travessia
+    'pag-10': 9,              // Imersão Total
+    'pag-proximo-nivel': 10,   // O Próximo Nível
     'pag-mapa-final': 10,      // O Mapa da Travessia
     'pag-roleta': 11,          // Roleta de Boas Vindas
     'pag-capitulo-1': 12,      // O Acolhimento
