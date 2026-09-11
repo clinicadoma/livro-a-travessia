@@ -1,0 +1,11 @@
+{
+  "modulos": [
+    "01_abertura.html",
+    "02_boas_vindas.html",
+    "03_mapa_travessia.html",
+    "04_sumario.html",
+    "05_apresentacao.html",
+    "06_jogo_comecou.html",
+    "07_doma_coins.html"
+  ]
+}
