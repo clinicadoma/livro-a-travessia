@@ -60,13 +60,76 @@ window.mudarPagina = function(direcao) {
     }
 };
 
-// NOVA FUNÇÃO: Permite saltar direto da página do Sumário para a fase destrancada
 window.irParaModulo = function(index) {
     let maxPag = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
     if (index >= 0 && index < window.modulos.length && index <= maxPag) {
         moduloAtual = index;
         injetarModulo(moduloAtual);
     }
+};
+
+// ==========================================
+// O TRADUTOR DO SUMÁRIO (NOVA FUNÇÃO)
+// ==========================================
+// Como não temos mais todas as telas no DOM ao mesmo tempo, 
+// o irParaTela converte o ID clicado (ex: 'pag-5') no Índice real do seu mapa.json (ex: 4).
+// IMPORTANTE: Ajuste os números abaixo para baterem com a ordem exata dos arquivos no seu mapa.json (Lembrando que começa no 0)
+const dicionarioDeTelas = {
+    'pag-3': 1,               // Boas Vindas
+    'pag-5': 2,               // Economia Doma
+    'pag-7': 3,               // O Monstrinho Interno
+    'pag-8': 4,               // A Travessia
+    'pag-10': 5,              // Imersão Total
+    'pag-proximo-nivel': 6,   // O Próximo Nível
+    'pag-mapa-final': 7,      // O Mapa da Travessia
+    'pag-roleta': 8,          // Roleta de Boas Vindas
+    'pag-capitulo-1': 9,      // O Acolhimento
+    'pag-mecanica-mente': 10, // Mecânica da Mente
+    'pag-intro-darkmode': 11, // Laboratório
+    'pag-26': 12,             // O Papel de Pão
+    'slide-intro-1': 13,      // Triagem
+    'pag-25-b': 14,           // Quem é o Domador
+    'pag-bagagem-domador': 15,// Bagagem do Domador
+    'acendendo-lanterna': 16, // Acendendo a Lanterna
+    'roleta_interna': 17,     // Roleta Interna
+    'pag-polvo': 18,          // Acolhendo o Polvo
+    'superpoder': 19,         // O Superpoder
+    'malabarista': 20,        // Malabarista
+    'aliviando-mochila': 21,  // Aliviando a Mochila
+    'espelho-restaura': 22,   // Espelho Restaura
+    'ponte-cristal': 23,      // Ponte Cristal
+    'checkin-ouro': 24,       // Check-in Ouro
+    'jogo-verdade': 25,       // Jogo da Verdade
+    'pag-diagnostico-profundo': 26, 
+    'pag-tribunal-intro': 27, 
+    'quem-voz': 28,           
+    'retrato-falado': 29,     
+    'resgate-crianca': 30,    
+    'pag-tesouro': 31,        
+    'loja-discos': 32,        
+    'pag-jogo-insights': 33,  
+    'pag-72': 34              // Final
+};
+
+window.irParaTela = function(idAlvo) {
+    let maxPag = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
+    let isPremium = localStorage.getItem('acesso_vip_doma_liberado') === 'true';
+    
+    // Descobre qual é o número da página baseada no ID clicado
+    let alvoIndex = dicionarioDeTelas[idAlvo];
+    
+    if (alvoIndex === undefined) {
+        console.warn("Tela não mapeada no dicionário do motor.js: " + idAlvo);
+        return;
+    }
+
+    // TRAVA JAVASCRIPT: Impede clicar em itens não alcançados (exceto os que sempre ficam livres)
+    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > maxPag) {
+        return; 
+    }
+
+    // Chama o seu próprio sistema modular para carregar a página
+    window.irParaModulo(alvoIndex);
 };
 
 window.ganharMoedas = function(quantidade, eventoClick = null) {
@@ -186,75 +249,6 @@ window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, mod
     window.abrirModalDoma(modalTit, modalTxt, modalTipo, function(){
         if(pagAvanco !== null) window.mudarPagina(pagAvanco);
     });
-};
-
-// ==========================================
-// MOTOR DE NAVEGAÇÃO GLOBAL (BLINDADO)
-// ==========================================
-
-window.irParaTela = function(idAlvo) {
-    // 1. Lê todas as páginas direto do DOM em tempo real (Evita o erro "is not defined")
-    const todasPaginas = Array.from(document.querySelectorAll('.doma-pagina'));
-    
-    // 2. Resgata o progresso do usuário com segurança
-    let maxPagAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
-    let isPremium = localStorage.getItem('acesso_vip_doma_liberado') === 'true';
-    
-    let indexTribunal = todasPaginas.findIndex(p => p.id === 'pag-tribunal-intro');
-    let alvoIndex = todasPaginas.findIndex(p => p.id === idAlvo);
-    
-    if (alvoIndex === -1) return; // Se a página não existir, cancela a ação
-    
-    // 3. TRAVA DE GAMIFICAÇÃO: Impede pular para onde não alcançou
-    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > maxPagAlcancada) {
-        return; 
-    }
-    
-    // 4. TRAVA VIP (PAYWALL)
-    if (indexTribunal !== -1 && alvoIndex >= indexTribunal && !isPremium) {
-        let modalVip = document.getElementById('slide-paywall-vip');
-        if (modalVip) modalVip.style.display = 'flex';
-        return; 
-    }
-
-    // 5. TROCA DE TELA: Esconde todas e mostra apenas o alvo
-    todasPaginas.forEach(p => {
-        p.classList.remove('ativa');
-        p.style.display = ''; // Limpa resquícios inline
-    });
-    
-    const paginaAlvo = todasPaginas[alvoIndex];
-    paginaAlvo.classList.add('ativa');
-    
-    // Atualiza a variável global para as setas saberem onde estamos
-    window.pagAtiva = alvoIndex; 
-    try { paginaAlvo.scrollTop = 0; window.scrollTo(0,0); } catch(e){}
-    
-    // 6. Atualiza progresso e Interface
-    if (typeof window.atualizarVisibilidadeSeta === 'function') window.atualizarVisibilidadeSeta();
-    
-    if (idAlvo !== 'pag-mapa-final' && idAlvo !== 'pag-sumario' && idAlvo !== 'pag-mapa-travessia') {
-        if (alvoIndex > maxPagAlcancada) {
-            localStorage.setItem('doma_max_pagina', alvoIndex);
-        }
-    }
-    if (typeof window.atualizarVisualSumario === 'function') window.atualizarVisualSumario();
-};
-
-window.mudarPagina = function(direcao) {
-    const todasPaginas = Array.from(document.querySelectorAll('.doma-pagina'));
-    
-    // Garante que o sistema saiba onde está, mesmo se a página recarregar
-    if (typeof window.pagAtiva === 'undefined') {
-        let indexAtivo = todasPaginas.findIndex(p => p.classList.contains('ativa'));
-        window.pagAtiva = indexAtivo !== -1 ? indexAtivo : 0;
-    }
-
-    let proximaPagina = (window.pagAtiva + direcao + todasPaginas.length) % todasPaginas.length;
-    let alvoId = todasPaginas[proximaPagina].id;
-    
-    // Usa a mesma inteligência blindada do irParaTela
-    window.irParaTela(alvoId);
 };
 
 iniciarSistema();
