@@ -1,0 +1,28 @@
+<div class="doma-pagina bg-minimalista-cores" id="pag-13" style="background-color: #f0f9ff; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    <!-- Fundo simulando linhas de caderno -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; pointer-events: none; background-image: linear-gradient(#0ea5e9 1px, transparent 1px); background-size: 100% 30px;"></div>
+
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100%;">
+
+        <!-- Linha do Mapa Mental Ligando os Balões -->
+        <div style="position: absolute; top: 15vh; bottom: 25vh; left: 50%; transform: translateX(-50%); width: 4px; background-image: linear-gradient(to bottom, #1a1a1a 50%, transparent 50%); background-size: 4px 15px; opacity: 0.3; z-index: 1;"></div>
+
+        <div style="width: 100%; display: flex; flex-direction: column; gap: clamp(15px, 3vh, 25px); position: relative; z-index: 2;">
+            
+            <div class="balao-pensamento" style="align-self: flex-start; background: #ffffff; border: 2px solid #1a1a1a; padding: clamp(12px, 2vh, 18px) 20px; font-size: clamp(0.95rem, 2.2vh, 1.1rem); margin: 0; border-radius: 20px 20px 20px 0; box-shadow: 4px 4px 0px #0ea5e9; font-weight: 800; color: #1a1a1a; max-width: 85%; animation: balancoBalao 3s ease-in-out infinite;">💭 Sabe aquela preocupação que não sai da cabeça?</div>
+            
+            <div class="balao-pensamento" style="align-self: flex-end; background: #fef08a; border: 2px solid #1a1a1a; padding: clamp(12px, 2vh, 18px) 20px; font-size: clamp(0.95rem, 2.2vh, 1.1rem); margin: 0; border-radius: 20px 20px 0 20px; box-shadow: -4px 4px 0px #ca8a04; font-weight: 800; color: #1a1a1a; max-width: 85%; animation: balancoBalao 3.5s ease-in-out infinite reverse;">🫣 O medo que impede de tentar o novo?</div>
+            
+            <div class="balao-pensamento" style="align-self: flex-start; background: #ffffff; border: 2px solid #1a1a1a; padding: clamp(12px, 2vh, 18px) 20px; font-size: clamp(0.95rem, 2.2vh, 1.1rem); margin: 0; border-radius: 20px 20px 20px 0; box-shadow: 4px 4px 0px #0ea5e9; font-weight: 800; color: #1a1a1a; max-width: 85%; animation: balancoBalao 2.8s ease-in-out infinite;">😶‍🌫️ A timidez que atrapalha?</div>
+            
+            <div class="balao-pensamento" style="align-self: flex-end; background: #e2e8f0; border: 2px solid #1a1a1a; padding: clamp(12px, 2vh, 18px) 20px; font-size: clamp(0.95rem, 2.2vh, 1.1rem); margin: 0; border-radius: 20px 20px 0 20px; box-shadow: -4px 4px 0px #475569; font-weight: 800; color: #1a1a1a; max-width: 85%; animation: balancoBalao 3.2s ease-in-out infinite reverse;">🌧️ Ou aquela tristeza que aparece sem avisar?</div>
+            
+        </div>
+
+        <div style="margin-top: 6vh; text-align: center; z-index: 2;">
+            <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase;" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                CONTINUAR  ➔
+            </button>
+        </div>
+    </div>
+</div>
