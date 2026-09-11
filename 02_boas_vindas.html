@@ -1,21 +1,75 @@
-<div class="wrapper-isolado" style="padding: 40px 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100vh;">
-    <div style="text-align:center; width:100%; position: relative; z-index: 2;">
-        <div style="font-size:clamp(3.5rem, 10vh, 5.5rem); margin-bottom: 1vh; filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.1)); transform: rotate(-3deg);">🧠</div>
-        <p style="font-family:'Cinzel', serif; font-size:clamp(1.2rem, 3vh, 1.6rem); color:#1a1a1a; font-weight: 800; text-align:center; margin-bottom:4vh; letter-spacing: 2px; text-transform: uppercase; background: #fef08a; display: inline-block; padding: 4px 15px; border-radius: 4px; box-shadow: 2px 2px 0px #1a1a1a; border: 2px solid #1a1a1a;">
-            O Despertar do Domador
-        </p>
-        <div style="padding: 4vh 30px; margin-bottom: 4vh; background-color: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; box-shadow: 6px 6px 0px rgba(0,0,0,0.05); position: relative;">
-            <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(-2deg); width: 60px; height: 20px; background-color: rgba(254, 240, 138, 0.8); box-shadow: 1px 1px 3px rgba(0,0,0,0.1);"></div>
-            <p style="text-align:center; font-size:clamp(1.1rem, 2.5vh, 1.3rem); line-height: 1.8; margin-bottom:0; color: #333;">
-                Bem-vindo(a) à Travessia de <strong style="color:#C4622D; font-weight: 900; background: linear-gradient(180deg, transparent 60%, rgba(196, 98, 45, 0.2) 60%);">autoconhecimento clínico</strong> mais transformadora da sua vida. Aqui você não vai apenas <em style="font-family: 'Georgia', serif;">entender</em> seus monstrinhos internos — você vai aprender a escutar, acolher, ressignificar e <strong style="font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #1a1a1a;">domá-los</strong>.
-            </p>
-        </div>
+<!-- Início da Página 2: O Despertar do Domador -->
+<div class="doma-pagina bg-minimalista-cores" id="pag-2" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    
+    <!-- Elementos Decorativos de Fundo (Estilo Sketch/Caderno) -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.03; pointer-events: none; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; min-height: 100%;">
         
-        <!-- Botão Avançar -->
-        <div style="text-align: center; margin-top: 6vh; margin-bottom: 4vh;">
-            <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase;">
-                Mapa da Travessia ➔
-            </button>
+        <div style="text-align:center; width:100%; position: relative; z-index: 2;">
+            
+            <!-- Ícone do Cérebro em Destaque -->
+            <div style="font-size:clamp(3.5rem, 10vh, 5.5rem); margin-bottom: 1vh; filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.1)); transform: rotate(-3deg);">
+                🧠
+            </div>
+            
+            <!-- Título / Subtítulo -->
+            <p style="font-family:'Cinzel', serif; font-size:clamp(1.2rem, 3vh, 1.6rem); color:#1a1a1a; font-weight: 800; text-align:center; margin-bottom:4vh; letter-spacing: 2px; text-transform: uppercase; background: #fef08a; display: inline-block; padding: 4px 15px; border-radius: 4px; box-shadow: 2px 2px 0px #1a1a1a; border: 2px solid #1a1a1a;">
+                O Despertar do Domador
+            </p>
+            
+            <!-- Caixa de Texto Introdutório (Estilo Ficha) -->
+            <div class="caixa-padrao" style="padding: 4vh 30px; margin-bottom: 4vh; background-color: #ffffff; border: 2px solid #1a1a1a; border-radius: 12px; box-shadow: 6px 6px 0px rgba(0,0,0,0.05); position: relative;">
+                
+                <!-- Detalhe visual de fita adesiva -->
+                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(-2deg); width: 60px; height: 20px; background-color: rgba(254, 240, 138, 0.8); box-shadow: 1px 1px 3px rgba(0,0,0,0.1);"></div>
+
+                <p class="doma-texto-corrido" style="text-align:center; font-size:clamp(1.1rem, 2.5vh, 1.3rem); line-height: 1.8; margin-bottom:0; color: #333;">
+                    Bem-vindo(a) à Travessia de <strong style="color:#C4622D; font-weight: 900; background: linear-gradient(180deg, transparent 60%, rgba(196, 98, 45, 0.2) 60%);">autoconhecimento clínico</strong> mais transformadora da sua vida. Aqui você não vai apenas <em style="font-family: 'Georgia', serif; font-size: 1.1em;">entender</em> seus monstrinhos internos — você vai aprender à escutar, acolher, ressignificar e <strong style="font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #1a1a1a;">domá-los</strong>.
+                </p>
+            </div>
+
+            <!-- Início da Seção Expansível (Details) -->
+            <details style="margin-bottom: 30px; border: 2px solid #1a1a1a; border-radius: 8px; overflow: hidden; background-color: #ffffff; box-shadow: 4px 4px 0px rgba(0,0,0,0.9); text-align: left; transition: all 0.3s ease;">
+                <summary style="cursor: pointer; padding: 18px 20px; background-color: #f9f9f9; font-size: clamp(1.1rem, 2.5vh, 1.25rem); font-weight: 900; color: #1a1a1a; list-style: none; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1a1a1a; font-family: 'Nunito', sans-serif; text-transform: uppercase; letter-spacing: 1px;">
+                    <span style="display: flex; align-items: center; gap: 10px;">
+                        <span style="background-color: #C4622D; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span>
+                        Mensagem de Boas-Vindas
+                    </span>
+                    <span style="font-size: 1.2em; color: #C4622D;">&#x25BC;</span>
+                </summary>
+                
+                <div style="padding: 25px 30px; background-image: repeating-linear-gradient(transparent, transparent 29px, #f0f0f0 30px); background-attachment: local;">
+                    
+                    <p class="doma-texto-corrido" style="font-size:clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.8; margin-bottom: 20px; color:#1a1a1a; text-align: center;">
+                        <strong style="font-family: 'Caveat', cursive; font-size: 1.8rem; color: #C4622D;">Olá, leitor(a),</strong>
+                    </p>
+                    
+                    <p class="doma-texto-corrido" style="font-size:clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.8; margin-bottom: 20px; color:#1a1a1a;">
+                        <strong></strong> Talvez você já conheça alguns dos seus monstros internos — a <strong style="color:#C4622D; font-weight: 800;">Ansiedade</strong>, o <strong style="color:#C4622D; font-weight: 800;">Medo</strong>, a <strong style="color:#C4622D; font-weight: 800;">Baixa Autoestima</strong> — ou talvez sinta uma bagunça de emoções que ainda nem consiga dar nome.
+                    </p>
+                    
+                    <p class="doma-texto-corrido" style="font-size:clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.8; margin-bottom: 25px; color:#1a1a1a; background-color: #fff4e6; padding: 15px 20px; border-left: 4px solid #C4622D; border-radius: 0 8px 8px 0; box-shadow: 2px 2px 0px rgba(196, 98, 45, 0.1);">
+                        💡 <strong style="font-weight: 900; text-transform: uppercase; font-size: 0.9em;">A boa notícia:</strong> Eles não são invencíveis. <strong></strong>.
+                    </p>
+                    
+                    <p class="doma-texto-corrido" style="font-size:clamp(1.05rem, 2.5vh, 1.2rem); line-height: 1.8; margin-bottom:0; color:#1a1a1a;">
+                        A proposta aqui é a <strong style="background: rgba(254, 240, 138, 0.6); padding: 2px 5px;">autodescoberta</strong>: um caminho profundo para integrar todas as partes do seu ser e viver de forma muito mais autêntica. Esteja preparado(a) para momentos de desconforto, mas, acima de tudo, para uma <strong style="color: #C4622D; font-weight: 900; text-decoration: underline; text-decoration-color: #fef08a; text-decoration-thickness: 3px;">profunda libertação</strong>.
+                    </p>
+                    
+                </div>
+            </details>
+            <!-- Fim da Seção Expansível -->
+
+            <!-- INÍCIO DO BOTÃO INCLUÍDO (Estilo Consistente com a Página 1) -->
+            <div style="text-align: center; margin-top: 6vh; margin-bottom: 4vh;">
+                <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: 2px solid #1a1a1a; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase;" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+                    Mapa da Travessia ➔
+                </button>
+            </div>
+            <!-- FIM DO BOTÃO INCLUÍDO -->
+
         </div>
     </div>
 </div>
+<!-- Fim da Página 2 -->
