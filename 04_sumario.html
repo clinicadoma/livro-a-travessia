@@ -1,11 +1,12 @@
 <style>
-    /* Trava do Sumário (Gamificação Original) */
+    /* TRAVAS DO SUMÁRIO (GAMIFICAÇÃO) - Preservado do original */
     .sumario-item-travado {
         opacity: 0.5 !important;
         cursor: not-allowed !important;
         pointer-events: none !important; 
         filter: grayscale(100%) !important;
     }
+    /* Esta linha mata qualquer clique nos emojis e textos dentro do botão trancado */
     .sumario-item-travado * {
         pointer-events: none !important;
     }
@@ -13,12 +14,10 @@
         content: " 🔒";
         font-size: 0.9em;
     }
-    .scroll-oculto::-webkit-scrollbar { display: none; }
-    .scroll-oculto { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
 <!-- Início da Página: Sumário -->
-<div class="doma-pagina ativa bg-minimalista-cores" id="pag-sumario" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative; display: flex;">
+<div class="doma-pagina bg-minimalista-cores" id="pag-sumario" style="background-color: #fcfcfc; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
     
     <!-- Elementos Decorativos de Fundo (Estilo Caderno) -->
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; pointer-events: none; background-image: linear-gradient(#1a1a1a 1px, transparent 1px); background-size: 100% 40px;"></div>
@@ -85,7 +84,7 @@
                 </div>
             </div>
 
-            <!-- Item O Próximo Nível -->
+            <!-- ITENS COMENTADOS (Atualizados para o novo estilo caso sejam ativados) -->
             <div class="item-sumario sumario-item-travado" data-alvo="pag-proximo-nivel" style="background: #ffffff; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 2px solid #1a1a1a; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-proximo-nivel')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
                 <div style="background: #fff7ed; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0px #1a1a1a; position: relative; z-index: 3;">🧠</div>
                 <div>
@@ -94,7 +93,6 @@
                 </div>
             </div>
 
-            <!-- Item O Mapa Final -->
             <div class="item-sumario sumario-item-travado" data-alvo="pag-mapa-final" style="background: #fffbeb; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 20px; border: 3px solid #f59e0b; cursor: pointer; box-shadow: 4px 4px 0px #f59e0b; transition: all 0.2s ease; position: relative; z-index: 2;" onclick="irParaTela('pag-mapa-final')" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #f59e0b';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #f59e0b';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #f59e0b';">
                 <div style="background: #f59e0b; min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #b45309; box-shadow: 2px 2px 0px #b45309; position: relative; z-index: 3;">🗺️</div>
                 <div>
@@ -106,46 +104,3 @@
     </div>
 </div>
 <!-- Fim da Página: Sumário -->
-
-<script>
-// Script Isolado para garantir que a trava visual do sumário funcione perfeitamente
-// mesmo com o código fragmentado em módulos HTML separados.
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Mapeia os índices em que essas páginas apareciam no seu código original 
-    // (Isso garante que a leitura do seu localStorage continue 100% precisa)
-    const indicesOriginais = {
-        'pag-3': 4,
-        'pag-5': 6,
-        'pag-7': 8,
-        'pag-8': 9,
-        'pag-10': 11,
-        'pag-proximo-nivel': 12,
-        'pag-mapa-final': 13
-    };
-
-    function atualizarVisualSumarioLocal() {
-        let maxPaginaAlcancada = 0;
-        try {
-            maxPaginaAlcancada = parseInt(localStorage.getItem('doma_max_pagina')) || 0;
-        } catch(e) {}
-
-        const itens = document.querySelectorAll('#pag-sumario .item-sumario');
-        
-        itens.forEach(item => {
-            const alvoId = item.getAttribute('data-alvo');
-            const alvoIndex = indicesOriginais[alvoId] || 999999;
-            
-            // Regra Original: pag-3 e pag-roleta sempre abertos. O restante depende do maxPaginaAlcancada
-            if (alvoId === 'pag-3' || alvoId === 'pag-roleta' || maxPaginaAlcancada >= alvoIndex) {
-                item.classList.remove('sumario-item-travado');
-            } else {
-                item.classList.add('sumario-item-travado');
-            }
-        });
-    }
-
-    // Roda a verificação inicial
-    atualizarVisualSumarioLocal();
-});
-</script>
