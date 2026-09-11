@@ -1,0 +1,48 @@
+<div class="doma-pagina ativa" id="pag-observador" style="background-color: #f0f9ff; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; position: relative;">
+    
+    <!-- Fundo Nuvens Sutis -->
+    <div style="position: absolute; top: 10%; left: 10%; font-size: 4rem; opacity: 0.2; filter: grayscale(100%);">☁️</div>
+    <div style="position: absolute; bottom: 20%; right: 10%; font-size: 5rem; opacity: 0.2; filter: grayscale(100%);">☁️</div>
+
+    <div class="wrapper-isolado" style="padding-top: 10px; padding-bottom: 10px; padding-left: 5vw; padding-right: 5vw; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100%;">
+        
+        <div style="background: #ffffff; padding: 5vh 30px; border-radius: 24px; border: 3px solid #1a1a1a; width: 100%; box-shadow: 8px 8px 0px #0284c7; position: relative; z-index: 2;">
+            
+            <!-- SVG Observador e a Nuvem -->
+            <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 2vh;">
+                <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" style="width: 150px; height: auto;">
+                    <!-- Nuvem com raio -->
+                    <path d="M120,60 C120,40 150,40 160,50 C175,45 190,60 180,75 C190,90 170,100 155,95 C145,110 115,100 120,80 Z" fill="#e2e8f0" stroke="#1a1a1a" stroke-width="3"/>
+                    <path d="M140,95 L135,110 L145,110 L140,125" fill="#fef08a" stroke="#1a1a1a" stroke-width="2"/>
+                    <!-- Olho observador (Sol) -->
+                    <circle cx="50" cy="60" r="30" fill="#fef08a" stroke="#1a1a1a" stroke-width="3"/>
+                    <path d="M30,60 Q50,40 70,60 Q50,80 30,60 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+                    <circle cx="50" cy="60" r="10" fill="#0284c7"/>
+                    <!-- Linhas de observação -->
+                    <path d="M85,60 L110,60 M90,50 L115,55 M90,70 L115,65" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 4"/>
+                </svg>
+            </div>
+
+            <h3 style="font-family: 'Arial Black', Impact, sans-serif; text-transform: uppercase; font-size: clamp(1.4rem, 4vw, 1.8rem); text-align: center; margin-bottom: 20px; color: #1a1a1a;">
+                O Truque do Observador
+            </h3>
+            
+            <p class="doma-texto-corrido" style="color: #1a1a1a; font-size: clamp(1.05rem, 2.5vh, 1.2rem); text-align: center; line-height: 1.6; margin-bottom: 15px; font-weight: 600;">
+                As nuvens pretas (pânico, dor, culpa) passam e assustam. Mas elas não são você.
+            </p>
+            <p class="doma-texto-corrido" style="color: #1a1a1a; font-size: clamp(1.05rem, 2.5vh, 1.2rem); text-align: center; line-height: 1.6; margin-bottom: 25px; font-weight: 600;">
+                <strong style="color: #0284c7; font-weight: 900; text-transform: uppercase;">A Mecânica é simples:</strong> Você não é o clima ruim. Você é o <b style="background: #fef08a; padding: 0 5px; border: 2px solid #1a1a1a; border-radius: 4px;">CÉU</b> que observa a tempestade passar sem ser destruído por ela.
+            </p>
+            
+            <div style="background: #fef08a; padding: 20px; border-radius: 12px; border: 2px solid #1a1a1a; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.1); transform: rotate(1deg);">
+                <p class="doma-texto-corrido" style="text-align: center; font-weight: 900; margin: 0; font-size: 1rem; color: #1a1a1a;">
+                    💡 Dica Prática: Quando a crise bater, diga: <em style="font-family: 'Georgia', serif; font-weight: bold; color: #0369a1;">"Eu estou vendo uma nuvem de medo passar"</em>, em vez de dizer "Eu estou com medo".
+                </p>
+            </div>
+        </div>
+        
+        <button class="btn-doma" style="background-color: #0284c7; color: #ffffff; border: 2px solid #1a1a1a; margin-top: 5vh; padding: 18px 45px; font-size: clamp(1.1rem, 2.5vh, 1.3rem); font-family: 'Nunito', sans-serif; font-weight: 900; letter-spacing: 1px; border-radius: 50px; cursor: pointer; box-shadow: 4px 4px 0px #1a1a1a; transition: all 0.2s ease; text-transform: uppercase; width: 100%;" onclick="mudarPagina(1)" onmouseover="this.style.transform='translateY(-2px) translateX(-2px)'; this.style.boxShadow='6px 6px 0px #1a1a1a';" onmouseout="this.style.transform='translateY(0) translateX(0)'; this.style.boxShadow='4px 4px 0px #1a1a1a';" onmousedown="this.style.transform='translateY(4px) translateX(4px)'; this.style.boxShadow='0px 0px 0px #1a1a1a';">
+            ENTRAR NO LABORATÓRIO ➔
+        </button>
+    </div>
+</div>
