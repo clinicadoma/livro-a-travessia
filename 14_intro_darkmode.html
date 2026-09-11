@@ -1,0 +1,32 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+    .bg-dm { background: #080c14 !important; background-image: radial-gradient(ellipse at 80% 5%,  rgba(244,114,182,.14) 0%, transparent 50%), radial-gradient(ellipse at 5% 95%,  rgba(124,58,237,.10)  0%, transparent 50%) !important; }
+    .dm-card { width: 100%; background: #131e2e; border: 1px solid rgba(255,255,255,.09); border-radius: 16px; padding: 22px 18px; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+    .dm-tag { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #f472b6; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+    .dm-h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.45rem, 6vw, 1.9rem); color: #ffffff !important; margin: 0 0 13px; line-height: 1.2; }
+    .dm-p { font-size: clamp(.87rem, 3.5vw, .96rem); color: #e2e8f0 !important; line-height: 1.75; margin: 0 0 14px; font-family: 'DM Sans', sans-serif; }
+    .dm-p strong { color: #f472b6 !important; }
+    .dm-alert { background: rgba(248,113,113,.08); border: 1px dashed rgba(248,113,113,.4); border-radius: 10px; padding: 14px; color: #fca5a5 !important; font-size: clamp(.87rem,3.5vw,.96rem); font-weight: 600; text-align: center; line-height: 1.6; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
+    .dm-hr { border: none; border-top: 1px solid rgba(255,255,255,.1); margin: 16px 0; }
+    .dm-btn { display: block; width: 100%; padding: 14px 18px; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-size: .87rem; font-weight: 700; letter-spacing: .04em; cursor: pointer; text-align: center; box-sizing: border-box; margin-top: 4px; }
+    .dm-btn-pink { background: linear-gradient(135deg,#be185d,#f472b6); color: #fff !important; }
+    .dm-btn-pulse { animation: dm-pulse 2.4s ease-in-out infinite; }
+    @keyframes dm-pulse { 0%,100%{opacity:1} 50%{opacity:.8} }
+</style>
+
+<div class="bg-dm" style="width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 15px; box-sizing: border-box;">
+    <div class="wrapper-isolado" style="width: 100%; max-width: 800px; margin: 0 auto;">
+        <div class="dm-card">
+            <span class="dm-tag">🤔 Pergunta Clínica</span>
+            <h1 class="dm-h1">Por que ninguém nos ensinou a sentir?</h1>
+            <p class="dm-p">
+                Ensinaram a "engolir o choro" e a "performar força". O resultado? Quando a dor não encontra palavras, <strong>ela transborda para o corpo.</strong>
+            </p>
+            <div class="dm-alert">
+                O corpo é o último recurso do inconsciente. Ele grita quando a mente não consegue mais segurar.
+            </div>
+            <hr class="dm-hr">
+            <button class="dm-btn dm-btn-pink dm-btn-pulse" onclick="window.mudarPagina(1)">MAPEAR MEUS SINTOMAS ➔</button>
+        </div>
+    </div>
+</div>
