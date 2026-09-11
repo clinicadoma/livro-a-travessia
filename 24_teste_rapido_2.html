@@ -1,0 +1,35 @@
+<div class="doma-pagina bg-templo-luz swiper-no-swiping" id="pag-25" style="height: 100dvh; overflow-y: auto;">
+    <div class="wrapper-isolado" style="padding: clamp(70px, 12vh, 120px) 20px clamp(50px, 10vh, 100px) 20px; width: 100%; max-width: 700px; min-height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
+        
+        <div style="background: #ffffff; padding: clamp(25px, 4vh, 40px) clamp(20px, 4vw, 40px); border-radius: 20px; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.15); border-top: 5px solid #f59e0b; width: 100%; text-align: center;">
+            <h2 style="color: #d97706; font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 900; margin-top: 0; margin-bottom: 15px;">🧠 Teste Rápido</h2>
+            <p style="color: #475569; font-size: clamp(1rem, 2.5vw, 1.25rem); line-height: 1.6; margin-bottom: 25px; font-weight: bold;">
+                Qual é o verdadeiro significado da palavra "Monstro" dentro da Clínica Doma?
+            </p>
+            
+            <button id="btn-revelar-2" class="btn-doma efeito-tremor" style="background: #f59e0b; color: white; border: none; width: 100%; padding: clamp(15px, 3vh, 20px); border-radius: 12px; font-weight: 900; font-size: clamp(1.1rem, 2.5vw, 1.3rem); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);" onclick="document.getElementById('opcoes-teste-2').style.display='block'; this.style.display='none';">
+                VER OPÇÕES ➔
+            </button>
+
+            <div id="opcoes-teste-2" style="display: none; animation: fadeInFesta 0.6s ease;">
+                <button id="btn-teste-2-a" class="btn-doma" style="background: #f1f5f9; color: #334155; border: 2px solid #cbd5e1; width: 100%; padding: clamp(15px, 3vh, 20px); margin-bottom: 15px; border-radius: 12px; font-weight: 600; text-align: left; font-size: clamp(1rem, 2vw, 1.15rem);" onclick="verificarQuizIntro(this, true, 10, 2)">
+                    A) Aquele que mostra ou aquilo que revela algo importante sobre nós.
+                </button>
+                
+                <button id="btn-teste-2-b" class="btn-doma" style="background: #f1f5f9; color: #334155; border: 2px solid #cbd5e1; width: 100%; padding: clamp(15px, 3vh, 20px); margin-bottom: 15px; border-radius: 12px; font-weight: 600; text-align: left; font-size: clamp(1rem, 2vw, 1.15rem);" onclick="verificarQuizIntro(this, false, 10, 2)">
+                    B) Uma criatura inimiga que deve ser combatida e destruída a todo custo.
+                </button>
+
+                <button id="btn-teste-2-c" class="btn-doma" style="background: #f1f5f9; color: #334155; border: 2px solid #cbd5e1; width: 100%; padding: clamp(15px, 3vh, 20px); border-radius: 12px; font-weight: 600; text-align: left; font-size: clamp(1rem, 2vw, 1.15rem);" onclick="verificarQuizIntro(this, false, 10, 2)">
+                    C) Apenas uma sensação passageira e que deve ser ignorada.
+                </button>
+            </div>
+        </div>
+
+        <div id="btn-continuar-teste-2" style="display: none; margin-top: 3vh; text-align: center; width: 100%;">
+            <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: none; padding: 15px 35px; font-size: clamp(1rem, 2vh, 1.2rem); font-family: inherit; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(196, 98, 45, 0.3); transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.opacity='0.9'; this.style.transform='scale(1.02)';" onmouseout="this.style.opacity='1'; this.style.transform='scale(1)';">
+                CONTINUAR  ➔
+            </button>
+        </div>
+    </div>
+</div>
