@@ -1,0 +1,183 @@
+<!-- SLIDE: ROLETA DE BOAS-VINDAS (INTRODUÇÃO) COM CARTEIRA  -->
+<div class="doma-pagina bg-grad-roxoverde" id="pag-roleta" style="background-color: #faf6ee; font-family: 'Nunito', sans-serif; width: 100%; height: 100vh; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative;">
+    
+    <div class="btn-voltar-sumario" onclick="irParaTela('pag-mapa-final')" style="position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.9); border: 2px solid #cbd5e1; border-radius: 8px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 99999;">☰</div>
+    
+    <!-- Elementos Decorativos de Fundo -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.04; pointer-events: none; background-image: radial-gradient(#1a1a1a 2px, transparent 2px); background-size: 30px 30px;"></div>
+
+    <div class="wrapper-isolado" style="width: 100%; max-width: 420px; text-align: center; position: relative; z-index: 2; padding: 10px 0;">
+        <div style="font-size: clamp(5rem, 12vh, 6.5rem); margin-bottom: 10px; animation: flutuar 3s ease-in-out infinite; filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.15));">🎁</div>
+        
+        <h2 style="color: #1a1a1a; font-family: 'Arial Black', Impact, sans-serif; font-weight: 900; font-size: clamp(1.8rem, 5vw, 2.2rem); margin-bottom: 25px; margin-left: 20px; margin-right: 20px; line-height: 1.1; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+            <span style="background-color: #fef08a; padding: 4px 15px; border-radius: 8px; border: 2px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; display: inline-block; transform: rotate(-1.5deg);">
+                Roleta de Boas-Vindas
+            </span>
+        </h2>
+        
+        <div style="background: #1a1a1a; border-radius: 8px; padding: 6px 15px; display: inline-block; margin-bottom: 25px; border: 2px solid #ea580c; box-shadow: 3px 3px 0px rgba(0,0,0,0.15);">
+            <p style="color: #ffffff; font-weight: 900; font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 1px;">
+                Giros disponíveis: <span id="contador-giros-intro" style="color: #10b981; font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; font-weight: 900; margin-left: 5px;">3</span>
+            </p>
+        </div>
+
+        <div class="roleta-container" style="position: relative; display: flex; align-items: center; justify-content: center; border: 12px solid #bae6fd; border-radius: 50%; box-shadow: 0 10px 30px rgba(186, 230, 253, 0.6); background: white; margin: 0 auto; width: 320px; height: 320px; box-sizing: border-box;">
+            <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 100; width: 28px; height: 38px; background: #f43f5e; clip-path: polygon(100% 0, 0 0, 50% 100%);"></div>
+            <canvas id="canvasRoletaIntro" width="280" height="280" style="display: block; border-radius: 50%; border: 8px solid white; background: white; box-shadow: 0 0 0 4px #bae6fd;"></canvas>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50; background: white; border: 3px solid #bae6fd; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <img src="https://i.postimg.cc/HLGxyf9V/Captura-de-tela-2025-09-27-133248.png" style="width: 35px;" alt="Mascote Doma">
+            </div>
+        </div>
+
+        <button id="btnGirarRoletaIntro" class="btn-doma pulse-btn" onclick="girarRoletaIntro()" style="background-color: #ea580c; color: white; margin-top: 30px; width: 80%; border-radius: 50px; font-weight: 900; padding: 18px; border: 2px solid #1a1a1a; box-shadow: 4px 4px 0px #1a1a1a; font-size: 1.15rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;">
+            GIRAR AGORA ➔
+        </button><br><br>
+    </div>
+</div>
+
+<!-- MODAL DE RESULTADO: ROLETA DE BOAS-VINDAS -->
+<div id="modal-intro-doma" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.97); z-index: 999999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(10px);">
+    <div style="background: white; width: 100%; max-width: 380px; max-height: 85vh; border-radius: 30px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; position: relative;">
+        <div id="intro-topo" style="padding: 30px 20px 20px 20px; color: white; text-align: center; flex-shrink: 0; position: relative;">
+            <div style="position: absolute; top: 15px; right: 15px; background: white; color: #ea580c; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">+10 COINS 🪙</div>
+            <div id="intro-visual" style="font-size: 4rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));"></div>
+            <h3 id="intro-nome" style="font-weight: 900; font-size: 1.8rem; margin: 5px 0 0 0; font-family: 'Quicksand', sans-serif;"></h3>
+        </div>
+        <div style="padding: 25px 20px; background: white; overflow-y: auto; flex-grow: 1; text-align: center;">
+            <h4 style="color: #1e1b4b; margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; font-weight: 900;"> Conheça seu hóspede!</h4>
+            <p id="intro-descricao" style="color: #475569; font-weight: 600; font-size: 1.05rem; line-height: 1.5; margin-bottom: 20px;"></p>
+            <div style="background: #fdf4ff; border: 2px dashed #f0abfc; border-radius: 15px; padding: 15px;">
+                <p style="color: #c026d3; font-weight: 800; font-size: 0.9rem; margin: 0;">Você acaba de receber 10 Doma Coins na sua carteira. Use-os com sabedoria no decorrer do livro!</p>
+            </div>
+        </div>
+        <div style="padding: 15px 20px; background: #f8fafc; border-top: 1px solid #eee; flex-shrink: 0;">
+            <button id="btn-resgatar-intro" onclick="fecharModalESomarCoins()" style="background: #1e1b4b; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(30,27,75,0.3);">
+                RESGATAR E CONTINUAR ➔
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+window.premiosIntro = [
+    { label: "INSEGURANÇA", visual: "🎭", cor: "#FF85B3", descricao: "A Insegurança é apenas você duvidando do seu valor. Vamos mapeá-la juntos." },
+    { label: "MEDO", visual: "🛡️", cor: "#5CD1FF", descricao: "O Medo te protege do perigo real; a Ansiedade do imaginário. Você está pronto para enfrentá-lo?" },
+    { label: "REJEIÇÃO", visual: "❄️", cor: "#B388FF", descricao: "Rejeição dói pelo que você acha que o outro pensa de você. Vamos derreter esse gelo ?" },
+    { label: "ANSIEDADE", visual: "⏳", cor: "#FFB74D", descricao: "Estar ocupado não é ser produtivo. Às vezes é só a Ansiedade roubando seu tempo. Cuidado!" },
+    { label: "CULPA", visual: "⛓️", cor: "#81D4FA", descricao: "A Responsabilidade corrige o erro; a Culpa apenas te castiga. Aceita quebrar essas correntes?" },
+    { label: "AUTOESTIMA", visual: "🪞", cor: "#FFD54F", descricao: "Baixa Autoestima é acreditar que o seu lugar não existe. Vamos limpar esse espelho." },
+    { label: "VAZIO", visual: "🌌", cor: "#CE93D8", descricao: "O Vazio é a ausência de você mesmo na sua história. Está na hora de preenchê-lo." },
+    { label: "RAIVA", visual: "🔥", cor: "#FF5252", descricao: "Explosão não é personalidade forte. É o monstro no controle. Vou te ajudar a domá-lo." },
+    { label: "SEM NOME", visual: "🕯️", cor: "#A5D6A7", descricao: "Nem toda dor tem nome, mas todas ocupam espaço em você. Vamos iluminar essa sombra." },
+    { label: "BOOM!", visual: "💥", cor: "#37474F", descricao: "Às vezes tudo explode. Sorte que você está apenas começando sua Travessia e pode reconstruir." }
+];
+
+window.anguloIntro = 0;
+window.girandoIntro = false;
+window.girosIntroFeitos = 0;
+window.maxGirosIntro = 3; 
+
+window.desenharRoletaIntro = function() {
+    const canvases = document.querySelectorAll('#canvasRoletaIntro');
+    canvases.forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const numPremios = window.premiosIntro.length;
+        const arco = (2 * Math.PI) / numPremios;
+        ctx.clearRect(0, 0, 280, 280);
+
+        window.premiosIntro.forEach((p, i) => {
+            const ang = window.anguloIntro + i * arco;
+            ctx.beginPath();
+            ctx.fillStyle = p.cor;
+            ctx.moveTo(140, 140);
+            ctx.arc(140, 140, 140, ang, ang + arco);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(255,255,255,0.4)"; ctx.lineWidth = 2; ctx.stroke();
+            ctx.save();
+            ctx.translate(140, 140); 
+            ctx.rotate(ang + arco / 2);
+            ctx.fillStyle = "#fff"; 
+            ctx.font = "900 15px Quicksand"; 
+            ctx.shadowColor = "rgba(0,0,0,0.6)"; 
+            ctx.shadowBlur = 5;
+            ctx.textAlign = "right"; 
+            ctx.fillText(p.label, 130, 5, 110);
+            ctx.restore();
+        });
+        ctx.beginPath();
+        ctx.arc(140, 140, 138, 0, 2 * Math.PI);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#bae6fd";
+        ctx.stroke();
+    });
+};
+
+window.girarRoletaIntro = function() {
+    if (window.girosIntroFeitos >= window.maxGirosIntro || window.girandoIntro) return;
+    window.girandoIntro = true;
+    window.girosIntroFeitos++;
+    
+    document.querySelectorAll('#contador-giros-intro').forEach(el => el.innerText = (window.maxGirosIntro - window.girosIntroFeitos));
+    
+    let velocidade = 0.8 + Math.random() * 0.4; 
+    let friccao = 0.988; 
+    
+    document.querySelectorAll('#btnGirarRoletaIntro').forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+    });
+
+    const animarGiroIntro = () => {
+        velocidade *= friccao;
+        window.anguloIntro += velocidade;
+        window.desenharRoletaIntro();
+        if (velocidade > 0.0015) {
+            requestAnimationFrame(animarGiroIntro);
+        } else {
+            window.girandoIntro = false;
+            setTimeout(() => { window.processarResultadoIntro(); }, 1200); 
+        }
+    };
+    animarGiroIntro();
+};
+
+window.processarResultadoIntro = function() {
+    let arco = (2 * Math.PI) / window.premiosIntro.length;
+    let anguloRelativo = (Math.PI * 1.5 - window.anguloIntro) % (Math.PI * 2);
+    if (anguloRelativo < 0) anguloRelativo += Math.PI * 2;
+    let index = Math.floor(anguloRelativo / arco) % window.premiosIntro.length;
+    let m = window.premiosIntro[index];
+
+    document.querySelectorAll('#intro-topo').forEach(el => el.style.background = m.cor);
+    document.querySelectorAll('#intro-visual').forEach(el => el.innerText = m.visual);
+    document.querySelectorAll('#intro-nome').forEach(el => el.innerText = m.label);
+    document.querySelectorAll('#intro-descricao').forEach(el => el.innerText = m.descricao);
+    
+    document.querySelectorAll('#btn-resgatar-intro').forEach(btnModal => {
+        if(window.girosIntroFeitos >= window.maxGirosIntro) {
+            btnModal.innerHTML = "RESGATAR E INICIAR CAPÍTULO 1 ➔";
+        } else {
+            btnModal.innerHTML = "RESGATAR E GIRAR DE NOVO ➔";
+        }
+    });
+    document.querySelectorAll('#modal-intro-doma').forEach(modal => modal.style.display = 'flex');
+};
+
+window.fecharModalESomarCoins = function() {
+    if (typeof window.ganharMoedas === 'function') window.ganharMoedas(10);
+    document.querySelectorAll('#modal-intro-doma').forEach(modal => modal.style.display = 'none');
+    
+    if(window.girosIntroFeitos >= window.maxGirosIntro) {
+        if (typeof window.mudarPagina === 'function') window.mudarPagina(1);
+    } else {
+        document.querySelectorAll('#btnGirarRoletaIntro').forEach(btnGiro => {
+            btnGiro.disabled = false;
+            btnGiro.style.opacity = "1";
+            btnGiro.innerHTML = "GIRAR NOVAMENTE ➔";
+        });
+    }
+};
+
+setTimeout(window.desenharRoletaIntro, 500);
+setTimeout(window.desenharRoletaIntro, 1500);
+</script>
