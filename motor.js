@@ -101,5 +101,89 @@ window.ganharMoedas = function(quantidade, eventoClick = null) {
     }, 1500);
 };
 
+window.fecharModal = function() {
+    const overlay = document.getElementById('domaModal');
+    const box = document.getElementById('domaModalBox');
+    if(!overlay) return;
+    overlay.style.opacity = '0';
+    box.style.transform = 'scale(0.8)';
+    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+};
+
+window.abrirModalDoma = function(titulo, texto, tipo, acaoAposFechar = null) {
+    const overlay = document.getElementById('domaModal');
+    const box = document.getElementById('domaModalBox');
+    const tit = document.getElementById('domaModalTitulo');
+    const txt = document.getElementById('domaModalTexto');
+    const img = document.getElementById('domaModalImg');
+    const btnOk = document.querySelector('.doma-modal-btn'); 
+
+    if (!overlay) return;
+
+    if (tipo === 'sucesso') {
+        img.src = 'https://i.postimg.cc/cHCq7BvW/autoestisma.png'; img.style.borderColor = '#10b981'; tit.style.color = '#047857';
+    } else if (tipo === 'amor') {
+        img.src = 'https://i.postimg.cc/ht0PpMtg/amor-proprio.png'; img.style.borderColor = '#be185d'; tit.style.color = '#be185d';
+    } else if (tipo === 'alerta') {
+        img.src = 'https://i.postimg.cc/7LxrhkDv/ansiedade.png'; img.style.borderColor = '#e11d48'; tit.style.color = '#be123c';
+    } else {
+        img.src = 'https://i.postimg.cc/HLGxyf9V/Captura-de-tela-2025-09-27-133248.png'; img.style.borderColor = '#f59e0b'; tit.style.color = '#b45309';
+    }
+
+    tit.innerText = titulo; txt.innerHTML = texto || "";
+    
+    btnOk.onclick = function() {
+        window.fecharModal();
+        if (acaoAposFechar) setTimeout(acaoAposFechar, 350); 
+    };
+    
+    overlay.style.display = 'flex';
+    setTimeout(() => { overlay.style.opacity = '1'; box.style.transform = 'scale(1)'; }, 10);
+};
+
+window.isCoerente = function(texto) {
+    let txt = texto.trim().toLowerCase();
+    if (txt.length < 4) return false; 
+    let vogais = txt.match(/[aeiouáéíóúãõâêô]/g);
+    if (!vogais || vogais.length === 0) return false; 
+    if (/(.)\1{4,}/.test(txt)) return false; 
+    if (/[bcdfghjklmnpqrstvwxyz]{5,}/.test(txt)) return false; 
+    if (txt.length > 15 && txt.indexOf(' ') === -1) return false; 
+    return true;
+};
+
+window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, modalTxt, modalTipo, pagAvanco) {
+    let todosVazios = true;
+    let incoerente = false;
+
+    for(let id of idsArray) {
+        let el = document.getElementById(id);
+        if(el && el.value.trim() !== '') {
+            todosVazios = false;
+            if(!window.isCoerente(el.value)) incoerente = true;
+        }
+    }
+
+    if(todosVazios) {
+        window.abrirModalDoma('🚨 EM BRANCO!', 'Por favor, escreva algo antes de validar. Não fuja do exercício!', 'alerta');
+        return;
+    }
+
+    if(incoerente) {
+        window.abrirModalDoma('🚨 CONCENTRE-SE!', 'O texto digitado não parece fazer sentido. Por favor, respire, concentre-se e escreva palavras reais. A fuga alimenta o monstro.', 'alerta');
+        return;
+    }
+
+    let jaGanhou = localStorage.getItem('doma_task_' + taskId);
+    if(!jaGanhou) {
+        if (window.ganharMoedas) window.ganharMoedas(moedasVal, null);
+        localStorage.setItem('doma_task_' + taskId, 'true');
+    }
+
+    window.abrirModalDoma(modalTit, modalTxt, modalTipo, function(){
+        if(pagAvanco !== null) window.mudarPagina(pagAvanco);
+    });
+};
+
 // Dá a partida no sistema
 iniciarSistema();
