@@ -25,10 +25,13 @@
     .peca-quebra-cabeca::before { content: ''; position: absolute; right: -10px; top: calc(50% - 10px); width: 20px; height: 20px; background: #b5952f; border-radius: 50%; z-index: -1; }
     .peca-quebra-cabeca::after { content: ''; position: absolute; bottom: -10px; left: calc(50% - 10px); width: 20px; height: 20px; background: #c5a233; border-radius: 50%; z-index: -1; }
     .peca-quebra-cabeca:active { cursor: grabbing; opacity: 0.95; }
+    
     .dragging { transition: none !important; z-index: 9999; animation: none !important; box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important; transform: scale(1.1) !important; }
     .peca-fantasma { position: absolute; width: 140px; height: 75px; background: #d4af37; border-radius: 10px; opacity: 0.4; pointer-events: none; z-index: 50; transition: opacity 0.4s, transform 0.4s; }
     .mini-peca { position: absolute; width: 20px; height: 14px; background: #d4af37; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
     
+    @keyframes pedraViva { 0% { transform: rotate(0deg); box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); } 25% { transform: rotate(-3deg) scale(1.02); box-shadow: 0 0 25px rgba(212, 175, 55, 0.9); } 50% { transform: rotate(3deg); box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); } 75% { transform: rotate(-3deg) scale(1.02); box-shadow: 0 0 25px rgba(212, 175, 55, 0.9); } 100% { transform: rotate(0deg); box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); } }
+    .animada { animation: pedraViva 2s infinite ease-in-out; }
     @keyframes quicarPeca { 0% { transform: translateY(-50px) rotate(0deg); opacity: 1; } 60% { transform: translateY(10px) rotate(15deg); } 80% { transform: translateY(-5px) rotate(5deg); } 100% { transform: translateY(0) rotate(10deg); opacity: 0.9; } }
     .quique { animation: quicarPeca 0.5s ease-out forwards; }
 
@@ -106,7 +109,7 @@
 
         <div class="area-peca" id="area-jogo-fisica">
             <p id="texto-instrucao" class="instrucao-arraste">👇 Arraste para o cesto correto 👇</p>
-            <div id="peca-arrastavel" class="peca-quebra-cabeca"><span id="texto-peca-jogo" style="line-height: 1.3;">...</span></div>
+            <div id="peca-arrastavel" class="peca-quebra-cabeca animada"><span id="texto-peca-jogo" style="line-height: 1.3;">...</span></div>
             
             <div id="area-botao-diagnostico" style="display: none; text-align: center; width: 100%; margin-top: 20px;">
                 <button class="btn-doma pulse-btn" style="background: linear-gradient(135deg, #d4af37, #b5952f); color: white; width: 100%; border: none; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);" onclick="mostrarDiagnosticoTriagem()">VER DIAGNÓSTICO CLÍNICO ❯</button>
@@ -247,7 +250,7 @@
             { t: "Tentar Salvar Parente de Vícios", desc: "Tentar curar parentes dos vícios e péssimas escolhas.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você limpa a sujeira ou esconde a bebida do adicto.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A própria vida e finanças.", c: "T", tipo: "emocional", pedeNome: true, d_eu: ["Aceitar que não posso curar a dor de outro adulto."], d_outro: ["Recusar dar dinheiro para cobrir rombos do vício."] },
             { t: "Cuidar de Todos e Esquecer de Mim", desc: "Cuidar de todos os adoentados e negligenciar o próprio corpo.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Você marca médico para filhos, mas está há anos sem fazer um exame.<br><br><strong style='color: #e11d48;'>O que você perde:</strong> A sua estrutura vital.", c: "T", tipo: "fisico", pedeNome: true, d_eu: ["Priorizar minhas refeições e sono antes de cuidar do outro."], d_outro: ["Exigir que outros parentes assumam turnos de cuidado."] },
             { t: "Viver Meus Planos em Paz", desc: "Amar a família, mas recusar o roteiro neurótico que te deram.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta assumir seus projetos e metas pessoais sem buscar aprovação.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> A autonomia sobre a sua própria história adulta.", c: "D", tipo: "mental", pedeNome: true, d_eu: ["Parar de pedir permissão para viajar ou mudar."], d_outro: ["Cortar críticas aos meus sonhos com 'Não pedi opinião'."] },
-            { t: "Aceitar Que Eles Não Vão Mudar", desc: "Suportar a frustração de que eles não vão mudar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta abandonar a fantasia de transformar seus parentes.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> O alívio psíquico de aceitar o real familiar.", c: "D", tipo: "emocional", pedeNome: true, d_eu: ["Abolir a fantasia de ter a família perfeita."], d_outro: ["Não discutir para tentar mudar a visão deles."] },
+            { t: "Aceitar Que Eles Não Vão Mudar", desc: "Suportar a frustração de que eles não vão mudar.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta abandonar a fantasia de transformar seus parentes.<br><br><strong style='color: #10b981;'>O que você deixa de ganhar:</strong> O alívio psíquico de aceitar o real familiar.", c: "D", type: "emocional", pedeNome: true, d_eu: ["Abolir a fantasia de ter a família perfeita."], d_outro: ["Não discutir para tentar mudar a visão deles."] },
             { t: "Proteger Minha Casa de Traumas", desc: "Impor limites para que sua casa não seja filial do trauma.", cons: "<strong style='color: #0ea5e9;'>Na prática:</strong> Falta estabelecer barreiras para impedir que fofocas invadam seu lar.<br><br><strong style='color: #10b981;'>O que você deixa de proteger:</strong> O seu santuário logístico de descanso.", c: "D", tipo: "fisico", pedeNome: true, d_eu: ["Manter minha casa focada apenas no meu descanso."], d_outro: ["Convidar a se retirar quem desrespeitar as regras da minha casa."] }
         ],
         'autocuidado': [
@@ -282,9 +285,15 @@
     let indexAtual = 0;
     let categoriaSelecionadaGlobal = null;
     let indiceTaticaEmEdicao = null; 
-    let triagemConcluida = false;
+    let fisicaJaConfigurada = false;
 
-    // 3. FUNÇÕES GLOBAIS EXPOSTAS
+    // 3. ÁUDIOS LOCAIS (Resgate das chamadas originais)
+    function tocarPegarPecaSeguro() { let a = document.getElementById('AUD_PEGAR'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
+    function tocarDropPraticoSeguro() { let a = document.getElementById('AUD_DROP_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
+    function tocarDropAusenteSeguro() { let a = document.getElementById('AUD_DROP_NAO_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} }
+    function tocarHoverCestoSeguro() { /* Pode adicionar um click sutil se quiser */ }
+
+    // 4. FUNÇÕES GLOBAIS EXPOSTAS
     window.iniciarJogoTriagem = function(categoria, elemento) {
         document.querySelectorAll('.btn-categoria').forEach(btn => btn.classList.remove('selecionada'));
         elemento.classList.add('selecionada');
@@ -304,7 +313,12 @@
         document.getElementById('triagem-tela-jogo').style.display = 'flex';
         
         mostrarProximaPecaTriagem();
-        setTimeout(configurarDragAndDropTriagem, 100);
+        
+        // CORREÇÃO CRÍTICA: Configura a física apenas UMA VEZ!
+        if (!fisicaJaConfigurada) {
+            configurarFisicaJogo();
+            fisicaJaConfigurada = true;
+        }
     };
 
     function mostrarProximaPecaTriagem() {
@@ -313,9 +327,11 @@
         const textPeca = document.getElementById('texto-peca-jogo');
         const textDesc = document.getElementById('desc-peca');
         
+        // Garante que a peça volte exatamente pro centro e recupere a animação de "pedra viva"
         peca.style.transition = 'transform 0.1s';
         peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
         peca.style.opacity = '1';
+        peca.classList.add('animada'); 
         
         if (indexAtual < pecasExibicao.length) {
             const item = pecasExibicao[indexAtual];
@@ -344,93 +360,165 @@
         }
     }
 
-    // 4. MOTOR DRAG AND DROP
-    function configurarDragAndDropTriagem() {
-        const peca = document.getElementById('peca-arrastavel');
-        const areaJogo = document.getElementById('area-jogo-fisica');
-        let isDragging = false, startX, startY, currentX, currentY, cestoAlvo = null;
+    // 5. MOTOR DRAG AND DROP RESTAURADO 100% ORIGINAL
+    function configurarFisicaJogo() {
+        var peca = document.getElementById('peca-arrastavel');
+        var areaJogo = document.getElementById('area-jogo-fisica');
+        var isDragging = false;
+        var startX, startY, currentX = 0, currentY = 0;
+        var cestoAlvo = null;
+        var rastroTimer = null;
+
+        function criarRastro(x, y, rotation) {
+            var fantasma = document.createElement('div');
+            fantasma.className = 'peca-fantasma';
+            fantasma.style.left = peca.offsetLeft + 'px';
+            fantasma.style.top = peca.offsetTop + 'px';
+            fantasma.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + rotation + 'deg)';
+            areaJogo.appendChild(fantasma);
+            setTimeout(function() { fantasma.style.opacity = '0'; }, 50);
+            setTimeout(function() { fantasma.remove(); }, 400);
+        }
 
         function onDragStart(e) {
             if(indexAtual >= pecasExibicao.length) return;
-            e.stopPropagation(); isDragging = true; peca.classList.add('dragging');
-            let clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
-            let clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
-            startX = clientX; startY = clientY;
-            const aud = document.getElementById('AUD_PEGAR'); if(aud){aud.currentTime=0;aud.play().catch(e=>{});}
+            e.stopPropagation(); 
+            isDragging = true; 
+            peca.classList.add('dragging'); 
+            peca.classList.remove('animada');
+            
+            var clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
+            var clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
+            
+            startX = clientX; 
+            startY = clientY; 
+            currentX = 0; 
+            currentY = 0; 
+            cestoAlvo = null; // CRÍTICO: Zera o alvo no primeiro clique
+
+            tocarPegarPecaSeguro();
         }
 
         function onDragMove(e) {
             if (!isDragging) return;
             if (e.cancelable) e.preventDefault();
-            let clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
-            let clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
-            currentX = clientX - startX; currentY = clientY - startY;
-            let rotation = currentX * 0.05;
-            peca.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotation}deg)`;
+            e.stopPropagation();
             
-            let rectPeca = peca.getBoundingClientRect();
-            let cX = rectPeca.left + (rectPeca.width/2);
-            let cY = rectPeca.top + (rectPeca.height/2);
-            let cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
-            let cTemp = null; let minD = Infinity;
-
-            cestos.forEach(c => {
-                let rC = c.getBoundingClientRect();
-                let rcX = rC.left + (rC.width/2);
-                let dX = Math.abs(cX - rcX);
-                if (cY > rC.top - 100) { if (dX < minD) { minD = dX; cTemp = c; } }
+            var clientX = e.type.indexOf('mouse') !== -1 ? e.clientX : e.touches[0].clientX;
+            var clientY = e.type.indexOf('mouse') !== -1 ? e.clientY : e.touches[0].clientY;
+            
+            currentX = clientX - startX; 
+            currentY = clientY - startY;
+            var rotation = currentX * 0.05;
+            
+            peca.style.transform = 'translate(' + currentX + 'px, ' + currentY + 'px) rotate(' + rotation + 'deg)';
+            
+            if (!rastroTimer) { 
+                criarRastro(currentX, currentY, rotation); 
+                rastroTimer = setTimeout(function() { rastroTimer = null; }, 80); 
+            }
+            
+            var rectPeca = peca.getBoundingClientRect();
+            var centroXPeca = rectPeca.left + (rectPeca.width / 2);
+            var centroYPeca = rectPeca.top + (rectPeca.height / 2);
+            
+            var cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
+            var cestoTemp = null;
+            var menorDistanciaX = Infinity;
+            
+            cestos.forEach(function(cesto) {
+                var rectCesto = cesto.getBoundingClientRect();
+                var centroXCesto = rectCesto.left + (rectCesto.width / 2);
+                var distanciaX = Math.abs(centroXPeca - centroXCesto);
+                
+                if (centroYPeca > rectCesto.top - 120) {
+                    if (distanciaX < menorDistanciaX) {
+                        menorDistanciaX = distanciaX;
+                        cestoTemp = cesto;
+                    }
+                }
             });
 
-            cestos.forEach(c => {
-                if (c === cTemp) c.classList.add('cesto-hover');
-                else c.classList.remove('cesto-hover');
+            cestos.forEach(function(c) {
+                if (c === cestoTemp) {
+                    if (!c.classList.contains('cesto-hover')) {
+                        c.classList.add('cesto-hover');
+                        tocarHoverCestoSeguro();
+                        if (navigator.vibrate) navigator.vibrate(10);
+                    }
+                } else {
+                    c.classList.remove('cesto-hover');
+                }
             });
-            cestoAlvo = cTemp;
+            
+            cestoAlvo = cestoTemp;
         }
 
         function onDragEnd(e) {
             if (!isDragging) return;
-            isDragging = false; peca.classList.remove('dragging');
-            document.querySelectorAll('.cesto').forEach(c => c.classList.remove('cesto-hover'));
+            isDragging = false; 
+            peca.classList.remove('dragging');
+            
+            var cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
+            cestos.forEach(function(c) { c.classList.remove('cesto-hover'); });
             
             if (cestoAlvo) {
-                let alvoStr = cestoAlvo.getAttribute('data-alvo');
-                if(alvoStr === 'existe') {
-                    let a = document.getElementById('AUD_DROP_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});}
-                } else {
-                    let a = document.getElementById('AUD_DROP_NAO_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});}
-                }
-                processarJogada(alvoStr);
+                var rectCesto = cestoAlvo.getBoundingClientRect();
+                var rectPecaInicial = peca.getBoundingClientRect();
+                var cX = currentX || 0;
+                var cY = currentY || 0;
+                
+                var destX = (rectCesto.left + rectCesto.width / 2) - (rectPecaInicial.left - cX + rectPecaInicial.width / 2);
+                var destY = (rectCesto.top + rectCesto.height / 2) - (rectPecaInicial.top - cY + rectPecaInicial.height / 2);
+                
+                peca.style.transition = 'transform 0.15s ease-in, opacity 0.15s';
+                peca.style.transform = 'translate(' + destX + 'px, ' + destY + 'px) scale(0.4)';
+                peca.style.opacity = '0';
+                
+                if (navigator.vibrate) navigator.vibrate(40);
+                
+                var alvoStr = cestoAlvo.getAttribute('data-alvo');
+                if (alvoStr === 'existe') tocarDropPraticoSeguro();
+                else if (alvoStr === 'nao-existe') tocarDropAusenteSeguro();
+                
+                var cestoCapturado = cestoAlvo;
+                setTimeout(function() { window.jogarNoCesto(cestoCapturado); }, 150);
             } else {
-                peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
+                peca.style.transform = 'translate(0px, 0px) rotate(0deg)'; 
+                peca.classList.add('animada');
             }
+            
+            cestoAlvo = null; // CRÍTICO: Previne que o clique dispare o cesto passado
+            currentX = 0; 
+            currentY = 0;
         }
 
-        peca.addEventListener('touchstart', onDragStart, {passive: false});
-        document.addEventListener('touchmove', onDragMove, {passive: false});
+        peca.addEventListener('touchstart', onDragStart, {passive: false}); 
+        document.addEventListener('touchmove', onDragMove, {passive: false}); 
         document.addEventListener('touchend', onDragEnd);
-        peca.addEventListener('mousedown', onDragStart);
-        document.addEventListener('mousemove', onDragMove);
+        peca.addEventListener('mousedown', onDragStart); 
+        document.addEventListener('mousemove', onDragMove); 
         document.addEventListener('mouseup', onDragEnd);
     }
 
-    function processarJogada(alvoStr) {
-        const itemOriginal = pecasExibicao[indexAtual];
+    // 6. PROCESSA A CAIXA E AVANÇA A PEÇA
+    window.jogarNoCesto = function(cestoDiv) {
+        var alvoStr = cestoDiv.getAttribute('data-alvo');
+        var interiorCesto = document.getElementById('interior-' + alvoStr);
+        var miniPeca = document.createElement('div');
+        miniPeca.className = 'mini-peca quique';
+        miniPeca.style.left = (Math.random() * 60 + 10) + '%'; 
+        miniPeca.style.bottom = '10px'; 
+        miniPeca.style.transform = 'rotate(' + ((Math.random() - 0.5) * 60) + 'deg)';
+        interiorCesto.appendChild(miniPeca);
+        
+        var itemOriginal = pecasExibicao[indexAtual];
         registroEscolhas.push({ 
             texto: itemOriginal.t, escolha: alvoStr, real: itemOriginal.c, 
             tipo: itemOriginal.tipo, d_eu: itemOriginal.d_eu, d_outro: itemOriginal.d_outro, 
             pedeNome: itemOriginal.pedeNome, cons: itemOriginal.cons, taticaDefinida: null
         });
-
-        // Efeito visual no cesto
-        const interior = document.getElementById('interior-' + alvoStr);
-        const mini = document.createElement('div');
-        mini.className = 'mini-peca quique';
-        mini.style.left = (Math.random() * 60 + 10) + '%';
-        mini.style.bottom = '10px';
-        mini.style.transform = `rotate(${(Math.random() - 0.5) * 60}deg)`;
-        interior.appendChild(mini);
-
+        
         indexAtual++;
         let pct = (indexAtual / 10) * 100;
         document.getElementById('barra-progresso').style.width = pct + '%';
@@ -439,7 +527,7 @@
         mostrarProximaPecaTriagem();
     }
 
-    // 5. DIAGNÓSTICO FINAL (LAUDO)
+    // 7. DIAGNÓSTICO FINAL (LAUDO)
     window.mostrarDiagnosticoTriagem = function() {
         document.getElementById('triagem-tela-jogo').style.display = 'none';
         document.getElementById('triagem-tela-laudo').style.display = 'block';
@@ -460,17 +548,17 @@
 
         if (pct >= 80) {
             tit.innerText = 'Laudo: Estrutura Blindada'; icon.innerText = '🛡️'; tit.style.color = '#059669';
-            btn.style.background = '#10b981'; msgBox.innerText = 'O mapeamento mostra que sua casa interna tem uma base fortíssima. Você sabe proteger seus limites.';
+            btn.style.background = '#10b981'; msgBox.innerText = 'O mapeamento mostra que sua casa interna tem uma base fortíssima. Você sabe proteger seus limites do inconsciente.';
         } else if (pct >= 40) {
             tit.innerText = 'Laudo: Reforma Necessária'; icon.innerText = '⚠️'; tit.style.color = '#c2410c';
-            btn.style.background = '#ea580c'; msgBox.innerText = 'Seu Lar tem pontos fortes, mas existem infiltrações emocionais ocupando o lugar da sua paz psíquica.';
+            btn.style.background = '#ea580c'; msgBox.innerText = 'Seu Lar tem pontos fortes, mas existem infiltrações emocionais ocupando o lugar da sua paz psíquica. Vamos tratá-las.';
         } else {
             tit.innerText = 'Laudo: Atenção Crítica'; icon.innerText = '🚨'; tit.style.color = '#be123c';
             btn.style.background = '#e11d48'; msgBox.innerText = 'A fundação do seu Lar está comprometida. A energia vital está sendo drenada. Inicie a reforma imediata.';
         }
     };
 
-    // 6. ESPELHO DA REALIDADE (AUTOESCRITA)
+    // 8. ESPELHO DA REALIDADE (AUTOESCRITA)
     window.prepararEspelhoAutoescrita = function() {
         document.getElementById('triagem-tela-laudo').style.display = 'none';
         
@@ -518,7 +606,7 @@
         window.scrollTo(0,0);
     };
 
-    // 7. PLANO TÁTICO
+    // 9. PLANO TÁTICO
     window.abrirPlanoGeral = function() {
         document.getElementById('triagem-tela-espelho').style.display = 'none';
         document.getElementById('triagem-tela-plano').style.display = 'block';
@@ -549,7 +637,7 @@
                     if (item.taticaDefinida) {
                         btnHtml = `<button class="btn-tatica-individual" onclick="window.abrirModalTatica(${index})" style="background:#10b981;">✅ TÁTICA ATIVA (EDITAR)</button>`;
                     } else {
-                        btnHtml = `<button class="btn-tatica-individual" onclick="window.abrirModalTatica(${index})" style="animation: pulseBtn 2s infinite;">🎯 DEFINIR INTERVENÇÃO</button>`;
+                        btnHtml = `<button class="btn-tatica-individual" onclick="window.abrirModalTatica(${index})">🎯 DEFINIR INTERVENÇÃO</button>`;
                     }
                 } else if (temSelecionada) {
                     btnHtml = `<div style="margin-top:10px; color:#64748b; font-weight:bold; font-size:0.8rem; text-align:center;">🔒 BLOQUEADO</div>`;
@@ -585,7 +673,7 @@
         renderizarListaDePecasNoPlano();
     };
 
-    // 8. TÁTICA E SALVAMENTO
+    // 10. TÁTICA E SALVAMENTO
     window.abrirModalTatica = function(index) {
         indiceTaticaEmEdicao = index;
         const item = registroEscolhas[index];
