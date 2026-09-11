@@ -188,4 +188,47 @@ window.processarFormulario = function(idsArray, taskId, moedasVal, modalTit, mod
     });
 };
 
+window.irParaTela = function(idAlvo) {
+    let indexTribunal = 0;
+    paginas.forEach((p, i) => { if(p.id === 'pag-tribunal-intro') indexTribunal = i; });
+    
+    let alvoIndex = 0;
+    paginas.forEach((p, i) => { if (p.id === idAlvo) alvoIndex = i; });
+    
+    // --- TRAVA JAVASCRIPT: IMPEDE A ABERTURA DE ITENS AINDA NÃO ALCANÇADOS ---
+    if (idAlvo !== 'pag-3' && idAlvo !== 'pag-roleta' && alvoIndex > maxPaginaAlcancada) {
+        return; // Corta a ação na raiz. Mesmo que clique, não abre!
+    }
+    
+    // Trava de Paywall (VIP)
+    if (alvoIndex >= indexTribunal && !isUsuarioPremium) {
+        document.getElementById('slide-paywall-vip').style.display = 'flex';
+        return;
+    }
+
+    // Executa a troca de tela
+    paginas.forEach((p, i) => {
+        if (p.id === idAlvo) {
+            paginas[pagAtiva].classList.remove('ativa');
+            paginas[pagAtiva].style.display = '';
+            pagAtiva = i;
+            p.classList.add('ativa');
+            p.scrollTop = 0;
+        }
+    });
+    
+    if (typeof atualizarVisibilidadeSeta === 'function') atualizarVisibilidadeSeta();
+    
+    // Atualiza a pontuação de avanço no menu
+    let idAtual = paginas[pagAtiva].id;
+    if (idAtual !== 'pag-mapa-final' && idAtual !== 'pag-sumario' && idAtual !== 'pag-mapa-travessia') {
+        if (pagAtiva > maxPaginaAlcancada) {
+            maxPaginaAlcancada = pagAtiva;
+            localStorage.setItem('doma_max_pagina', maxPaginaAlcancada);
+        }
+    }
+    
+    if (typeof atualizarVisualSumario === 'function') atualizarVisualSumario();
+};
+
 iniciarSistema();
