@@ -17,7 +17,8 @@
     .btn-categoria .icone { font-size: 1.8rem; }
     .btn-categoria .titulo { font-weight: 900; color: #1e1b4b; font-size: 0.75rem; text-transform: uppercase; line-height: 1.1; }
 
-    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 110px; width: 100%; max-width: 500px; margin: 30px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
+    /* MARGEM SUPERIOR AUMENTADA PARA 65PX PARA PROTEGER A LEGENDA DO PLACAR */
+    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 110px; width: 100%; max-width: 500px; margin: 65px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
     .cesto { width: 48%; height: 100%; position: relative; background: rgba(255, 255, 255, 0.3); border-left: 2px solid rgba(255, 255, 255, 0.9); border-right: 2px solid rgba(255, 255, 255, 0.9); border-radius: 8px 8px 20px 20px; box-shadow: inset 5px 0 10px rgba(255,255,255,0.6), inset -5px 0 10px rgba(255,255,255,0.6), 0 10px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; transition: all 0.2s ease; }
     .cesto::before { content: ''; position: absolute; top: -8px; left: -2px; right: -2px; height: 16px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.2); z-index: 3; box-shadow: inset 0 5px 10px rgba(0,0,0,0.05); }
     #cesto-existe { border-bottom: 5px solid #ef4444; background-color: rgba(239, 68, 68, 0.08); } #cesto-existe::before { border-color: rgba(239, 68, 68, 0.5); }
@@ -303,7 +304,6 @@
     function tocarPegarPecaSeguro() { try { let a = document.getElementById('AUD_PEGAR'); if(a){a.currentTime=0;a.play().catch(e=>{});} } catch(e){} }
     function tocarDropPraticoSeguro() { try { let a = document.getElementById('AUD_DROP_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} } catch(e){} }
     function tocarDropAusenteSeguro() { try { let a = document.getElementById('AUD_DROP_NAO_EXISTE'); if(a){a.currentTime=0;a.play().catch(e=>{});} } catch(e){} }
-    function tocarHoverCestoSeguro() { /* Som sutil opcional */ }
 
     // 4. INICIAR O JOGO
     window.iniciarJogoTriagem = function(categoria, elemento) {
@@ -370,13 +370,13 @@
         }
     }
 
-    // 5. MOTOR DRAG AND DROP - LIMPO E INFALÍVEL (COM LIMPEZA DE LISTENERS)
+    // 5. MOTOR DRAG AND DROP ESTREITO (AABB PERFEITO) E BLINDADO
     window.configurarFisicaJogo = function() {
         var peca = document.getElementById('peca-arrastavel');
         var areaJogo = document.getElementById('area-jogo-fisica');
         if (!peca || !areaJogo) return;
 
-        // Limpeza bruta de listeners: clonamos a peça para remover os eventos antigos dela
+        // Limpeza dos clones zumbis
         var novaPeca = peca.cloneNode(true);
         peca.parentNode.replaceChild(novaPeca, peca);
         peca = novaPeca; 
@@ -399,10 +399,9 @@
 
         function onDragStart(e) {
             if(indexAtual >= pecasExibicao.length) return;
-            // Previne a seleção de texto e arrasto da imagem no Desktop
             if(e.type === 'mousedown') { e.preventDefault(); }
-            
             e.stopPropagation(); 
+            
             isDragging = true; 
             peca.style.transition = 'none'; 
             peca.classList.add('dragging'); 
@@ -443,28 +442,19 @@
             var cestoDir = document.getElementById('cesto-nao-existe');
             var cestoTemp = null;
             
-            // Pega o centro EXATO da peça na tela
-            var rectPeca = peca.getBoundingClientRect();
-            var cxPeca = rectPeca.left + (rectPeca.width / 2);
+            var rectEsq = cestoEsq.getBoundingClientRect();
+            var rectDir = cestoDir.getBoundingClientRect();
             
-            // LÓGICA DE COLISÃO ORIGINAL (MANTIDA E ADAPTADA)
-            // Avalia se o usuário puxou a peça para cima (pelo menos -20px do eixo Y)
-            if (currentY < -20) {
-                var rectEsq = cestoEsq.getBoundingClientRect();
-                var rectDir = cestoDir.getBoundingClientRect();
-                
-                var centroEsq = rectEsq.left + (rectEsq.width / 2);
-                var centroDir = rectDir.left + (rectDir.width / 2);
-                
-                var distEsq = Math.abs(cxPeca - centroEsq);
-                var distDir = Math.abs(cxPeca - centroDir);
-                
-                // O cesto que estiver mais próximo do eixo X da peça acende
-                if (distEsq < distDir) {
-                    cestoTemp = cestoEsq;
-                } else {
-                    cestoTemp = cestoDir;
-                }
+            // DETECÇÃO POR TOQUE REAL (O Dedo/Mouse DEVE entrar na área do cesto)
+            var padX = 20; // 20px de gordura nas laterais
+            var padY = 30; // 30px de gordura na altura
+
+            if (clientX >= rectEsq.left - padX && clientX <= rectEsq.right + padX &&
+                clientY >= rectEsq.top - padY && clientY <= rectEsq.bottom + padY) {
+                cestoTemp = cestoEsq;
+            } else if (clientX >= rectDir.left - padX && clientX <= rectDir.right + padX &&
+                       clientY >= rectDir.top - padY && clientY <= rectDir.bottom + padY) {
+                cestoTemp = cestoDir;
             }
 
             var cestos = [cestoEsq, cestoDir];
@@ -493,19 +483,14 @@
             cestos.forEach(function(c) { c.classList.remove('cesto-hover'); });
             
             if (cestoAlvo) {
-                var rectCesto = cestoAlvo.getBoundingClientRect();
-                var rectPecaInicial = peca.getBoundingClientRect();
-                
-                var cxOriginal = rectPecaInicial.left - currentX + rectPecaInicial.width / 2;
-                var cyOriginal = rectPecaInicial.top - currentY + rectPecaInicial.height / 2;
-                
-                var destX = (rectCesto.left + rectCesto.width / 2) - cxOriginal;
-                var destY = (rectCesto.top + rectCesto.height / 2) - cyOriginal;
-                
                 var isSim = cestoAlvo.getAttribute('data-alvo') === 'existe';
                 
+                // Animação visual fixa: afunda a peça e joga pra Esq ou Dir
+                var destX = isSim ? -80 : 80;
+                var destY = -120;
+                
                 peca.style.transition = 'transform 0.15s ease-in, opacity 0.15s';
-                peca.style.transform = 'translate(' + destX + 'px, ' + destY + 'px) scale(0.4) rotate(' + (isSim ? '-15deg' : '15deg') + ')';
+                peca.style.transform = 'translate(' + destX + 'px, ' + destY + 'px) scale(0.3) rotate(' + (isSim ? '-15deg' : '15deg') + ')';
                 peca.style.opacity = '0';
                 
                 if (navigator.vibrate) navigator.vibrate(40);
@@ -515,8 +500,11 @@
                 
                 var cestoCapturado = cestoAlvo;
                 cestoAlvo = null; 
-                setTimeout(function() { window.jogarNoCesto(cestoCapturado); }, 150);
+                setTimeout(function() { 
+                    if (typeof window.jogarNoCesto === 'function') window.jogarNoCesto(cestoCapturado); 
+                }, 150);
             } else {
+                // Soltou fora: devolve a peça ao centro
                 peca.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                 peca.style.transform = 'translate(0px, 0px) rotate(0deg)'; 
                 setTimeout(function(){ peca.classList.add('animada'); }, 200);
@@ -536,11 +524,9 @@
             document.removeEventListener('mouseup', window.domaDragEndHandler);
         }
 
-        // Armazena as referências na window para poder limpá-las na próxima vez
         window.domaDragMoveHandler = onDragMove;
         window.domaDragEndHandler = onDragEnd;
 
-        // Aplica os eventos na peça nova limpa e no document
         peca.addEventListener('touchstart', onDragStart, {passive: false}); 
         document.addEventListener('touchmove', window.domaDragMoveHandler, {passive: false}); 
         document.addEventListener('touchend', window.domaDragEndHandler);
@@ -798,6 +784,7 @@
         document.getElementById('triagem-tela-contrato').style.display = 'block';
         window.scrollTo(0,0);
     };
+    // FIM
 
 })();
 </script>
