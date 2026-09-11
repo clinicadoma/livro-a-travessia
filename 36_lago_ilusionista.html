@@ -1,0 +1,340 @@
+<style>
+/* REGRAS GERAIS PARA O LAGO */
+.intro-papel-pao { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #d4b496; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: all 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+.conteudo-papel { text-align: center; padding: 30px; background: rgba(255,255,255,0.05); border: 2px dashed rgba(93, 64, 55, 0.2); border-radius: 15px; max-width: 80%; }
+.texto-intro { font-family: 'Courier New', Courier, monospace; font-size: clamp(1.4rem, 4vw, 2.2rem); color: #5d4037; font-weight: bold; line-height: 1.4; margin-bottom: 30px; }
+.subtexto { display: block; font-size: 0.8em; margin-top: 10px; font-style: italic; opacity: 0.8; }
+.btn-iniciar-zen { background: #5d4037; color: #e3c5a8; border: none; padding: 15px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.3s ease; text-transform: uppercase; }
+.intro-papel-pao.amassado { transform: scale(0) rotate(720deg); opacity: 0; filter: brightness(0.4) blur(8px); }
+
+/* ESTILOS DO CONVITE PARA AVANÇAR SOBRE O LAGO */
+.container-avancar-lago { position: absolute; bottom: 65px; left: 50%; transform: translate(-50%, 20px); text-align: center; opacity: 0; transition: all 1.5s ease; pointer-events: none; z-index: 100; }
+.container-avancar-lago.visivel { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.texto-avancar-lago { color: #1e1b4b; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+.seta-avancar { display: inline-block; color: #7c3aed; font-weight: 900; letter-spacing: 2px; background: rgba(255,255,255,0.4); padding: 5px 15px; border-radius: 20px; backdrop-filter: blur(4px); animation: bounceSeta 2s infinite; cursor: pointer; }
+@keyframes bounceSeta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+
+/* CENA DO LAGO E ANIMAÇÕES */
+.cenario-lago-novo { position: relative; width: 100%; max-width: 100%; height: clamp(300px, 45vh, 400px); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; margin-bottom: 20px; z-index: 5; }
+.jardim-protecao { position: absolute; width: clamp(360px, 95vw, 460px); height: clamp(180px, 30vh, 250px); bottom: -10px; opacity: 0; transition: opacity 2s ease-in-out; display: flex; justify-content: center; pointer-events: none; z-index: 4; }
+.jardim-protecao.visivel { opacity: 1; }
+.cerca-envolvente { position: absolute; bottom: 0; width: 100%; height: 60px; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 5px; }
+.ripa { width: 8px; height: 50px; background: #8b5e3c; border-radius: 4px 4px 0 0; box-shadow: 2px 0 8px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 1.5s ease-out; }
+.visivel .ripa { transform: translateY(0); }
+.passaros-voando { position: absolute; top: 0; width: 100%; height: 100px; }
+.passaro { position: absolute; font-size: 20px; opacity: 0; transition: opacity 1s; }
+.visivel .passaro { opacity: 1; }
+.bird-1 { left: -50px; animation: vooPassaro1 8s infinite linear; }
+.bird-2 { right: -50px; animation: vooPassaro2 10s infinite linear 2s; }
+@keyframes vooPassaro1 { 0% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(200px, -40px) rotate(10deg); } 100% { transform: translate(450px, -10px) rotate(0deg); } }
+@keyframes vooPassaro2 { 0% { transform: translate(0, 0) scaleX(-1); } 50% { transform: translate(-220px, -50px) scaleX(-1); } 100% { transform: translate(-450px, -20px) scaleX(-1); } }
+.flores-container { position: absolute; width: 100%; height: 100%; }
+.flor { position: absolute; font-size: 18px; transform: scale(0); transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.visivel .flor { transform: scale(1); }
+.f1 { bottom: 35px; left: 5%; transition-delay: 0.2s; } .f2 { bottom: 40px; left: 20%; transition-delay: 0.5s; }
+.f3 { bottom: 45px; left: 40%; transition-delay: 0.8s; } .f4 { bottom: 42px; left: 60%; transition-delay: 1.1s; }
+.f5 { bottom: 38px; left: 75%; transition-delay: 1.4s; } .f6 { bottom: 35px; left: 90%; transition-delay: 1.7s; }
+.container-quebra-cabeca-total { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2; overflow: hidden; }
+.peca { position: absolute; font-size: clamp(24px, 3.5vw, 40px); top: -60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); animation: quedaPecaLivre 14s infinite linear; opacity: 0.7; }
+.c-roxo { color: #8b5cf6; } .c-azul { color: #3b82f6; } .c-turq { color: #06b6d4; } .c-ouro { color: #facc15; }
+@keyframes quedaPecaLivre { 0% { top: -60px; transform: rotate(0deg) scale(0.8); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 105vh; transform: rotate(360deg) scale(0.9); opacity: 0; } }
+
+.cascata-fios-nova { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: clamp(220px, 70vw, 360px); height: 300px; z-index: 2; overflow: hidden; pointer-events: none; }
+.fio-agua-novo { position: absolute; width: 3px; height: 18px; background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(56, 189, 248, 0.9)); border-radius: 50%; box-shadow: 0 4px 8px rgba(14, 165, 233, 0.4); opacity: 0; }
+.fio-1 { left: 20%; animation: quedaAguaZen 2.5s infinite linear 0.1s; } 
+.fio-2 { left: 50%; animation: quedaAguaZen 2.2s infinite linear 1.2s; } 
+.fio-3 { left: 80%; animation: quedaAguaZen 3.0s infinite linear 0.5s; }
+.gota-4 { left: 35%; animation: quedaAguaZen 2.8s infinite linear 2.0s; }
+.gota-5 { left: 65%; animation: quedaAguaZen 3.2s infinite linear 1.5s; }
+.gota-6 { left: 10%; animation: quedaAguaZen 2.4s infinite linear 0.8s; }
+.gota-7 { left: 90%; animation: quedaAguaZen 2.9s infinite linear 2.5s; }
+@keyframes quedaAguaZen { 0% { top: -10%; opacity: 0; transform: scaleY(1); } 10% { opacity: 1; } 85% { opacity: 1; transform: scaleY(1.1); } 100% { top: 95%; opacity: 0; transform: scaleY(0.4); } }
+.lago-base { position: relative; width: clamp(260px, 85vw, 400px); height: clamp(70px, 20vw, 100px); background: rgba(186, 230, 253, 0.3); border-radius: 50%; z-index: 5; margin-bottom: clamp(10px, 2vh, 20px); overflow: visible; }
+.reflexo-anel { position: absolute; top: 50%; left: 50%; width: 0; height: 0; border: 2px solid rgba(14, 165, 233, 0.4); border-radius: 50%; transform: translate(-50%, -50%); }
+.anel-1 { animation: anelAguaZen 4.5s infinite ease-out 0s; }
+.anel-2 { animation: anelAguaZen 4.5s infinite ease-out 1.5s; }
+.anel-3 { animation: anelAguaZen 4.5s infinite ease-out 3.0s; }
+@keyframes anelAguaZen { 0% { width: 0; height: 0; opacity: 1; border-width: 2px; } 100% { width: 100%; height: 100%; opacity: 0; border-width: 1px; } }
+.btn-play-lago { background: linear-gradient(to bottom, #0ea5e9, #0284c7); color: white; border: none; border-bottom: 4px solid #0369a1; padding: 15px 35px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s ease; z-index: 20; margin-top: 10px; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3); }
+.fagulha-coragem { position: absolute; width: 4px; height: 4px; background-color: #fde047; border-radius: 50%; box-shadow: 0 0 6px #facc15; opacity: 0; bottom: 20px; }
+.fag-1 { left: 25%; animation: subirFagulha 4s infinite ease-in-out; } .fag-2 { left: 45%; animation: subirFagulha 3.5s infinite ease-in-out 1s; } .fag-3 { left: 65%; animation: subirFagulha 5s infinite ease-in-out 2.5s; } .fag-4 { left: 80%; animation: subirFagulha 4.2s infinite ease-in-out 0.5s; }
+@keyframes subirFagulha { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 30% { opacity: 0.8; transform: translateY(-30px) scale(1); } 100% { transform: translateY(-100px) scale(0.2); opacity: 0; } }
+.eco-da-letra { color: #0284c7; font-style: italic; font-weight: 600; font-size: clamp(0.9rem, 2vh, 1.1rem); margin-bottom: 25px; text-align: center; letter-spacing: 0.5px; animation: respiracaoLetra 5s infinite alternate ease-in-out; z-index: 10; }
+@keyframes respiracaoLetra { 0% { opacity: 0.4; transform: scale(0.98); text-shadow: 0 0 0px transparent; } 100% { opacity: 1; transform: scale(1); text-shadow: 0 0 10px rgba(14, 165, 233, 0.3); } }
+
+.slide-pecinhas { position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; background: linear-gradient(120deg, rgb(238, 242, 255), rgb(240, 245, 255), rgb(255, 241, 242)) !important; z-index: 20; transform: translateX(100%); opacity: 0; transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; justify-content: center; align-items: flex-start; padding: clamp(20px, 5vh, 40px); box-sizing: border-box; pointer-events: none; overflow-y: auto; }
+.slide-pecinhas.visivel { transform: translateX(0); opacity: 1; pointer-events: auto; }
+.conteudo-pecinhas { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-radius: 24px; padding: clamp(20px, 4vw, 40px); max-width: 1000px; text-align: center; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.9); margin-top: auto; margin-bottom: auto; }
+.esconder-definitivo { display: none !important; }
+.btn-mapear-realidade { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #ffffff; border: none; padding: 18px 30px; font-size: 1.15rem; font-weight: 900; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 8px 25px rgba(225, 29, 72, 0.4); transition: all 0.3s ease; width: 100%; max-width: 350px; margin: 25px auto 10px auto; display: flex; justify-content: center; align-items: center; gap: 10px; position: relative; overflow: hidden; animation: pulsarBotaoMapear 2s infinite; }
+.btn-mapear-realidade:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(225, 29, 72, 0.6); background: linear-gradient(135deg, #be123c, #e11d48); }
+.btn-mapear-realidade:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3); }
+@keyframes pulsarBotaoMapear { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
+</style>
+
+<div class="doma-pagina ativa" id="pag-26" style="height: 100dvh; overflow-y: auto; overflow-x: hidden; background: linear-gradient(to bottom, #f0fdfa, #e0f2fe, #f0fdfa); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative;">
+    <div class="btn-voltar-sumario" onclick="irParaTela('pag-mapa-final')" style="border-color:#334155; background:rgba(15,23,42,0.8); color:white;">☰</div>
+    
+    <div id="intro-papel-pao" class="intro-papel-pao">
+        <div class="conteudo-papel">
+            <p class="texto-intro">
+                Eu já me fiz pequeno(a),<br>
+                já fui rascunho em papel de pão...<br>
+                <span class="subtexto">Quer saber?</span>
+            </p>
+            <button id="btn-iniciar-experiencia" class="btn-iniciar-zen">Aperte e veja a mensagem</button>
+        </div>
+    </div>
+
+    <div class="container-quebra-cabeca-total">
+        <div class="peca c-roxo" style="left: 5%; animation-delay: 0s;">🧩</div>
+        <div class="peca c-azul" style="left: 15%; animation-delay: 4s;">🧩</div>
+        <div class="peca c-turq" style="left: 25%; animation-delay: 2s;">🧩</div>
+        <div class="peca c-ouro" style="left: 40%; animation-delay: 6s; font-size: 20px; opacity: 0.5;">🧩</div>
+        <div class="peca c-azul" style="left: 50%; animation-delay: 1s; font-size: 18px; opacity: 0.4;">🧩</div>
+        <div class="peca c-roxo" style="left: 60%; animation-delay: 8s; font-size: 22px; opacity: 0.5;">🧩</div>
+        <div class="peca c-turq" style="left: 75%; animation-delay: 3s;">🧩</div>
+        <div class="peca c-ouro" style="left: 85%; animation-delay: 5s;">🧩</div>
+        <div class="peca c-azul" style="left: 95%; animation-delay: 7s;">🧩</div>
+    </div>
+
+    <div class="wrapper-isolado" style="position: relative; padding: clamp(60px, 10vh, 120px) 20px clamp(50px, 10vh, 100px) 20px; width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; z-index: 10;">
+        <div class="aura-lago-fundo" style="position: absolute; width: clamp(300px, 90vw, 420px); height: clamp(150px, 20vh, 200px); background: radial-gradient(circle, rgba(253, 224, 71, 0.15) 0%, transparent 70%); z-index: 1; transform: translate(-50%, 40px); left: 50%;"></div>
+        <div class="cenario-lago-novo">
+            <div class="cascata-fios-nova">
+                <div class="fio-agua-novo fio-1"></div>
+                <div class="fio-agua-novo fio-2"></div>
+                <div class="fio-agua-novo fio-3"></div>
+                <div class="fio-agua-novo gota-4"></div>
+                <div class="fio-agua-novo gota-5"></div>
+                <div class="fio-agua-novo gota-6"></div>
+                <div class="fio-agua-novo gota-7"></div>
+            </div>
+            <div id="jardim-limite" class="jardim-protecao">
+                <div class="passaros-voando">
+                    <span class="passaro bird-1">🕊️</span>
+                    <span class="passaro bird-2">🕊️</span>
+                </div>
+                <div class="cerca-envolvente">
+                    <span class="ripa r1"></span><span class="ripa r2"></span><span class="ripa r3"></span>
+                    <span class="ripa r4"></span><span class="ripa r5"></span><span class="ripa r6"></span>
+                    <span class="ripa r7"></span><span class="ripa r8"></span><span class="ripa r9"></span>
+                </div>
+                <div class="flores-container">
+                    <span class="flor f1">🌸</span><span class="flor f2">🌼</span>
+                    <span class="flor f3">🌺</span><span class="flor f4">🌸</span>
+                    <span class="flor f5">🌼</span><span class="flor f6">🌺</span>
+                </div>
+            </div>
+            <div id="container-avancar" class="container-avancar-lago">
+                <p class="texto-avancar-lago">Sua jornada continua...</p>
+                <div class="seta-avancar">AVANÇAR ❯</div>
+            </div>
+            <div class="lago-base">
+                <div class="reflexo-anel anel-1"></div>
+                <div class="reflexo-anel anel-2"></div>
+                <div class="reflexo-anel anel-3"></div>
+                <div class="fagulha-coragem fag-1"></div>
+                <div class="fagulha-coragem fag-2"></div>
+                <div class="fagulha-coragem fag-3"></div>
+                <div class="fagulha-coragem fag-4"></div>
+            </div>
+        </div>
+
+        <div id="legenda-dinamica-lago" class="eco-da-letra">"Aperte o play para ouvir..."</div>
+        <button id="btn-lago-zen" class="btn-play-lago"><span id="icone-lago">▶</span> Tocar Mensagem</button>
+
+        <p id="msg-deslize" style="font-size: clamp(0.65rem, 2vh, 0.75rem); color: #0d9488; margin-top: clamp(4vh, 6vh, 50px); font-weight: bold; text-align: center; letter-spacing: 1.5px; opacity: 0; pointer-events: none; transition: opacity 1s ease;">
+            DESLIZE PARA CONTINUAR ❯
+        </p>
+    </div>
+    
+    <div id="slide-pecinhas" class="slide-pecinhas">
+        <div class="conteudo-pecinhas">
+            <div id="sub-1" class="sub-slide ativo" style="padding: 0; align-items: stretch; width: 100%;">
+                <div style="padding: 0 15px; text-align: center;">
+                    <h1 style="color: #be123c; font-size: clamp(1.6rem, 4vw, 2.2rem); margin-top: 0; margin-bottom: 5px; font-weight: 900; text-transform: uppercase;">A Ilusão do Controle</h1>
+                    <p style="color: #881337; font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">Você acha que está dirigindo, mas quem está no volante?</p>
+                    <p style="font-size: 1.05rem; color: #334155; line-height: 1.6; margin-bottom: 15px;">
+                        A música ecoa: <em>"Sou voz, sou inteira"</em>. Mas, na vida real, a voz que dita as regras quase nunca é a sua.
+                    </p>
+                    <div style="background: #fef2f2; padding: 15px; border-radius: 12px; border-left: 6px solid #ef4444; margin-bottom: 20px; text-align: left;">
+                        <p style="margin: 0; color: #991b1b; font-size: 1rem; line-height: 1.5;">
+                            Apresento a você <strong>O Ilusionista</strong>. Um Monstrinho que age nos bastidores, disfarçado de "intuição" ou "bom senso". Ele te convence de que aguentar situações que te machucam é apenas ser <em>"forte"</em> ou <em>"prudente"</em>.
+                        </p>
+                    </div>
+                    <p style="font-size: 1.05rem; color: #2563eb; line-height: 1.6; margin-bottom: 15px;">
+                        Ele te faz acreditar que você está na condução. Mas na verdade, ele está <strong>boicotando o seu Lar</strong>, te obrigando a 
+                        <span style="background-color: #fef9c3; color: #be123c; padding: 2px 6px; border-radius: 4px; font-weight: bold; border: 1px solid #facc15;">guardar peças que já apodreceram 🧩🤢</span> 
+                        só porque o conhecido é "mais seguro" do que mudar.
+                    </p>
+                    <p style="font-size: 1.2rem; font-weight: 900; color: #1e1b4b; text-transform: uppercase; margin-top: 20px; margin-bottom: 15px; background: #e0e7ff; padding: 10px; border-radius: 8px; display: inline-block;">
+                        Chega de fechar os olhos.
+                    </p>
+                    <p style="font-size: 0.95rem; color: #475569; line-height: 1.5; margin-bottom: 20px;">
+                        Faremos um <strong>Raio-X</strong><br> Vamos descobrir como está sendo construída a sua história.<br> Quais são as pecinhas que fazem parte da sua vida HOJE e as ações que você precisa tomar AGORA para organizar essa bagunça. Continue descendo para olhar para o seu verdadeiro Lar.
+                    </p>
+
+                    <div id="setor-mapeamento" style="padding-top: 50px;">
+                        <div style="text-align: center;">
+                            <button class="btn-mapear-realidade" onclick="mudarPagina(1)">
+                                MAPEAR MINHA REALIDADE ❯
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="audio-lago-zen" preload="auto">
+        <source src="https://music.wixstatic.com/mp3/253e81_4bae4fd39de1420aa8a2f96e31a81823.mp3" type="audio/mpeg">
+        <source src="https://music.wixstatic.com/mp3/253e81_70ec405de5914f87aeef215e4d92c2a9.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+    (function() {
+        const btnPlay = document.getElementById('btn-lago-zen');
+        const btnIniciar = document.getElementById('btn-iniciar-experiencia');
+        const audio = document.getElementById('audio-lago-zen');
+        const icone = document.getElementById('icone-lago');
+        const jardim = document.getElementById('jardim-limite');
+        const papelIntro = document.getElementById('intro-papel-pao');
+        const msgDeslize = document.getElementById('msg-deslize');
+        const painelAvancar = document.getElementById('container-avancar');
+        const btnClicavel = document.querySelector('.seta-avancar');
+        const telaIsolada = document.querySelector('#pag-26 .wrapper-isolado');
+        const proximaTela = document.getElementById('slide-pecinhas');
+        const containerQuebraCabeca = document.querySelector('.container-quebra-cabeca-total');
+
+        if(audio) {
+            let tocando = false;
+            const atualizarInterface = (isTocando) => {
+                tocando = isTocando;
+                icone.innerText = isTocando ? '⏸' : '▶';
+                btnPlay.innerHTML = isTocando ? '⏸ Pausar Mensagem' : '▶ Tocar Mensagem';
+            };
+
+            window.liberarAvancoLago = function() {
+                if (window.lagoLiberado) return; 
+                window.lagoLiberado = true;
+                if (typeof window.atualizarVisibilidadeSeta === 'function') window.atualizarVisibilidadeSeta();
+                if(painelAvancar) {
+                    painelAvancar.style.display = 'block'; 
+                    setTimeout(() => {
+                        painelAvancar.style.opacity = '1';
+                        painelAvancar.style.pointerEvents = 'auto';
+                    }, 50); 
+                }
+                if(msgDeslize) {
+                    msgDeslize.style.opacity = "0.8";
+                    msgDeslize.style.pointerEvents = "auto";
+                }
+            };
+
+            btnIniciar.addEventListener('click', () => {
+                papelIntro.classList.add('amassado');
+                audio.play().catch(e => console.log("Erro ao reproduzir."));
+                atualizarInterface(true);
+                setTimeout(() => { papelIntro.style.display = 'none'; }, 1800);
+                setTimeout(window.liberarAvancoLago, 136000);
+            });
+
+            btnPlay.addEventListener('click', () => {
+                if (!tocando) {
+                    audio.play();
+                    atualizarInterface(true);
+                } else {
+                    audio.pause();
+                    atualizarInterface(false);
+                }
+            });
+
+            const legendaLago = document.getElementById('legenda-dinamica-lago');
+            const cronogramaLegendas = [
+                { tempo: 0.0, texto: "🎵 (Respire fundo. Sinta a musica...) 🎵" },
+                { tempo: 13.0, texto: "Eu já fui rascunho em papel de pão..." },
+                { tempo: 19.0, texto: "Tentando adivinhar a forma de me encaixar" },
+                { tempo: 24.0, texto: "Para caber no molde que o mundo ofereceu" },
+                { tempo: 29.0, texto: "Mas o desenho mudou e o molde morreu" },
+                { tempo: 35.0, texto: "Meus limites são prioridades do meu jardim" },
+                { tempo: 41.0, texto: "Protegendo o que floresce em mim" },
+                { tempo: 44.0, texto: "Sou quebra-cabeça em movimento" },
+                { tempo: 47.0, texto: "Pego as peças soltas e faço a minha história" },
+                { tempo: 53.0, texto: "As temporárias ensinam o caminho" },
+                { tempo: 58.0, texto: "As definitivas criam meu aconchego" },
+                { tempo: 63.0, texto: "Não vou nunca mais me apagar" },
+                { tempo: 66.0, texto: "pra luz do outro brilhar" },
+                { tempo: 68.0, texto: "A coragem de ser inteira é o meu lugar" },
+                { tempo: 74.0, texto: "O respeito não é um pedido, é um alicerce" },
+                { tempo: 78.0, texto: "A voz que se encontra, a paz que floresce" },
+                { tempo: 82.0, texto: "Não preciso de cola pra me remendar" },
+                { tempo: 88.0, texto: "Sou mosaico de mar sem data pra findar" },
+                { tempo: 94.0, texto: "O que é meu eu guardo, o que é seu devolvo" },
+                { tempo: 99.0, texto: "Neste novo solo eu me resolvo" },
+                { tempo: 103.0, texto: "Sou quebra-cabeça em movimento" },
+                { tempo: 106.0, texto: "Pego as peças soltas e faço a minha história" },
+                { tempo: 112.0, texto: "As temporárias ensinam o caminho" },
+                { tempo: 117.0, texto: "As definitivas criam meu aconchego" },
+                { tempo: 122.0, texto: "Não vou nunca mais me apagar" },
+                { tempo: 125.0, texto: "pra luz do outro brilhar" },
+                { tempo: 127.0, texto: "A coragem de ser inteira é o meu lugar" },
+                { tempo: 134.0, texto: "Inteira..." },
+                { tempo: 136.0, texto: "Peça por peça, agora eu sou o meu próprio lar." }
+            ];
+
+            audio.addEventListener('timeupdate', () => {
+                if (audio.currentTime >= 38) { jardim.classList.add('visivel'); }
+                else { jardim.classList.remove('visivel'); }
+                if (legendaLago) {
+                    let textoAtual = "..."; 
+                    for (let i = 0; i < cronogramaLegendas.length; i++) {
+                        if (audio.currentTime >= cronogramaLegendas[i].tempo) {
+                            textoAtual = cronogramaLegendas[i].texto;
+                        }
+                    }
+                    if (legendaLago.innerText !== `"${textoAtual}"`) {
+                        legendaLago.innerText = `"${textoAtual}"`;
+                    }
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                atualizarInterface(false);
+                btnPlay.innerHTML = '▶ Ouvir Novamente';
+                jardim.classList.remove('visivel');
+                if (legendaLago) legendaLago.innerText = `"Aperte o play para ouvir..."`;
+                window.liberarAvancoLago();
+            });
+        }
+
+        if(painelAvancar) {
+            painelAvancar.style.display = 'none'; 
+            painelAvancar.style.opacity = '0';
+            painelAvancar.style.pointerEvents = 'none';
+            painelAvancar.style.zIndex = '99999'; 
+        }
+
+        if(btnClicavel) {
+            btnClicavel.style.position = 'relative';
+            btnClicavel.style.zIndex = '999999';
+            btnClicavel.addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation(); 
+                if(telaIsolada && proximaTela) {
+                    telaIsolada.style.transition = "all 1.2s ease-in-out";
+                    telaIsolada.style.opacity = "0";
+                    telaIsolada.style.transform = "translateX(-50px) scale(0.95)";
+                    setTimeout(() => {
+                        proximaTela.classList.add('visivel');
+                        window.scrollTo(0,0);
+                    }, 400); 
+                    setTimeout(() => {
+                        telaIsolada.classList.add('esconder-definitivo');
+                        if(containerQuebraCabeca) containerQuebraCabeca.classList.add('esconder-definitivo');
+                    }, 1200);
+                }
+            });
+        }
+    })();
+    </script>
+</div>
