@@ -1,0 +1,30 @@
+<style>
+    .img-responsiva-doma {
+        object-fit: contain !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        margin: 0 auto !important;
+    }
+    @media (min-width: 768px) {
+        .img-responsiva-doma {
+            width: auto !important; 
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+    }
+</style>
+
+<div class="doma-pagina bg-grad-laranja" id="pag-metodologia">
+    <div class="wrapper-isolado">
+        <div style="text-align: center; position: relative; width: 100%; padding: 2vh 0;">
+            
+            <img src="https://i.postimg.cc/6pcXK2T5/metodologia.png" alt="A Metodologia Doma" class="img-responsiva-doma" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 2vh;">
+
+            <div style="margin-top: 3vh; text-align: center;">
+                <button onclick="mudarPagina(1)" style="background-color: #C4622D; color: #ffffff; border: none; padding: 15px 35px; font-size: clamp(1rem, 2vh, 1.2rem); font-family: inherit; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(196, 98, 45, 0.3); transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.opacity='0.9'; this.style.transform='scale(1.02)';" onmouseout="this.style.opacity='1'; this.style.transform='scale(1)';">
+                    CONTINUAR  ➔
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
