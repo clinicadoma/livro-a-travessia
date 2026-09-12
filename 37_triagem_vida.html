@@ -1,0 +1,545 @@
+<style>
+    /* Estilos Base e Animações da Triagem */
+    .doma-triagem-bg { background: linear-gradient(135deg, #e0f2fe, #f3e8ff); color: #1e1b4b; user-select: none; -webkit-user-select: none; width: 100%; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 20px;}
+    @keyframes fadeInTriagem { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseSoftTriagem { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    @keyframes tremerSuaveTriagem { 0%, 80%, 100% { transform: translateX(0); } 82%, 90% { transform: translateX(-2px) rotate(-1deg); } 86%, 94% { transform: translateX(2px) rotate(1deg); } }
+    
+    .fade-in { animation: fadeInTriagem 0.6s ease-out forwards; }
+    .pulse-btn { animation: pulseSoftTriagem 2s infinite; }
+    .tremer-alerta { animation: tremerSuaveTriagem 4s infinite; display: inline-block; }
+
+    .btn-principal { background: linear-gradient(135deg, #d4af37 0%, #b5952f 100%); color: white; border: none; padding: 18px 30px; border-radius: 30px; font-size: clamp(0.95rem, 4vw, 1.1rem); font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); text-transform: uppercase; width: 100%; max-width: 400px; margin: 20px auto 10px auto; display: block; transition: all 0.3s; }
+    .btn-principal:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6); }
+
+    .doma-popup-tela { display: none; position: fixed !important; inset: 0 !important; background: rgba(15, 23, 42, 0.85) !important; backdrop-filter: blur(8px) !important; z-index: 99990 !important; align-items: center !important; justify-content: flex-start !important; padding: 20px 15px !important; overflow-y: auto !important; flex-direction: column !important; }
+    .cartao-popup { background: #ffffff; width: 100%; max-width: 550px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative; padding: 25px 15px; box-sizing: border-box; margin: auto; display: flex; flex-direction: column; align-items: center; }
+
+    @keyframes baterCarimbo { 0% { transform: translate(-50%, -50%) scale(5); opacity: 0; } 50% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; } 70% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+    .animacao-carimbo { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8rem; z-index: 999999; animation: baterCarimbo 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); pointer-events: none; display: none; }
+
+    .grid-categorias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; max-width: 500px; margin: 0 auto; padding: 10px 15px; box-sizing: border-box; }
+    .btn-categoria { width: calc(50% - 5px); background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px 5px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 75px; box-sizing: border-box; }
+    .btn-categoria.selecionada { border-color: #059669; background: #ecfdf5; transform: scale(1.05); box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2); }
+    .btn-categoria .icone { font-size: 1.4rem; }
+    .btn-categoria .titulo { font-weight: 900; color: #1e1b4b; font-size: 0.7rem; text-transform: uppercase; line-height: 1.1; }
+
+    /* Área de Jogo Drag and Drop */
+    .area-cestos { display: flex; justify-content: space-between; align-items: flex-end; height: 100px; width: 100%; max-width: 500px; margin: 30px auto 5px auto; padding: 0 10px; box-sizing: border-box; gap: 10px; }
+    .cesto { width: 48%; height: 100%; position: relative; background: rgba(255, 255, 255, 0.3); border-left: 2px solid rgba(255, 255, 255, 0.9); border-right: 2px solid rgba(255, 255, 255, 0.9); border-top: none; border-radius: 8px 8px 20px 20px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; transition: all 0.2s ease; }
+    #cesto-existe { border-bottom: 5px solid #ef4444; background-color: rgba(239, 68, 68, 0.08); } 
+    #cesto-nao-existe { border-bottom: 5px solid #64748b; background-color: rgba(100, 116, 139, 0.08); }
+    .cesto-hover { transform: scale(1.05); background-color: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); } 
+    .cesto-label { position: absolute; top: -45px; width: 100%; left: 0; font-size: 0.9rem; font-weight: 900; color: #1e1b4b; background: white; padding: 8px 2px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.08); text-align: center; z-index: 5; text-transform: uppercase; }
+
+    .area-peca { min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-sizing: border-box; margin-bottom: 5px; width: 100%; }
+    .peca-quebra-cabeca { width: 120px; min-height: 65px; height: auto; background: linear-gradient(135deg, #d4af37, #b5952f); position: relative; z-index: 100; cursor: grab; display: flex; justify-content: center; align-items: center; text-align: center; border-radius: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); color: white; font-weight: 900; font-size: 0.75rem; padding: 10px; box-sizing: border-box; touch-action: none !important; transition: transform 0.1s; }
+    .peca-quebra-cabeca:active { cursor: grabbing; opacity: 0.95; }
+    .dragging { transition: none !important; z-index: 9999; box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important; }
+    .mini-peca { position: absolute; width: 20px; height: 14px; background: #d4af37; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
+
+    .alerta-clinico-modal { background: #f8fafc; width: 100%; max-width: 450px; border-radius: 24px; display: flex; flex-direction: column; text-align: center; position: relative; padding: clamp(20px, 5vw, 30px) 15px; box-sizing: border-box; margin: auto; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 6px solid #f97316; }
+    .card-diagnostico { background: white; border: 1px solid #e2e8f0; padding: 20px 15px; border-radius: 16px; text-align: left; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 12px;}
+    .check-card-tatico { display: flex; align-items: center; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; position: relative; text-align: left; }
+    .check-card-tatico.selecionado { border-color: #f97316; background: #fff7ed; }
+    .check-card-tatico input { position: absolute; opacity: 0; }
+    .check-card-tatico span { font-size: clamp(0.9rem, 3.8vw, 1rem); font-weight: 600; color: #334155; display: block; padding-left: 35px; position: relative; line-height: 1.4; transition: color 0.2s; }
+    .check-card-tatico.selecionado span { color: #9a3412; font-weight: 800; }
+    .check-card-tatico span::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border: 2px solid #cbd5e1; border-radius: 6px; background: white; transition: all 0.2s; }
+    .check-card-tatico.selecionado span::before { background: #f97316; border-color: #f97316; }
+    .check-card-tatico.selecionado span::after { content: '✓'; position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: white; font-weight: 900; font-size: 14px; }
+    .input-data-doma { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: clamp(1rem, 4vw, 1.1rem); margin-top: 10px; box-sizing: border-box; color: #1e293b; background: white; }
+</style>
+
+<div class="doma-pagina doma-triagem-bg ativa" id="slide-intro-1" style="display: flex; justify-content: center; align-items: center; padding: 20px; text-align: center;">
+    <div class="btn-voltar-sumario" onclick="irParaTela('pag-mapa-final')">☰</div>
+    <div class="fade-in" style="background: rgba(255,255,255,0.98); padding: clamp(30px, 8vh, 50px) 20px; border-radius: 24px; box-shadow: 0 15px 40px rgba(124, 58, 237, 0.15); border: 2px solid #7c3aed;">
+        <div style="font-size: clamp(3rem, 10vh, 4rem); margin-bottom: 15px;">🧩</div>
+        <h1 style="color: #4c1d95; font-size: clamp(1.4rem, 5vw, 1.8rem); margin: 0 0 15px 0; text-transform: uppercase; font-weight: 900;">Como está o seu lar?</h1>
+        <p style="font-size: clamp(0.95rem, 4vw, 1.05rem); color: #475569; line-height: 1.6; margin-bottom: 30px; font-weight: 500;">
+            A música nos ensina que, <em>"peça por peça, construímos nosso próprio lar"</em>. Mas pare um instante: <strong>como está a fundação da sua casa interna hoje?</strong> Ela aguenta a tempestade ou está precisando de reforma?
+        </p>
+        <button class="btn-principal pulse-btn" style="background: #7c3aed;" onclick="window.avancarSlideDoma('slide-intro-1', 'slide-intro-14')">AVANÇAR PARA A TRIAGEM ❯</button>
+    </div>
+</div>
+
+<div id="slide-intro-14" class="doma-pagina doma-triagem-bg" style="display: none; justify-content: center; align-items: center; padding: 20px; text-align: center;">
+    <div class="fade-in" style="background: rgba(255,255,255,0.95); padding: 50px 25px; border-radius: 20px; box-shadow: 0 15px 40px rgba(124, 58, 237, 0.3); border: 4px solid #7c3aed; margin: 0 auto;">
+        <div style="font-size: 4rem; margin-bottom: 15px;">🎯</div>
+        <p style="font-size: 1rem; color: #64748b; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">Pronto para a avaliação?</p>
+        <h1 style="color: #4c1d95; font-size: 2rem; margin: 0 0 30px 0;">É hora de arrumar a casa.</h1>
+        <button class="btn-principal pulse-btn" style="background: #7c3aed; color: white; border: 2px solid white; padding: 18px 40px; font-size: 1.2rem;" 
+                onclick="
+                    window.triagemIniciada = true; 
+                    if(typeof atualizarVisibilidadeSeta === 'function') atualizarVisibilidadeSeta();
+                    window.avancarSlideDoma('slide-intro-14', 'slide-categorias');
+                ">
+            INICIAR TRIAGEM ❯
+        </button>
+    </div>
+</div>
+
+<div id="slide-categorias" class="doma-popup-tela fade-in" style="display: none;">
+    <div class="cartao-popup fade-in">
+        <div style="text-align: center; padding: 0 20px; margin-bottom: 20px;">
+            <h2 style="font-size: clamp(1.4rem, 5vw, 1.6rem); margin: 0; color: #1e1b4b; font-weight: 900;">Mapeamento Tático</h2>
+            <p style="color: #64748b; font-weight: 600; font-size: clamp(0.85rem, 3.5vw, 0.95rem); margin-top: 8px;">Escolha <strong>apenas UMA área</strong> da sua vida para organizar e domar hoje:</p>
+        </div>
+        <div class="grid-categorias">
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'relacionamentos')"><span class="icone">❤️‍🔥</span><span class="titulo">Relacionamentos</span></div>
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'trabalho')"><span class="icone">💼</span><span class="titulo">Trabalho & Carreira</span></div>
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'familia')"><span class="icone">👨‍👩‍👧‍👦</span><span class="titulo">Família & Ancestralidade</span></div>
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'autocuidado')"><span class="icone">🧘‍♀️</span><span class="titulo">Saúde & Autocuidado</span></div>
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'financeiro')"><span class="icone">💰</span><span class="titulo">Vida Financeira</span></div>
+            <div class="btn-categoria" onclick="selecionarCategoriaDoma(this, 'estudos')"><span class="icone">📚</span><span class="titulo">Estudos & Foco</span></div>
+        </div>
+    </div>
+</div>
+
+<div id="slide-triagem" class="doma-popup-tela" style="display: none;">
+    <div class="cartao-popup fade-in" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 2px solid #cbd5e1;">
+        <div style="padding: 5px; text-align: center; width: 100%;">
+            <h2 style="margin: 0; color: #1e1b4b; font-weight: 800; font-size: clamp(1rem, 4vw, 1.15rem);"><span id="titulo-area-jogo" style="color: #d4af37;"></span> Qual é o destino dessa peça?</h2>
+            <div style="width: 100%; max-width: 350px; margin: 10px auto 5px auto; background: rgba(212, 175, 55, 0.2); border-radius: 10px; height: 8px;">
+                <div id="barra-progresso" style="width: 0%; background: #d4af37; height: 100%; border-radius: 10px; transition: width 0.3s; box-shadow: 0 0 10px rgba(212,175,55,0.8);"></div>
+            </div>
+            <p id="texto-progresso" style="font-size: 0.8rem; color: #b5952f; margin: 0; font-weight: bold;">0 / 10</p>
+        </div>
+
+        <div class="area-cestos">
+            <div id="cesto-existe" class="cesto" data-alvo="existe">
+                <div class="cesto-label">SIM<br><span style="color:#ef4444;">Existe no Lar?</span></div>
+                <div class="cesto-interior" id="interior-existe"></div>
+            </div>
+            <div id="cesto-nao-existe" class="cesto" data-alvo="nao-existe">
+                <div class="cesto-label">NÃO<br><span style="color:#64748b;">Não existe!</span></div>
+                <div class="cesto-interior" id="interior-nao-existe"></div>
+            </div>
+        </div>
+
+        <div class="area-peca" id="area-jogo-fisica">
+            <p id="texto-instrucao" style="background: #fef08a; border: 2px dashed #eab308; padding: 5px; border-radius: 8px; font-size: 0.65rem; color: #854d0e; font-weight: 900; text-transform: uppercase; text-align: center; width: 95%; max-width: 320px; margin-bottom: 8px;">👇 Arraste para escolher os cestos 👇</p>
+            <div id="peca-arrastavel" class="peca-quebra-cabeca"><span id="texto-peca-jogo" style="line-height: 1.2;">...</span></div>
+            <div id="area-botao" style="display: none; text-align: center; width: 100%; padding-top: 20px;">
+                <button type="button" onclick="mostrarDiagnosticoDireto()" class="btn-principal pulse-btn" style="border-radius: 15px; width: 90%;">VER DIAGNÓSTICO CLÍNICO ❯</button>
+            </div>
+        </div>
+        
+        <div style="display: flex; align-items: center; justify-content: center; padding: 0 5px 5px 5px; width: 100%; margin-top: 10px;">
+            <div style="background: #fdfbf7; border: 3px solid #d4af37; border-radius: 12px; padding: 15px 10px; width: 95%; max-width: 450px; text-align: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);" id="caixa-desc">
+                <span id="icone-tipo" style="font-size: 0.7rem; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold; text-transform: uppercase;">Aguarde...</span>
+                <p id="desc-peca" style="font-size: clamp(0.85rem, 3.5vw, 0.95rem); margin: 8px 0 0 0; line-height: 1.4; font-weight: 700; color: #1e1b4b; min-height: 40px;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="slide-diagnostico-alerta" class="doma-popup-tela" style="display: none;">
+    <div class="alerta-clinico-modal fade-in" id="modal-diagnostico-cor" style="max-width: 500px; padding: 40px 20px; margin: auto;">
+        <div style="font-size: clamp(4rem, 12vw, 5rem); margin-bottom: 15px; animation: pulseSoftTriagem 1s infinite alternate;" id="icone-diagnostico">🚨</div>
+        <h3 id="titulo-modal-sirene" style="color: #1e1b4b; font-weight: 900; font-size: clamp(1.6rem, 6vw, 1.8rem); margin: 0 0 15px 0;">Laudo Clínico</h3>
+        <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+            <p id="msg-sirene-diagnostico" style="color: #334155; font-size: clamp(1rem, 4.5vw, 1.1rem); line-height: 1.6; font-weight: 600; margin: 0;"></p>
+        </div>
+        <button type="button" onclick="prepararEspelhoAutoescrita()" style="background: #e11d48; color: white; border: none; padding: 20px; width: 100%; border-radius: 15px; font-weight: 900; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 8px 20px rgba(225, 29, 72, 0.3);" id="btn-avancar-alerta">
+            VER ESPELHO DA REALIDADE ➔
+        </button>
+    </div>
+</div>
+
+<div id="slide-final-conclusao" class="doma-popup-tela" style="display: none; background: linear-gradient(135deg, #e0f2fe, #f3e8ff) !important;">
+    <div style="position: relative; padding: clamp(20px, 3vh, 40px) 10px; width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; overflow-y: auto; height: 100%; margin: auto;">
+        <div id="conteudo-autoescrita" style="width: 100%; padding: clamp(15px, 3vh, 25px) 10px; border-top: 6px solid #7c3aed; background: rgba(255,255,255,0.98); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box;"></div>
+        <button type="button" class="btn-principal pulse-btn" style="background: #7c3aed; margin-top: 20px; width: 100%; max-width: 400px;" onclick="abrirPlanoGeral()">AVANÇAR PARA O MAPA TÁTICO ❯</button>
+    </div>
+</div>
+
+<div id="slide-plano-acao" class="doma-popup-tela" style="display: none;">
+    <div class="cartao-popup fade-in" style="width: 100%; box-sizing: border-box; max-width: 600px; margin: auto;">
+        <div style="display: inline-block; background: #1e1b4b; color: white; padding: 6px 15px; border-radius: 20px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase;">Protocolo de Tratamento</div>
+        <h2 style="font-size: clamp(1.8rem, 7vw, 2.2rem); margin: 0 0 20px 0; color: #1e1b4b; font-weight: 900; text-align: center;">Seu Plano Tático</h2>
+        
+        <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: clamp(15px, 4vw, 25px); border-radius: 20px; margin-bottom: 25px; color: white; text-align: center; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                <span style="font-size: clamp(1.8rem, 6vw, 2.2rem);">🎯</span>
+                <h3 style="margin: 0; font-size: clamp(1.3rem, 5vw, 1.6rem); color: white; font-weight: 900;">A Regra de Ouro</h3>
+            </div>
+            <p style="font-size: clamp(0.95rem, 4vw, 1.05rem); line-height: 1.5; margin: 0; font-weight: 600; text-align: left;">
+                A mudança real exige constância, não pressa. As peças em <strong style="color: #b91c1c;">Vermelho</strong> e <strong style="color: #c2410c;">Laranja</strong> revelam os comportamentos que exigem ação.
+            </p>
+        </div>
+
+        <div id="area-lista-pecas" style="width: 100%; text-align: left; display: flex; flex-direction: column; gap: 0;"></div>
+
+        <div style="width: 100%; background: white; border: 2px solid #e2e8f0; padding: clamp(20px, 6vw, 30px) 15px; border-radius: 20px; margin-top: 40px; text-align: center; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">✍️</div>
+            <h3 style="color: #1e1b4b; margin: 0 0 15px 0; font-size: clamp(1.1rem, 4.5vw, 1.3rem); font-weight: 800;">Firme Seu Compromisso</h3>
+            <input type="text" id="nome-assinatura" placeholder="Digite sua assinatura..." style="width: 100%; padding: 18px; border-radius: 12px; border: 2px solid #cbd5e1; font-weight: bold; background: #f8fafc; font-size: clamp(1rem, 4vw, 1.1rem); box-sizing: border-box; text-align: center; color: #334155;">
+        </div>
+
+        <button type="button" onclick="validarEAvancarData()" class="btn-principal" style="margin-top: 25px; width: 100%; border-radius: 15px; padding: 20px;">AVANÇAR E DATAR ❯</button>
+    </div>
+</div>
+
+<div id="modal-tatica-popup" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 9999999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(8px);">
+    <div class="fade-in" style="background: white; width: 100%; max-width: 450px; border-radius: 24px; display: flex; flex-direction: column; position: relative; padding: 0; box-sizing: border-box; max-height: 90vh; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.25);">
+        <div style="padding: 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.2rem; text-transform: uppercase;">Definir Tática</h3>
+            <button onclick="document.getElementById('modal-tatica-popup').style.display='none'" style="background: transparent; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer;">✕</button>
+        </div>
+        <div style="padding: 20px; overflow-y: auto; flex: 1;" id="modal-tatica-conteudo"></div>
+        <div id="area-botoes-modal" style="padding: 20px; border-top: 1px solid #e2e8f0; background: #fff; display: flex; gap: 10px; justify-content: space-between;"></div>
+    </div>
+</div>
+
+<div id="modal-info-peca" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 9999999; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(8px);">
+    <div class="alerta-clinico-modal fade-in" id="modal-info-box" style="border-top-color: #e11d48; max-width: 450px; width: 100%; padding: 25px 20px; text-align: left; max-height: 85vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+            <span id="info-tag-alerta" style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase;"></span>
+            <button onclick="document.getElementById('modal-info-peca').style.display='none'" style="background: transparent; border: none; font-size: 1.5rem; color: #64748b; cursor: pointer; padding: 0;">✕</button>
+        </div>
+        <h3 id="info-titulo-peca" style="color: #991b1b; font-weight: 900; font-size: 1.4rem; margin: 0 0 15px 0;"></h3>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; margin-bottom: 5px;">
+            <strong style="color: #1e293b; font-size: 0.95rem; display: block; margin-bottom: 10px;">Consequência Clínica:</strong>
+            <div id="info-consequencia" style="color: #475569; font-size: 0.9rem; line-height: 1.5; margin: 0;"></div>
+        </div>
+        <button type="button" onclick="document.getElementById('modal-info-peca').style.display='none'" class="btn-principal" style="width: 100%; background: #e11d48; margin-top: 15px; box-shadow: none; font-size: 0.9rem;">FECHAR</button>
+    </div>
+</div>
+
+<div id="slide-data-inicio" class="doma-popup-tela" style="display: none;">
+    <div class="cartao-popup fade-in" style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 500px; margin: auto; width: 100%; box-sizing: border-box;">
+        <div style="font-size: clamp(4rem, 12vw, 5rem); margin-bottom: 15px; animation: pulseSoftTriagem 2s infinite;">🗓️</div>
+        <h2 style="font-size: clamp(1.8rem, 6vw, 2.2rem); margin: 0 0 15px 0; color: #1e1b4b; font-weight: 900; line-height: 1.2;">Quando começamos?</h2>
+        <p style="color: #475569; font-size: clamp(1rem, 4vw, 1.1rem); font-weight: 500; margin-bottom: 30px; line-height: 1.6;">
+            Todo tratamento eficiente precisa de um <strong>Dia 1</strong>. Assuma a responsabilidade e defina a data exata da mudança.
+        </p>
+        <div style="width: 100%; background: white; padding: 30px 20px; border-radius: 20px; border: 2px solid #cbd5e1; box-shadow: 0 15px 35px rgba(0,0,0,0.05); box-sizing: border-box; margin-bottom: 30px;">
+            <label style="display: block; font-weight: 800; color: #1e293b; margin-bottom: 15px; font-size: clamp(1.1rem, 4.5vw, 1.2rem);">Data de Início:</label>
+            <input type="date" id="data-inicio-tratamento" class="input-data-doma" style="text-align: center; background: #f8fafc; font-weight: bold; border-color: #94a3b8;">
+        </div>
+        <button type="button" onclick="revelarContratoFinal()" class="btn-principal pulse-btn" style="width: 100%; border-radius: 15px; padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none;">ASSINAR MEU CONTRATO FINAL ❯</button>
+    </div>
+</div>
+
+<div id="slide-contrato" class="doma-popup-tela" style="display: none;"></div>
+<div id="selo-contrato" class="animacao-carimbo">✅</div>
+
+<div id="modal-sucesso-jornada" class="doma-popup-tela" style="display: none;">
+    <div class="alerta-clinico-modal fade-in" style="border-top-color: #10b981;">
+        <div style="font-size: clamp(4rem, 12vw, 4.5rem); margin-bottom: 10px; animation: pulseSoftTriagem 2s infinite;">🏆</div>
+        <h3 style="color: #065f46; font-weight: 900; font-size: clamp(1.3rem, 5vw, 1.5rem); margin: 0 0 15px 0;">Contrato Selado!</h3>
+        <p style="color: #475569; font-size: clamp(0.95rem, 4vw, 1.05rem); line-height: 1.5; font-weight: 600; margin-bottom: 25px; padding: 0 5px;">
+            O seu plano tático foi ativado com sucesso. Você assumiu o controle e agora pode continuar a sua travessia.
+        </p>
+        <button type="button" onclick="avancarJornada()" style="background: #10b981; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-weight: 900; cursor: pointer;">
+            ENTENDIDO ❯
+        </button>
+    </div>
+</div>
+
+<script>
+window.avancarSlideDoma = function(atualId, proxId) {
+    let atual = document.getElementById(atualId);
+    let prox = document.getElementById(proxId);
+    if(atual) { atual.classList.remove('ativa'); atual.style.display = 'none'; }
+    if(prox) { prox.classList.add('ativa'); prox.style.display = 'flex'; }
+    window.scrollTo(0,0);
+};
+
+let pecasExibicao = [];
+let registroEscolhas = [];
+let indexAtual = 0;
+let maquinaEscreverTimer = null;
+let categoriaSelecionadaGlobal = null;
+let travaAcaoDupla = false;
+let indiceTaticaEmEdicao = null; 
+
+const bancoDePecas = {
+    'estudos': [
+        { t: "Misturar a Cama e o Estudo", desc: "Estudar onde se dorme confunde a via libidinal do repouso com a da obrigação.", cons: "A paz do descanso é perdida.", c: "T", tipo: "fisico", pedeNome: true },
+        { t: "Estudo Passivo", desc: "Só ler e grifar, simulando conhecimento.", cons: "Falsa produtividade que desmorona.", c: "T", tipo: "mental", pedeNome: false },
+        { t: "Pausar e Descansar Sem Culpa", desc: "Pausar sem voz de culpa.", cons: "Regeneração mental.", c: "D", tipo: "emocional", pedeNome: false }
+    ],
+    'relacionamentos': [
+        { t: "Aceitar Distorção (Gaslighting)", desc: "Permitir que o outro distorça os fatos.", cons: "Perda de sanidade.", c: "T", tipo: "mental", pedeNome: true },
+        { t: "Confiança Mútua", desc: "Acreditar na lealdade do parceiro.", cons: "Tranquilidade mental.", c: "D", tipo: "emocional", pedeNome: false }
+    ],
+    'trabalho': [
+        { t: "Síndrome da Impostora", desc: "Fantasia de que você é uma fraude.", cons: "Você vive estressada achando que será demitida.", c: "T", tipo: "mental", pedeNome: false },
+        { t: "Pausar para Desconectar", desc: "Levantar a cada ciclo profundo.", cons: "Regulação do sistema nervoso.", c: "D", tipo: "fisico", pedeNome: false }
+    ],
+    'familia': [
+        { t: "Ser Pombo-Correio", desc: "Ser o pombo-correio de parentes que não se falam.", cons: "Sua energia vital é sugada.", c: "T", tipo: "emocional", pedeNome: true },
+        { t: "Cortar Cordão", desc: "Viver os planos sem aprovação parental.", cons: "Autonomia adulta.", c: "D", tipo: "mental", pedeNome: false }
+    ],
+    'autocuidado': [
+        { t: "Rolar o Feed Horas", desc: "Rolar o feed para não escutar os pensamentos.", cons: "A angústia cresce velada.", c: "T", tipo: "mental", pedeNome: false },
+        { t: "Ouvir Voz Que Me Humilha", desc: "Voz interna que xinga diante do erro.", cons: "Você transforma a mente em abusador.", c: "T", tipo: "mental", pedeNome: false },
+        { t: "Proteger o Lazer", desc: "Proteger lazer sem culpa.", cons: "Investimento na pulsão de vida.", c: "D", tipo: "emocional", pedeNome: false }
+    ],
+    'financeiro': [
+        { t: "Comprar Por Impulso", desc: "Comprar para preencher vazio emocional.", cons: "Culpa e rombo no cartão.", c: "T", tipo: "emocional", pedeNome: false },
+        { t: "Planejar Gastos Sem Terror", desc: "Planejar desejos sem pavor de escassez.", cons: "Previsibilidade e desfrute.", c: "D", tipo: "mental", pedeNome: false }
+    ]
+};
+
+window.selecionarCategoriaDoma = function(elemento, categoria) {
+    document.querySelectorAll('.btn-categoria').forEach(btn => btn.classList.remove('selecionada'));
+    elemento.classList.add('selecionada');
+    categoriaSelecionadaGlobal = categoria;
+    
+    setTimeout(() => {
+        let todasPecas = bancoDePecas[categoriaSelecionadaGlobal].slice().sort(() => Math.random() - 0.5);
+        pecasExibicao = todasPecas.slice(0, 5); // Reduzido para fluir melhor
+        registroEscolhas = [];
+        indexAtual = 0;
+        
+        const nomes = { 'estudos': 'Estudos e Foco', 'relacionamentos': 'Relacionamentos', 'trabalho': 'Trabalho e Carreira', 'familia': 'Família', 'autocuidado': 'Saúde e Autocuidado', 'financeiro': 'Financeiro' };
+        document.getElementById('titulo-area-jogo').innerText = '[' + nomes[categoriaSelecionadaGlobal] + ']';
+        
+        document.getElementById('slide-categorias').style.display = 'none';
+        document.getElementById('slide-triagem').style.display = 'flex';
+        
+        mostrarProximaPalavra();
+        configurarFisicaJogo();
+    }, 400);
+}
+
+function mostrarProximaPalavra() {
+    let peca = document.getElementById('peca-arrastavel');
+    let desc = document.getElementById('caixa-desc');
+    let textoDescricao = document.getElementById('desc-peca');
+    
+    peca.style.transform = 'translate(0px, 0px) rotate(0deg)';
+    peca.style.opacity = '1';
+    
+    if (indexAtual < pecasExibicao.length) {
+        let item = pecasExibicao[indexAtual];
+        document.getElementById('texto-peca-jogo').innerText = item.t;
+        textoDescricao.innerText = item.desc;
+        
+        let iconeSpan = document.getElementById('icone-tipo');
+        if (item.tipo === 'fisico') { iconeSpan.innerText = '💪 Base Física'; iconeSpan.style.backgroundColor = '#6366f1'; }
+        else if (item.tipo === 'mental') { iconeSpan.innerText = '⚙️ Mundo Mental'; iconeSpan.style.backgroundColor = '#3b82f6'; }
+        else { iconeSpan.innerText = '🧠 Emocional'; iconeSpan.style.backgroundColor = '#ec4899'; }
+    }
+}
+
+function configurarFisicaJogo() {
+    let peca = document.getElementById('peca-arrastavel');
+    let isDragging = false, startX, startY, currentX, currentY;
+    let cestoAlvo = null;
+
+    const startDrag = (e) => {
+        isDragging = true; peca.classList.add('dragging');
+        startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        startY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+    };
+
+    const drag = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+        currentX = clientX - startX; currentY = clientY - startY;
+        let rotation = currentX * 0.05;
+        peca.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotation}deg)`;
+        
+        let rectPeca = peca.getBoundingClientRect();
+        let centroXPeca = rectPeca.left + (rectPeca.width / 2);
+        let centroYPeca = rectPeca.top + (rectPeca.height / 2);
+        
+        let cestos = [document.getElementById('cesto-existe'), document.getElementById('cesto-nao-existe')];
+        cestoAlvo = null;
+        
+        cestos.forEach(c => c.classList.remove('cesto-hover'));
+        
+        cestos.forEach(c => {
+            let rectCesto = c.getBoundingClientRect();
+            if (centroYPeca > rectCesto.top - 50 && centroXPeca > rectCesto.left && centroXPeca < rectCesto.right) {
+                c.classList.add('cesto-hover');
+                cestoAlvo = c;
+            }
+        });
+    };
+
+    const drop = (e) => {
+        if (!isDragging) return;
+        isDragging = false; peca.classList.remove('dragging');
+        document.querySelectorAll('.cesto').forEach(c => c.classList.remove('cesto-hover'));
+        
+        if (cestoAlvo) {
+            let alvoStr = cestoAlvo.getAttribute('data-alvo');
+            let itemOriginal = pecasExibicao[indexAtual];
+            
+            registroEscolhas.push({ 
+                texto: itemOriginal.t, escolha: alvoStr, real: itemOriginal.c, 
+                tipo: itemOriginal.tipo, cons: itemOriginal.cons, taticaDefinida: null, selecionadaParaTratar: false
+            });
+            
+            indexAtual++;
+            document.getElementById('barra-progresso').style.width = ((indexAtual / pecasExibicao.length) * 100) + '%';
+            document.getElementById('texto-progresso').innerText = `${indexAtual} / ${pecasExibicao.length}`;
+            
+            if (indexAtual < pecasExibicao.length) { 
+                mostrarProximaPalavra(); 
+            } else {
+                document.getElementById('peca-arrastavel').style.display = 'none';
+                document.getElementById('texto-instrucao').style.display = 'none';
+                document.getElementById('caixa-desc').style.display = 'none';
+                document.getElementById('area-botao').style.display = 'block';
+            }
+        } else {
+            peca.style.transform = 'translate(0px, 0px) rotate(0deg)'; 
+        }
+    };
+
+    peca.addEventListener('mousedown', startDrag); document.addEventListener('mousemove', drag); document.addEventListener('mouseup', drop);
+    peca.addEventListener('touchstart', startDrag, {passive: false}); document.addEventListener('touchmove', drag, {passive: false}); document.addEventListener('touchend', drop);
+}
+
+window.mostrarDiagnosticoDireto = function() {
+    document.getElementById('slide-triagem').style.display = 'none';
+    document.getElementById('slide-diagnostico-alerta').style.display = 'flex';
+    
+    let acertos = 0;
+    registroEscolhas.forEach(item => {
+        if ((item.real === 'D' && item.escolha === 'existe') || (item.real === 'T' && item.escolha === 'nao-existe')) {
+            acertos++;
+        }
+    });
+
+    let percentualAcerto = (acertos / registroEscolhas.length) * 100;
+    let tituloBox = document.getElementById('titulo-modal-sirene');
+    let msgBox = document.getElementById('msg-sirene-diagnostico');
+    let iconeBox = document.getElementById('icone-diagnostico');
+    
+    if (percentualAcerto >= 60) {
+        tituloBox.innerText = 'Laudo: Estrutura Sólida'; iconeBox.innerText = '🛡️'; tituloBox.style.color = '#059669';
+        msgBox.innerHTML = 'A base do seu Lar Interno está forte. Vamos verificar os pilares e remover o que ainda machuca.';
+    } else {
+        tituloBox.innerText = 'Laudo: Atenção Crítica'; iconeBox.innerText = '🚨'; tituloBox.style.color = '#be123c';
+        msgBox.innerHTML = 'Alerta máximo: a fundação do seu Lar está comprometida. A energia vital está vazando. Inicie a reforma.';
+    }
+}
+
+window.prepararEspelhoAutoescrita = function() {
+    document.getElementById('slide-diagnostico-alerta').style.display = 'none';
+    
+    let toxicasPresentes = [];
+    registroEscolhas.forEach(item => {
+        if (item.real === 'T' && item.escolha === 'existe') toxicasPresentes.push(item.texto);
+    });
+
+    let htmlListas = '';
+    if(toxicasPresentes.length > 0) {
+        htmlListas = '<div style="background: #fff1f2; padding: 15px; border-radius: 12px; margin-bottom: 20px;"><strong style="color: #be123c;">🚨 Infiltrações Tóxicas no seu Lar:</strong><ul style="color: #9f1239;">';
+        toxicasPresentes.forEach(t => htmlListas += `<li>${t}</li>`);
+        htmlListas += '</ul></div>';
+    }
+
+    let htmlConteudo = `
+        <div style="font-size: 3.5rem; text-align: center;">🪞</div>
+        <h2 style="color: #1e1b4b; text-align: center;">O Espelho da Realidade</h2>
+        ${htmlListas}
+        <p style="color: #475569; font-size: 0.9rem; text-align: justify;">Diante dessa estrutura, escreva uma carta para si mesmo refletindo sobre a casa que construiu.</p>
+        <textarea style="width: 100%; min-height: 200px; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1;"></textarea>
+    `;
+
+    document.getElementById('conteudo-autoescrita').innerHTML = htmlConteudo;
+    document.getElementById('slide-final-conclusao').style.display = 'flex';
+}
+
+window.abrirPlanoGeral = function() {
+    document.getElementById('slide-final-conclusao').style.display = 'none';
+    document.getElementById('slide-plano-acao').style.display = 'flex';
+    
+    let areaLista = document.getElementById('area-lista-pecas');
+    let htmlPecas = '';
+
+    registroEscolhas.forEach((item, index) => {
+        let ehAcerto = (item.real === 'T' && item.escolha === 'nao-existe') || (item.real === 'D' && item.escolha === 'existe');
+        
+        if (!ehAcerto) {
+            htmlPecas += `
+                <div class="card-diagnostico" style="border-left: 5px solid #f97316; margin-bottom:12px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" onchange="selecionarParaTratar(${index}, this)" style="transform: scale(1.5);">
+                        <strong style="color: #991b1b; margin:0;">${item.texto}</strong>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    areaLista.innerHTML = `<h4 style="color: #be123c;">🚨 Alvos Identificados (Selecione 1 para tratar):</h4>${htmlPecas}`;
+}
+
+window.selecionarParaTratar = function(index, cb) {
+    document.querySelectorAll('#area-lista-pecas input[type="checkbox"]').forEach(el => {
+        if(el !== cb) el.checked = false;
+    });
+    registroEscolhas.forEach(it => it.selecionadaParaTratar = false);
+    if(cb.checked) {
+        registroEscolhas[index].selecionadaParaTratar = true;
+        registroEscolhas[index].taticaDefinida = "Limites Estabelecidos"; 
+    }
+}
+
+window.validarEAvancarData = function() {
+    let temSelecao = registroEscolhas.some(it => it.selecionadaParaTratar);
+    if (!temSelecao) {
+        alert("Selecione pelo menos um alvo para tratar.");
+        return;
+    }
+    let assinatura = document.getElementById('nome-assinatura').value.trim();
+    if (assinatura === '') {
+        alert("Firme seu compromisso com sua assinatura.");
+        return;
+    }
+
+    document.getElementById('slide-plano-acao').style.display = 'none';
+    document.getElementById('slide-data-inicio').style.display = 'flex';
+}
+
+window.revelarContratoFinal = function() {
+    let data = document.getElementById('data-inicio-tratamento').value;
+    if (data === '') { alert("Defina uma data."); return; }
+    
+    let assinatura = document.getElementById('nome-assinatura').value.trim();
+    let alvoSelecionado = registroEscolhas.find(it => it.selecionadaParaTratar);
+
+    let htmlContrato = `
+        <div class="cartao-popup fade-in" style="max-width: 600px; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">📜</div>
+            <h2 style="color: #1e1b4b; text-transform: uppercase;">Contrato Selado</h2>
+            <p>Eu, <strong>${assinatura}</strong>, a partir de <strong>${data}</strong>, assumo o controle do meu Lar interno.</p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                <strong style="color: #1e293b;">Alvo Principal:</strong>
+                <p style="color: #e11d48; font-weight: bold; margin: 5px 0;">${alvoSelecionado.texto}</p>
+            </div>
+            <button class="btn-principal" style="background: #10b981;" onclick="finalizarJornada2()">CONFIRMAR COMPROMISSO ✅</button>
+        </div>
+    `;
+
+    document.getElementById('slide-data-inicio').style.display = 'none';
+    let slideC = document.getElementById('slide-contrato');
+    slideC.innerHTML = htmlContrato;
+    slideC.style.display = 'flex';
+}
+
+window.finalizarJornada2 = function() {
+    document.getElementById('selo-contrato').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('selo-contrato').style.display = 'none';
+        document.getElementById('modal-sucesso-jornada').style.display = 'flex';
+    }, 1200);
+}
+
+window.avancarJornada = function() {
+    document.getElementById('modal-sucesso-jornada').style.display = 'none';
+    document.getElementById('slide-contrato').style.display = 'none';
+    mudarPagina(1);
+}
+</script>
